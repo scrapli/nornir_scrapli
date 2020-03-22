@@ -19,13 +19,3 @@ iosxe:
       extras:
         ssh_config_file: True
         auth_strict_key: False
-
-nxos:
-  platform: nxos
-  connection_options:
-    scrapli:
-      platform: cisco_nxos
-      port: 22
-      extras:
-        ssh_config_file: True
-        auth_strict_key: False

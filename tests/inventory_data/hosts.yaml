@@ -7,12 +7,3 @@ sea-ios-1:
   data:
     router_id: 10.255.255.101
     bgp_local_asn: 65535
-
-sea-nxos-1:
-  hostname: 172.18.0.12
-  groups:
-    - sea
-    - nxos
-  data:
-    router_id: 10.255.255.102
-    bgp_local_asn: 65535

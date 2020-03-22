@@ -1,6 +1,7 @@
 import os
 
 import pytest
+
 from nornir import InitNornir
 from nornir.core.state import GlobalState
 
@@ -8,7 +9,7 @@ global_data = GlobalState(dry_run=True)
 
 
 @pytest.fixture(scope="session", autouse=True)
-def nornir(request):
+def nornir():
     """Initializes nornir"""
     dir_path = os.path.dirname(os.path.realpath(__file__))
 
