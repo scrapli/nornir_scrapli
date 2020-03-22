@@ -1,7 +1,6 @@
 import os
 
 import pytest
-
 from nornir import InitNornir
 from nornir.core.state import GlobalState
 
