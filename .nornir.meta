@@ -1,0 +1,18 @@
+---
+name: nornir_scrapli
+summary: |
+  Connection plugin and various tasks to interact with network equipment via `scrapli <github.com/carlmontanari/scrapli/>`_.
+nornir_version: ~3
+categories:
+  - napalm
+  - networking
+intro_file: README.md
+badges:
+  - https://github.com/nornir-automation/nornir/workflows/test_nornir_napalm/badge.svg
+connection_plugins:
+  - nornir_napalm.connections.Scrapli
+task_plugins:
+  - nornir_scrapli.tasks.get_prompt
+  - nornir_scrapli.tasks.send_command
+  - nornir_scrapli.tasks.send_commands
+  - nornir_scrapli.tasks.send_configs
