@@ -194,7 +194,7 @@ def test_send_interactive(nornir, monkeypatch):
             finale=interact[3],
         )
         response.record_response("Clear logging buffer [confirm]\n\n\n3560CX#")
-        return [response]
+        return response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
     monkeypatch.setattr(IOSXEDriver, "send_interactive", mock_send_interactive)
@@ -204,7 +204,7 @@ def test_send_interactive(nornir, monkeypatch):
         interact=["clear logg", "are you sure blah blah", "y", "sea-ios-1#"],
     )
     assert (
-        result["sea-ios-1"].result[0].result
+        result["sea-ios-1"].result.result
         == "Clear logging buffer [confirm]\n\n\n3560CX#"
     )
     assert result["sea-ios-1"].failed is False
