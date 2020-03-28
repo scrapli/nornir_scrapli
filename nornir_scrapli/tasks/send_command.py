@@ -2,7 +2,7 @@
 from nornir.core.task import Result, Task
 
 
-def send_command(task: Task, command: str, strip_prompt: bool = True) -> Result:
+def send_command(task: Task, command: str, strip_prompt: bool = True,) -> Result:
     """
     Send a single command to device using scrapli
 
@@ -25,5 +25,8 @@ def send_command(task: Task, command: str, strip_prompt: bool = True) -> Result:
     )
 
     return Result(
-        host=task.host, result=scrapli_response, failed=scrapli_response.failed
+        host=task.host,
+        result=scrapli_response,
+        failed=scrapli_response.failed,
+        changed=False,
     )

@@ -28,4 +28,4 @@ def send_commands(task: Task, commands: List[str], strip_prompt: bool = True) ->
     if not all([response.failed for response in scrapli_response]):
         failed = False
 
-    return Result(host=task.host, result=scrapli_response, failed=failed)
+    return Result(host=task.host, result=scrapli_response, failed=failed, changed=False)

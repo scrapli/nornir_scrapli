@@ -18,4 +18,4 @@ def get_prompt(task: Task) -> Result:
     """
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
     prompt = scrapli_conn.get_prompt()
-    return Result(host=task.host, result=prompt)
+    return Result(host=task.host, result=prompt, failed=False, changed=False)

@@ -3,13 +3,18 @@ from nornir.core.task import List, Result, Task, Union
 
 
 def send_configs(
-    task: Task, configs: Union[str, List[str]], strip_prompt: bool = True
+    task: Task,
+    dry_run: bool = False,
+    configs: Union[str, List[str]] = None,
+    strip_prompt: bool = True,
 ) -> Result:
     """
     Send a single command to device using scrapli
 
     Args:
         task: nornir task object
+        dry_run: Whether to apply changes or not; if dry run, will ensure that it is possible to
+            enter config mode, but will NOT send any configs
         configs: string or list of strings to send to device in config mode
         strip_prompt: True/False strip prompt from returned output
 
@@ -22,6 +27,13 @@ def send_configs(
 
     """
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
+
+    if dry_run:
+        # if dry run, try to acquire config mode then back out; do not send any configurations!
+        scrapli_conn.acquire_priv("configuration")
+        scrapli_conn.acquire_priv(scrapli_conn.default_desired_priv)
+        return Result(host=task.host, result=None, failed=False, changed=False)
+
     scrapli_response = scrapli_conn.send_configs(
         configs=configs, strip_prompt=strip_prompt
     )
@@ -30,4 +42,4 @@ def send_configs(
     if not all([response.failed for response in scrapli_response]):
         failed = False
 
-    return Result(host=task.host, result=scrapli_response, failed=failed)
+    return Result(host=task.host, result=scrapli_response, failed=failed, changed=True)

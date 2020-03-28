@@ -33,6 +33,9 @@ def send_interactive(
     scrapli_response = scrapli_conn.send_interactive(
         interact=interact, hidden_response=hidden_response
     )
-    return Result(
-        host=task.host, result=scrapli_response, failed=scrapli_response.failed
-    )
+
+    failed = True
+    if not all([response.failed for response in scrapli_response]):
+        failed = False
+
+    return Result(host=task.host, result=scrapli_response, failed=failed, changed=True)
