@@ -18,6 +18,7 @@ nornir_scrapli -- [scrapli](https://github.com/carlmontanari/scrapli)'s plugin f
   - [Installation](#installation)
   - [A Simple Example](#a-simple-example)
 - [Supported Platforms](#supported-platforms)
+- [General Information](#general-information)
 
 
 # Quick Start Guide
@@ -92,7 +93,7 @@ nornir_scrapli supports the "core" scrapli drivers. See [scrapli docs](https://g
 # General Information
 
 Nornir has historically contained it's plugins within the actual Nornir codebase itself, this however is changing. At
- time of writing (27 March 2020) the end state of how plugins will work is not 100% solidified, but this should get
+ time of writing (28 March 2020) the end state of how plugins will work is not 100% solidified, but this should get
   fairly close, and it works with current and hopefully future Nornir!
 
 If you have used Nornir before, this package should be very similar, but not exactly the same. Since the plugins
@@ -114,3 +115,15 @@ As soon as a nornir_scrapli task is imported, it (nornir_scrapli) will register 
 
 This is obviously all in a "beta" state until Nornir 3.0 is officially released and the template for what plugins
  should look like is solidified, so use with care!
+
+The last important difference with nornir_scrapli is that in addition to the "normal" data in the Nornir Result
+ object, nornir_scrapli also assigns the scrapli `Response` object (or list of `Response` objects) to the
+  `scrapli_response` attribute. This means that you can access all of the "normal" scrapli response data from this
+   object -- including things like `elapsed_time` and `textfsm_parse_output`:
+
+```python
+>>> some_nornir_result["sea-ios-1"].scrapli_response.elapsed_time
+0.039469
+>>> some_nornir_result["sea-ios-1"].scrapli_response.textfsm_parse_output()
+[[some structured data back from the device!]]
+``` 

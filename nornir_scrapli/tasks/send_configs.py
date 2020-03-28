@@ -42,4 +42,8 @@ def send_configs(
     if not all([response.failed for response in scrapli_response]):
         failed = False
 
-    return Result(host=task.host, result=scrapli_response, failed=failed, changed=True)
+    result = Result(
+        host=task.host, result=scrapli_response, failed=failed, changed=True
+    )
+    setattr(result, "scrapli_response", scrapli_response)
+    return result

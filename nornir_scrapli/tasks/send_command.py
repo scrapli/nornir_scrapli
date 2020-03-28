@@ -24,9 +24,11 @@ def send_command(task: Task, command: str, strip_prompt: bool = True,) -> Result
         command=command, strip_prompt=strip_prompt
     )
 
-    return Result(
+    result = Result(
         host=task.host,
-        result=scrapli_response,
+        result=scrapli_response.result,
         failed=scrapli_response.failed,
         changed=False,
     )
+    setattr(result, "scrapli_response", scrapli_response)
+    return result

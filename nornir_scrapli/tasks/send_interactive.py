@@ -34,9 +34,11 @@ def send_interactive(
         interact=interact, hidden_response=hidden_response
     )
 
-    return Result(
+    result = Result(
         host=task.host,
         result=scrapli_response,
         failed=scrapli_response.failed,
         changed=True,
     )
+    setattr(result, "scrapli_response", scrapli_response)
+    return result
