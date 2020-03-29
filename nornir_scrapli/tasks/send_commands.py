@@ -28,8 +28,8 @@ def send_commands(task: Task, commands: List[str], strip_prompt: bool = True) ->
     if not all([response.failed for response in scrapli_response]):
         failed = False
 
-    result = Result(
-        host=task.host, result=scrapli_response, failed=failed, changed=False
-    )
+    full_results = "\n\n".join([response.result for response in scrapli_response])
+
+    result = Result(host=task.host, result=full_results, failed=failed, changed=False)
     setattr(result, "scrapli_response", scrapli_response)
     return result

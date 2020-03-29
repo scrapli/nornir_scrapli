@@ -1,5 +1,4 @@
 import pytest
-
 from nornir.core.exceptions import NornirExecutionError
 from scrapli.driver.core import IOSXEDriver
 from scrapli.response import Response
@@ -58,7 +57,7 @@ def test_send_commands(nornir, monkeypatch):
     monkeypatch.setattr(IOSXEDriver, "send_commands", mock_send_commands)
 
     result = nornir.run(task=send_commands, commands=["show version"])
-    assert result["sea-ios-1"].result[0].result == "some stuff about whatever"
+    assert result["sea-ios-1"][0].result == "some stuff about whatever"
     assert result["sea-ios-1"].failed is False
     assert result["sea-ios-1"].changed is False
 
@@ -69,7 +68,11 @@ def test_send_commands_not_list(nornir_raise_on_error, monkeypatch):
     def mock_open(cls):
         pass
 
+    def mock_acquire_priv(cls, desired_priv):
+        pass
+
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
+    monkeypatch.setattr(IOSXEDriver, "acquire_priv", mock_acquire_priv)
 
     with pytest.raises(NornirExecutionError) as exc:
         nornir_raise_on_error.run(task=send_commands, commands="show version")
@@ -98,7 +101,10 @@ def test_send_configs(nornir, monkeypatch):
     result = nornir.run(
         task=send_configs, configs=["interface loopback123", "description neat"]
     )
-    assert result["sea-ios-1"].result[0].result == "some stuff about whatever"
+    assert (
+        result["sea-ios-1"][0].result
+        == "interface loopback123\nsome stuff about whatever"
+    )
     assert result["sea-ios-1"].failed is False
     assert result["sea-ios-1"].changed is True
 

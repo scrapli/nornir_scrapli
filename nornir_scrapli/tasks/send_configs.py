@@ -26,6 +26,13 @@ def send_configs(
         N/A
 
     """
+    if configs is None:
+        return Result(
+            host=task.host, result="No configs provided...", failed=True, changed=False
+        )
+    if isinstance(configs, str):
+        configs = [configs]
+
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
 
     if dry_run:
@@ -42,8 +49,10 @@ def send_configs(
     if not all([response.failed for response in scrapli_response]):
         failed = False
 
-    result = Result(
-        host=task.host, result=scrapli_response, failed=failed, changed=True
-    )
+    full_results = ""
+    for config, response in zip(configs, scrapli_response):
+        full_results += "\n".join([config, response.result])
+
+    result = Result(host=task.host, result=full_results, failed=failed, changed=True)
     setattr(result, "scrapli_response", scrapli_response)
     return result
