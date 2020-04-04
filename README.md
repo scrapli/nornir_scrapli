@@ -93,7 +93,7 @@ nornir_scrapli supports the "core" scrapli drivers. See [scrapli docs](https://g
 # General Information
 
 Nornir has historically contained it's plugins within the actual Nornir codebase itself, this however is changing. At
- time of writing (28 March 2020) the end state of how plugins will work is not 100% solidified, but this should get
+ time of writing (4 April 2020) the end state of how plugins will work is not 100% solidified, but this should get
   fairly close, and it works with current and hopefully future Nornir!
 
 If you have used Nornir before, this package should be very similar, but not exactly the same. Since the plugins
@@ -127,3 +127,22 @@ The last important difference with nornir_scrapli is that in addition to the "no
 >>> some_nornir_result["sea-ios-1"].scrapli_response.textfsm_parse_output()
 [[some structured data back from the device!]]
 ``` 
+
+If you would like to continue using `print_result` like "normal" in nornir, but would like to see structured data (if
+ available) in the `print_result` output, you can use the nornir_scrapli `print_structured_result` function. This
+  function can be imported from the scrapli functions module:
+  
+```python
+from nornir_scrapli.functions import print_structured_result
+```
+
+This function acts pretty much exactly like the "normal" print result function, but will of course try to print the
+ structured result. By default this will try to use textfsm to parse results, but it is of course configurable via
+  the `parser` keyword argument. As scrapli will return an empty data structure if parsing fails, this may cause
+   tasks to look like they are getting skipped in the output (nornir's print result function does not print empty
+    lists), if you would like to fall back to printing the unparsed output you can do so by setting the
+     `fail_to_string` keyword argument to `True` as follows:
+     
+```python
+print_structured_result(my_agg_result, parser="genie", fail_to_string=True)
+```

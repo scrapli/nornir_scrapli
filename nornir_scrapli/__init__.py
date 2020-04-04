@@ -1,3 +1,3 @@
 """scrapli's plugin for nornir"""
 
-__version__ = "2020.03.28"
+__version__ = "2020.04.04"

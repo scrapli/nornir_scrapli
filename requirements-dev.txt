@@ -8,4 +8,6 @@ pylama>=7.7.1
 pycodestyle>=2.5.0
 pydocstyle>=5.0.2
 pylint>=2.4.4
+textfsm>=1.1.0
+ntc_templates>=1.4.0
 -r requirements.txt
