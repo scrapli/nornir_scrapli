@@ -5,6 +5,7 @@ from typing import List, Optional
 
 from nornir.core.task import AggregatedResult, MultiResult, Result
 from nornir.plugins.functions.text import _print_result
+from scrapli.response import Response
 
 LOCK = threading.Lock()
 
@@ -37,6 +38,8 @@ def print_structured_result(
         updated_multi_result = MultiResult(result.name)
         for individual_result in multi_result:
             scrapli_responses = getattr(individual_result, "scrapli_response", None)
+            if isinstance(scrapli_responses, Response):
+                scrapli_responses = [scrapli_responses]
             if not scrapli_responses:
                 updated_multi_result.append(individual_result)
                 continue
