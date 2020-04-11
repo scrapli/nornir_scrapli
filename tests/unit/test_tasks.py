@@ -30,7 +30,7 @@ def test_send_command(nornir, monkeypatch):
 
     def mock_send_command(cls, command, strip_prompt):
         response = Response(host="fake_as_heck", channel_input=command)
-        response.record_response("some stuff about whatever")
+        response._record_response("some stuff about whatever")
         return response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
@@ -50,7 +50,7 @@ def test_send_commands(nornir, monkeypatch):
 
     def mock_send_commands(cls, commands, strip_prompt):
         response = Response(host="fake_as_heck", channel_input=commands[0])
-        response.record_response("some stuff about whatever")
+        response._record_response("some stuff about whatever")
         return [response]
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
@@ -88,23 +88,18 @@ def test_send_configs(nornir, monkeypatch):
     def mock_send_configs(cls, configs, strip_prompt):
         responses = []
         response = Response(host="fake_as_heck", channel_input=configs[0])
-        response.record_response("some stuff about whatever")
+        response._record_response("some stuff about whatever")
         responses.append(response)
         response = Response(host="fake_as_heck", channel_input=configs[1])
-        response.record_response("some stuff about whatever")
+        response._record_response("some stuff about whatever")
         responses.append(response)
         return [response]
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
     monkeypatch.setattr(IOSXEDriver, "send_configs", mock_send_configs)
 
-    result = nornir.run(
-        task=send_configs, configs=["interface loopback123", "description neat"]
-    )
-    assert (
-        result["sea-ios-1"][0].result
-        == "interface loopback123\nsome stuff about whatever"
-    )
+    result = nornir.run(task=send_configs, configs=["interface loopback123", "description neat"])
+    assert result["sea-ios-1"][0].result == "interface loopback123\nsome stuff about whatever"
     assert result["sea-ios-1"].failed is False
     assert result["sea-ios-1"].changed is True
 
@@ -122,9 +117,7 @@ def test_send_configs_dry_run(nornir, monkeypatch):
     monkeypatch.setattr(IOSXEDriver, "acquire_priv", mock_acquire_priv)
 
     result = nornir.run(
-        task=send_configs,
-        dry_run=True,
-        configs=["interface loopback123", "description neat"],
+        task=send_configs, dry_run=True, configs=["interface loopback123", "description neat"],
     )
     assert result["sea-ios-1"].result is None
     assert result["sea-ios-1"].failed is False
@@ -137,15 +130,11 @@ def test_send_interactive(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_send_interactive(cls, interact, hidden_response):
+    def mock_send_interactive(cls, interact_events, failed_when_contains):
         response = Response(
-            host="fake_as_heck",
-            channel_input=interact[0],
-            expectation=interact[1],
-            channel_response=interact[2],
-            finale=interact[3],
+            host="fake_as_heck", channel_input=", ".join([event[0] for event in interact_events]),
         )
-        response.record_response("Clear logging buffer [confirm]\n\n\n3560CX#")
+        response._record_response("clear logg\nClear logging buffer [confirm]\n\ncsr1000v#")
         return response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
@@ -153,11 +142,11 @@ def test_send_interactive(nornir, monkeypatch):
 
     result = nornir.run(
         task=send_interactive,
-        interact=["clear logg", "are you sure blah blah", "y", "sea-ios-1#"],
+        interact_events=[("clear logg", "are you sure blah blah"), ("y", "csr1000#")],
     )
     assert (
         result["sea-ios-1"].result.result
-        == "Clear logging buffer [confirm]\n\n\n3560CX#"
+        == "clear logg\nClear logging buffer [confirm]\n\ncsr1000v#"
     )
     assert result["sea-ios-1"].failed is False
     assert result["sea-ios-1"].changed is True

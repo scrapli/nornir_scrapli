@@ -20,9 +20,7 @@ def send_commands(task: Task, commands: List[str], strip_prompt: bool = True) ->
 
     """
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
-    scrapli_response = scrapli_conn.send_commands(
-        commands=commands, strip_prompt=strip_prompt
-    )
+    scrapli_response = scrapli_conn.send_commands(commands=commands, strip_prompt=strip_prompt)
 
     failed = True
     if not all([response.failed for response in scrapli_response]):

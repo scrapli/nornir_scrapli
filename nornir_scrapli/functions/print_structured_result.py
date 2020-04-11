@@ -17,6 +17,7 @@ def print_structured_result(
     failed: bool = False,
     severity_level: int = logging.INFO,
     parser: str = "textfsm",
+    to_dict: bool = True,
     fail_to_string: bool = False,
 ) -> None:
     """
@@ -56,7 +57,7 @@ def print_structured_result(
                     stderr=individual_result.stderr,
                     stdout=individual_result.stdout,
                 )
-                structured_result = parser_method()
+                structured_result = parser_method(to_dict=to_dict)
                 if not structured_result and fail_to_string:
                     updated_result.result = scrapli_response.result
                 else:

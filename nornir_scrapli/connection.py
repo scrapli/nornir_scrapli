@@ -3,13 +3,7 @@ from typing import Any, Dict, Optional
 
 from nornir.core.configuration import Config
 from nornir.core.connections import ConnectionPlugin, Connections
-from scrapli.driver.core import (
-    EOSDriver,
-    IOSXEDriver,
-    IOSXRDriver,
-    JunosDriver,
-    NXOSDriver,
-)
+from scrapli.driver.core import EOSDriver, IOSXEDriver, IOSXRDriver, JunosDriver, NXOSDriver
 
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 
@@ -95,9 +89,7 @@ class Scrapli(ConnectionPlugin):
 
         scrapli_driver = None
         if platform is not None:
-            scrapli_driver = PLATFORM_MAP.get(
-                platform, NAPALM_PLATFORM_MAP.get(platform, None)
-            )
+            scrapli_driver = PLATFORM_MAP.get(platform, NAPALM_PLATFORM_MAP.get(platform, None))
         if scrapli_driver is None:
             raise NornirScrapliInvalidPlatform(
                 f"Provided platform `{platform}` is not a valid scrapli or napalm platform."

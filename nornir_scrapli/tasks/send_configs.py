@@ -27,9 +27,7 @@ def send_configs(
 
     """
     if configs is None:
-        return Result(
-            host=task.host, result="No configs provided...", failed=True, changed=False
-        )
+        return Result(host=task.host, result="No configs provided...", failed=True, changed=False)
     if isinstance(configs, str):
         configs = [configs]
 
@@ -41,9 +39,7 @@ def send_configs(
         scrapli_conn.acquire_priv(scrapli_conn.default_desired_priv)
         return Result(host=task.host, result=None, failed=False, changed=False)
 
-    scrapli_response = scrapli_conn.send_configs(
-        configs=configs, strip_prompt=strip_prompt
-    )
+    scrapli_response = scrapli_conn.send_configs(configs=configs, strip_prompt=strip_prompt)
 
     failed = True
     if not all([response.failed for response in scrapli_response]):

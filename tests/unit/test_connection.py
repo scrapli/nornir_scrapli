@@ -21,9 +21,7 @@ def test_connection_setup(nornir, monkeypatch):
         pass
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
-    scrapli_conn = nornir.inventory.hosts["sea-ios-1"].get_connection(
-        "scrapli", nornir.config
-    )
+    scrapli_conn = nornir.inventory.hosts["sea-ios-1"].get_connection("scrapli", nornir.config)
     assert scrapli_conn.transport.host == "172.18.0.11"
     assert scrapli_conn.transport.port == 22
     assert scrapli_conn.transport.auth_username == "vrnetlab"
@@ -51,6 +49,5 @@ def test_connection_invalid_platform():
         )
         nornir.inventory.hosts["sea-ios-1"].get_connection("scrapli", nornir.config)
     assert (
-        str(exc.value)
-        == "Provided platform `tacocat` is not a valid scrapli or napalm platform."
+        str(exc.value) == "Provided platform `tacocat` is not a valid scrapli or napalm platform."
     )
