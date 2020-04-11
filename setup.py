@@ -9,7 +9,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="nornir_scrapli",
-    version="2020.04.05",
+    version="2020.04.11",
     author=__author__,
     author_email="carl.r.montanari@gmail.com",
     description="scrapli Nornir plugin",
