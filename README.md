@@ -85,9 +85,25 @@ send_configs result:
 
 ```
 
-# Supported Platforms
+## Supported Platforms
 
 nornir_scrapli supports the "core" scrapli drivers. See [scrapli docs](https://github.com/carlmontanari/scrapli#supported-platforms) for more info.
+
+
+# Documentation
+
+Documentation is auto-generated [using pdoc3](https://github.com/pdoc3/pdoc). Documentation is linted (see Linting and
+ Testing section) via [pydocstyle](https://github.com/PyCQA/pydocstyle/).
+
+Documentation is hosted via GitHub Pages and can be found
+[here](https://carlmontanari.github.io/scrapli/docs/nornir_scrapli/index.html). You can also view this readme as a web
+ page [here](https://carlmontanari.github.io/nornir_scrapli/).
+
+To regenerate documentation locally, use the following make command:
+
+```
+make docs
+```
 
 
 # General Information

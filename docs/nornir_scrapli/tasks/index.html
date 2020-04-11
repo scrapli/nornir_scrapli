@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.5" />
+<title>nornir_scrapli.tasks API documentation</title>
+<meta name="description" content="nornir_scrapli.tasks" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>nornir_scrapli.tasks</code></h1>
+</header>
+<section id="section-intro">
+<p>nornir_scrapli.tasks</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;nornir_scrapli.tasks&#34;&#34;&#34;
+from nornir_scrapli.connection import register
+from nornir_scrapli.tasks.get_prompt import get_prompt
+from nornir_scrapli.tasks.send_command import send_command
+from nornir_scrapli.tasks.send_commands import send_commands
+from nornir_scrapli.tasks.send_configs import send_configs
+from nornir_scrapli.tasks.send_interactive import send_interactive
+
+# register the scrapli Connection plugin in nornir
+register()
+
+__all__ = (
+    &#34;get_prompt&#34;,
+    &#34;send_command&#34;,
+    &#34;send_commands&#34;,
+    &#34;send_configs&#34;,
+    &#34;send_interactive&#34;,
+)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="nornir_scrapli.tasks.get_prompt"><code class="name flex">
+<span>def <span class="ident">get_prompt</span></span>(<span>task)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get current prompt from device using scrapli</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>Result</code></strong></dt>
+<dd>nornir result object with Result.result value set to current prompt</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>N</code>/<code>A</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_prompt(task: Task) -&gt; Result:
+    &#34;&#34;&#34;
+    Get current prompt from device using scrapli
+
+    Args:
+        task: nornir task object
+
+    Returns:
+        Result: nornir result object with Result.result value set to current prompt
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
+    prompt = scrapli_conn.get_prompt()
+    return Result(host=task.host, result=prompt, failed=False, changed=False)</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.send_command"><code class="name flex">
+<span>def <span class="ident">send_command</span></span>(<span>task, command, strip_prompt=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Send a single command to device using scrapli</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>command</code></strong></dt>
+<dd>string to send to device in privilege exec mode</dd>
+<dt><strong><code>strip_prompt</code></strong></dt>
+<dd>True/False strip prompt from returned output</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>Result</code></strong></dt>
+<dd>nornir result object with Result.result value set to returned scrapli Response
+object</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>N</code>/<code>A</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def send_command(task: Task, command: str, strip_prompt: bool = True,) -&gt; Result:
+    &#34;&#34;&#34;
+    Send a single command to device using scrapli
+
+    Args:
+        task: nornir task object
+        command: string to send to device in privilege exec mode
+        strip_prompt: True/False strip prompt from returned output
+
+    Returns:
+        Result: nornir result object with Result.result value set to returned scrapli Response
+            object
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.send_command(command=command, strip_prompt=strip_prompt)
+
+    result = Result(
+        host=task.host,
+        result=scrapli_response.result,
+        failed=scrapli_response.failed,
+        changed=False,
+    )
+    setattr(result, &#34;scrapli_response&#34;, scrapli_response)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.send_commands"><code class="name flex">
+<span>def <span class="ident">send_commands</span></span>(<span>task, commands, strip_prompt=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Send a single command to device using scrapli</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>commands</code></strong></dt>
+<dd>list of strings to send to device in privilege exec mode</dd>
+<dt><strong><code>strip_prompt</code></strong></dt>
+<dd>True/False strip prompt from returned output</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>Result</code></strong></dt>
+<dd>nornir result object with Result.result value set to returned scrapli Response
+object</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>N</code>/<code>A</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def send_commands(task: Task, commands: List[str], strip_prompt: bool = True) -&gt; Result:
+    &#34;&#34;&#34;
+    Send a single command to device using scrapli
+
+    Args:
+        task: nornir task object
+        commands: list of strings to send to device in privilege exec mode
+        strip_prompt: True/False strip prompt from returned output
+
+    Returns:
+        Result: nornir result object with Result.result value set to returned scrapli Response
+            object
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.send_commands(commands=commands, strip_prompt=strip_prompt)
+
+    failed = True
+    if not all([response.failed for response in scrapli_response]):
+        failed = False
+
+    full_results = &#34;\n\n&#34;.join([response.result for response in scrapli_response])
+
+    result = Result(host=task.host, result=full_results, failed=failed, changed=False)
+    setattr(result, &#34;scrapli_response&#34;, scrapli_response)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.send_configs"><code class="name flex">
+<span>def <span class="ident">send_configs</span></span>(<span>task, dry_run=False, configs=None, strip_prompt=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Send a single command to device using scrapli</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>dry_run</code></strong></dt>
+<dd>Whether to apply changes or not; if dry run, will ensure that it is possible to
+enter config mode, but will NOT send any configs</dd>
+<dt><strong><code>configs</code></strong></dt>
+<dd>string or list of strings to send to device in config mode</dd>
+<dt><strong><code>strip_prompt</code></strong></dt>
+<dd>True/False strip prompt from returned output</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>Result</code></strong></dt>
+<dd>nornir result object with Result.result value set to returned scrapli Response
+object</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>N</code>/<code>A</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def send_configs(
+    task: Task,
+    dry_run: bool = False,
+    configs: Union[str, List[str]] = None,
+    strip_prompt: bool = True,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Send a single command to device using scrapli
+
+    Args:
+        task: nornir task object
+        dry_run: Whether to apply changes or not; if dry run, will ensure that it is possible to
+            enter config mode, but will NOT send any configs
+        configs: string or list of strings to send to device in config mode
+        strip_prompt: True/False strip prompt from returned output
+
+    Returns:
+        Result: nornir result object with Result.result value set to returned scrapli Response
+            object
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    if configs is None:
+        return Result(host=task.host, result=&#34;No configs provided...&#34;, failed=True, changed=False)
+    if isinstance(configs, str):
+        configs = [configs]
+
+    scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
+
+    if dry_run:
+        # if dry run, try to acquire config mode then back out; do not send any configurations!
+        scrapli_conn.acquire_priv(&#34;configuration&#34;)
+        scrapli_conn.acquire_priv(scrapli_conn.default_desired_priv)
+        return Result(host=task.host, result=None, failed=False, changed=False)
+
+    scrapli_response = scrapli_conn.send_configs(configs=configs, strip_prompt=strip_prompt)
+
+    failed = True
+    if not all([response.failed for response in scrapli_response]):
+        failed = False
+
+    full_results = &#34;&#34;
+    for config, response in zip(configs, scrapli_response):
+        full_results += &#34;\n&#34;.join([config, response.result])
+
+    result = Result(host=task.host, result=full_results, failed=failed, changed=True)
+    setattr(result, &#34;scrapli_response&#34;, scrapli_response)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.send_interactive"><code class="name flex">
+<span>def <span class="ident">send_interactive</span></span>(<span>task, interact_events, failed_when_contains=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Send inputs in an interactive fashion using scrapli; usually used to handle prompts</p>
+<p>Used to interact with devices where prompts change per input, and where inputs may be hidden
+such as in the case of a password input. This can be used to respond to challenges from
+devices such as the confirmation for the command "clear logging" on IOSXE devices for
+example. You may have as many elements in the "interact_events" list as needed, and each
+element of that list should be a tuple of two or three elements. The first element is always
+the input to send as a string, the second should be the expected response as a string, and
+the optional third a bool for whether or not the input is "hidden" (i.e. password input)
+An example where we need this sort of capability:</p>
+<pre><code>3560CX#copy flash: scp:
+Source filename []? test1.txt
+Address or name of remote host []? 172.31.254.100
+Destination username [carl]?
+Writing test1.txt
+Password:
+Password:
+ Sink: C0644 639 test1.txt
+!
+639 bytes copied in 12.066 secs (53 bytes/sec)
+3560CX#
+</code></pre>
+<p>To accomplish this we can use the following (in "native" scrapli):</p>
+<pre><code>interact = conn.channel.send_inputs_interact(
+    [
+        (&quot;copy flash: scp:&quot;, &quot;Source filename []?&quot;, False),
+        (&quot;test1.txt&quot;, &quot;Address or name of remote host []?&quot;, False),
+        (&quot;172.31.254.100&quot;, &quot;Destination username [carl]?&quot;, False),
+        (&quot;carl&quot;, &quot;Password:&quot;, False),
+        (&quot;super_secure_password&quot;, prompt, True),
+    ]
+)
+</code></pre>
+<p>If we needed to deal with more prompts we could simply continue adding tuples to the list of
+interact "events".</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>interact_events</code></strong></dt>
+<dd>list of tuples containing the "interactions" with the device
+each list element must have an input and an expected response, and may have an
+optional bool for the third and final element &ndash; the optional bool specifies if the
+input that is sent to the device is "hidden" (ex: password), if the hidden param is
+not provided it is assumed the input is "normal" (not hidden)</dd>
+<dt><strong><code>failed_when_contains</code></strong></dt>
+<dd>list of strings that, if present in final output, represent a
+failed command/interaction</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>Result</code></strong></dt>
+<dd>nornir result object with Result.result value set to returned scrapli Response
+object</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>N</code>/<code>A</code></dt>
+<dd>&nbsp;</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def send_interactive(
+    task: Task,
+    interact_events: List[Tuple[str, str, Optional[bool]]],
+    failed_when_contains: Optional[Union[str, List[str]]] = None,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Send inputs in an interactive fashion using scrapli; usually used to handle prompts
+
+    Used to interact with devices where prompts change per input, and where inputs may be hidden
+    such as in the case of a password input. This can be used to respond to challenges from
+    devices such as the confirmation for the command &#34;clear logging&#34; on IOSXE devices for
+    example. You may have as many elements in the &#34;interact_events&#34; list as needed, and each
+    element of that list should be a tuple of two or three elements. The first element is always
+    the input to send as a string, the second should be the expected response as a string, and
+    the optional third a bool for whether or not the input is &#34;hidden&#34; (i.e. password input)
+    An example where we need this sort of capability:
+
+    ```
+    3560CX#copy flash: scp:
+    Source filename []? test1.txt
+    Address or name of remote host []? 172.31.254.100
+    Destination username [carl]?
+    Writing test1.txt
+    Password:
+    Password:
+     Sink: C0644 639 test1.txt
+    !
+    639 bytes copied in 12.066 secs (53 bytes/sec)
+    3560CX#
+    ```
+
+    To accomplish this we can use the following (in &#34;native&#34; scrapli):
+
+    ```
+    interact = conn.channel.send_inputs_interact(
+        [
+            (&#34;copy flash: scp:&#34;, &#34;Source filename []?&#34;, False),
+            (&#34;test1.txt&#34;, &#34;Address or name of remote host []?&#34;, False),
+            (&#34;172.31.254.100&#34;, &#34;Destination username [carl]?&#34;, False),
+            (&#34;carl&#34;, &#34;Password:&#34;, False),
+            (&#34;super_secure_password&#34;, prompt, True),
+        ]
+    )
+    ```
+
+    If we needed to deal with more prompts we could simply continue adding tuples to the list of
+    interact &#34;events&#34;.
+
+    Args:
+        task: nornir task object
+        interact_events: list of tuples containing the &#34;interactions&#34; with the device
+            each list element must have an input and an expected response, and may have an
+            optional bool for the third and final element -- the optional bool specifies if the
+            input that is sent to the device is &#34;hidden&#34; (ex: password), if the hidden param is
+            not provided it is assumed the input is &#34;normal&#34; (not hidden)
+        failed_when_contains: list of strings that, if present in final output, represent a
+            failed command/interaction
+
+    Returns:
+        Result: nornir result object with Result.result value set to returned scrapli Response
+            object
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.send_interactive(
+        interact_events=interact_events, failed_when_contains=failed_when_contains
+    )
+
+    result = Result(
+        host=task.host, result=scrapli_response, failed=scrapli_response.failed, changed=True,
+    )
+    setattr(result, &#34;scrapli_response&#34;, scrapli_response)
+    return result</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="nornir_scrapli" href="../index.html">nornir_scrapli</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="nornir_scrapli.tasks.get_prompt" href="#nornir_scrapli.tasks.get_prompt">get_prompt</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.send_command" href="#nornir_scrapli.tasks.send_command">send_command</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.send_commands" href="#nornir_scrapli.tasks.send_commands">send_commands</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.send_configs" href="#nornir_scrapli.tasks.send_configs">send_configs</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.send_interactive" href="#nornir_scrapli.tasks.send_interactive">send_interactive</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

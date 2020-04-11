@@ -14,3 +14,12 @@ cov:
 
 test:
 	python -m pytest tests/
+
+.PHONY: docs
+docs:
+	rm -rf docs/nornir_scrapli
+	python -m pdoc \
+	--html \
+	--output-dir docs \
+	nornir_scrapli \
+	--force

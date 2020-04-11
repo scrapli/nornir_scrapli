@@ -1,3 +1,2 @@
 scrapli>=2020.04.11
 nornir>=2.4.0
-#nornir>=3.0.0
