@@ -1,5 +1,6 @@
 import pytest
 from nornir.core.exceptions import NornirExecutionError
+from scrapli.driver import GenericDriver
 from scrapli.driver.core import IOSXEDriver
 from scrapli.response import Response
 
@@ -121,6 +122,22 @@ def test_send_configs_dry_run(nornir, monkeypatch):
     )
     assert result["sea-ios-1"].result is None
     assert result["sea-ios-1"].failed is False
+    assert result["sea-ios-1"].changed is False
+
+
+def test_send_configs_generic_driver(nornir_generic, monkeypatch):
+    from nornir_scrapli.tasks import send_configs
+
+    def mock_open(cls):
+        pass
+
+    monkeypatch.setattr(GenericDriver, "open", mock_open)
+
+    result = nornir_generic.run(
+        task=send_configs, dry_run=True, configs=["interface loopback123", "description neat"],
+    )
+    assert result["sea-ios-1"].result == "No config mode for 'generic' platform type"
+    assert result["sea-ios-1"].failed is True
     assert result["sea-ios-1"].changed is False
 
 

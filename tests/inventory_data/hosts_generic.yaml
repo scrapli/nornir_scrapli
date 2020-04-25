@@ -1,0 +1,7 @@
+---
+sea-ios-1:
+  hostname: 172.18.0.11
+  platform: generic
+  data:
+    router_id: 10.255.255.101
+    bgp_local_asn: 65535

@@ -26,6 +26,13 @@ def send_configs(
         N/A
 
     """
+    if task.host.platform == "generic":
+        return Result(
+            host=task.host,
+            result="No config mode for 'generic' platform type",
+            failed=True,
+            changed=False,
+        )
     if configs is None:
         return Result(host=task.host, result="No configs provided...", failed=True, changed=False)
     if isinstance(configs, str):

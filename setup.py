@@ -17,7 +17,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/carlmontanari/nornir_scrapli",
     packages=setuptools.find_packages(),
-    install_requires=["scrapli>=2020.04.11", "nornir>=2.4.0"],
+    install_requires=["scrapli>=2020.04.11", "nornir>=2.4.0,<3.0.0"],
     extras_require={},
     classifiers=[
         "License :: OSI Approved :: MIT License",
