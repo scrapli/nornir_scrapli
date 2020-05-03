@@ -270,6 +270,13 @@ object</dd>
         N/A
 
     &#34;&#34;&#34;
+    if task.host.platform == &#34;generic&#34;:
+        return Result(
+            host=task.host,
+            result=&#34;No config mode for &#39;generic&#39; platform type&#34;,
+            failed=True,
+            changed=False,
+        )
     if configs is None:
         return Result(host=task.host, result=&#34;No configs provided...&#34;, failed=True, changed=False)
     if isinstance(configs, str):
@@ -280,7 +287,7 @@ object</dd>
     if dry_run:
         # if dry run, try to acquire config mode then back out; do not send any configurations!
         scrapli_conn.acquire_priv(&#34;configuration&#34;)
-        scrapli_conn.acquire_priv(scrapli_conn.default_desired_priv)
+        scrapli_conn.acquire_priv(scrapli_conn.default_desired_privilege_level)
         return Result(host=task.host, result=None, failed=False, changed=False)
 
     scrapli_response = scrapli_conn.send_configs(configs=configs, strip_prompt=strip_prompt)

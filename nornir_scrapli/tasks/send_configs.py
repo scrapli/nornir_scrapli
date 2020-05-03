@@ -43,7 +43,7 @@ def send_configs(
     if dry_run:
         # if dry run, try to acquire config mode then back out; do not send any configurations!
         scrapli_conn.acquire_priv("configuration")
-        scrapli_conn.acquire_priv(scrapli_conn.default_desired_priv)
+        scrapli_conn.acquire_priv(scrapli_conn.default_desired_privilege_level)
         return Result(host=task.host, result=None, failed=False, changed=False)
 
     scrapli_response = scrapli_conn.send_configs(configs=configs, strip_prompt=strip_prompt)

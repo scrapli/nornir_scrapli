@@ -30,6 +30,7 @@ from typing import Any, Dict, Optional
 
 from nornir.core.configuration import Config
 from nornir.core.connections import ConnectionPlugin, Connections
+from scrapli.driver import GenericDriver
 from scrapli.driver.core import EOSDriver, IOSXEDriver, IOSXRDriver, JunosDriver, NXOSDriver
 
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
@@ -41,6 +42,7 @@ PLATFORM_MAP = {
     &#34;cisco_iosxr&#34;: IOSXRDriver,
     &#34;arista_eos&#34;: EOSDriver,
     &#34;juniper_junos&#34;: JunosDriver,
+    &#34;generic&#34;: GenericDriver,
 }
 NAPALM_PLATFORM_MAP = {
     &#34;ios&#34;: IOSXEDriver,
