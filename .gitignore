@@ -58,6 +58,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+nornir2/
+nornir3/
 
 # pycharm
 .idea

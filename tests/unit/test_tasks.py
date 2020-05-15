@@ -29,7 +29,7 @@ def test_send_command(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_send_command(cls, command, strip_prompt):
+    def mock_send_command(cls, command, strip_prompt, failed_when_contains):
         response = Response(host="fake_as_heck", channel_input=command)
         response._record_response("some stuff about whatever")
         return response
@@ -49,7 +49,7 @@ def test_send_commands(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_send_commands(cls, commands, strip_prompt):
+    def mock_send_commands(cls, commands, strip_prompt, failed_when_contains, stop_on_failed):
         response = Response(host="fake_as_heck", channel_input=commands[0])
         response._record_response("some stuff about whatever")
         return [response]
@@ -69,7 +69,7 @@ def test_send_commands_not_list(nornir_raise_on_error, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_acquire_priv(cls, desired_priv):
+    def mock_acquire_priv(cls, desired_priv, failed_when_contains="", stop_on_failed=False):
         pass
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
@@ -86,7 +86,14 @@ def test_send_configs(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_send_configs(cls, configs, strip_prompt):
+    def mock_send_configs(
+        cls,
+        configs,
+        strip_prompt,
+        failed_when_contains="",
+        stop_on_failed=False,
+        privilege_level="",
+    ):
         responses = []
         response = Response(host="fake_as_heck", channel_input=configs[0])
         response._record_response("some stuff about whatever")
@@ -147,7 +154,7 @@ def test_send_interactive(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_send_interactive(cls, interact_events, failed_when_contains):
+    def mock_send_interactive(cls, interact_events, failed_when_contains=None, privilege_level=""):
         response = Response(
             host="fake_as_heck", channel_input=", ".join([event[0] for event in interact_events]),
         )
