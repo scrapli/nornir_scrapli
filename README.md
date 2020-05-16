@@ -7,9 +7,13 @@
 
 
 nornir_scrapli
-=======
+==============
 
 nornir_scrapli -- [scrapli](https://github.com/carlmontanari/scrapli)'s plugin for nornir.
+
+Feel free to join the very awesome networktocode slack workspace [here](https://networktocode.slack.com/), where you
+ will find a `scrapli` channel where you can discuss anything about scrapli, as well as tons of other channels covering
+  all sorts of network/network-automation topics!
 
 
 # Table of Contents
@@ -18,6 +22,7 @@ nornir_scrapli -- [scrapli](https://github.com/carlmontanari/scrapli)'s plugin f
   - [Installation](#installation)
   - [A Simple Example](#a-simple-example)
 - [Supported Platforms](#supported-platforms)
+- [Documentation](#documentation)
 - [General Information](#general-information)
 
 

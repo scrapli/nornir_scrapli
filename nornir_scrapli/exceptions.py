@@ -7,3 +7,7 @@ class NornirScrapliException(Exception):
 
 class NornirScrapliInvalidPlatform(NornirScrapliException):
     """nornir_scrapli base exception"""
+
+
+class NornirScrapliNoConfigModeGenericDriver(NornirScrapliException):
+    """nornir_scrapli exception for attempting config mode on generic platform"""

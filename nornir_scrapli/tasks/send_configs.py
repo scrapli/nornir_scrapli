@@ -3,24 +3,27 @@ from typing import List, Optional, Union
 
 from nornir.core.task import Result, Task
 
+from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
+from nornir_scrapli.result import ScrapliResult, process_config_result
+
 
 def send_configs(
     task: Task,
+    configs: Union[str, List[str]],
     dry_run: bool = False,
-    configs: Union[str, List[str]] = None,
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
     privilege_level: str = "",
 ) -> Result:
     """
-    Send a single command to device using scrapli
+    Send configs to device using scrapli
 
     Args:
         task: nornir task object
+        configs: string or list of strings to send to device in config mode
         dry_run: Whether to apply changes or not; if dry run, will ensure that it is possible to
             enter config mode, but will NOT send any configs
-        configs: string or list of strings to send to device in config mode
         strip_prompt: True/False strip prompt from returned output
         failed_when_contains: string or list of strings indicating failure if found in response
         stop_on_failed: True/False stop executing commands if a command fails, returns results as of
@@ -41,14 +44,7 @@ def send_configs(
 
     """
     if task.host.platform == "generic":
-        return Result(
-            host=task.host,
-            result="No config mode for 'generic' platform type",
-            failed=True,
-            changed=False,
-        )
-    if configs is None:
-        return Result(host=task.host, result="No configs provided...", failed=True, changed=False)
+        raise NornirScrapliNoConfigModeGenericDriver("No config mode for 'generic' platform type")
 
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
 
@@ -56,7 +52,7 @@ def send_configs(
         # if dry run, try to acquire config mode then back out; do not send any configurations!
         scrapli_conn.acquire_priv("configuration")
         scrapli_conn.acquire_priv(scrapli_conn.default_desired_privilege_level)
-        return Result(host=task.host, result=None, failed=False, changed=False)
+        return ScrapliResult(host=task.host, result=None, scrapli_response=None, changed=False)
 
     scrapli_response = scrapli_conn.send_configs(
         configs=configs,
@@ -66,14 +62,10 @@ def send_configs(
         privilege_level=privilege_level,
     )
 
-    failed = True
-    if not all([response.failed for response in scrapli_response]):
-        failed = False
-
-    full_results = ""
-    for config, response in zip(configs, scrapli_response):
-        full_results += "\n".join([config, response.result])
-
-    result = Result(host=task.host, result=full_results, failed=failed, changed=True)
-    setattr(result, "scrapli_response", scrapli_response)
+    result = ScrapliResult(
+        host=task.host,
+        result=process_config_result(configs=configs, scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=True,
+    )
     return result

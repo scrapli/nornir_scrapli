@@ -4,6 +4,8 @@ from scrapli.driver import GenericDriver
 from scrapli.driver.core import IOSXEDriver
 from scrapli.response import Response
 
+from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
+
 
 def test_get_prompt(nornir, monkeypatch):
     from nornir_scrapli.tasks import get_prompt
@@ -143,9 +145,13 @@ def test_send_configs_generic_driver(nornir_generic, monkeypatch):
     result = nornir_generic.run(
         task=send_configs, dry_run=True, configs=["interface loopback123", "description neat"],
     )
-    assert result["sea-ios-1"].result == "No config mode for 'generic' platform type"
+    assert (
+        "nornir_scrapli.exceptions.NornirScrapliNoConfigModeGenericDriver"
+        in result["sea-ios-1"].result
+    )
     assert result["sea-ios-1"].failed is True
     assert result["sea-ios-1"].changed is False
+    assert isinstance(result["sea-ios-1"].exception, NornirScrapliNoConfigModeGenericDriver)
 
 
 def test_send_interactive(nornir, monkeypatch):

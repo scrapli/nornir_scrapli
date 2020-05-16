@@ -3,6 +3,8 @@ from typing import List, Optional, Union
 
 from nornir.core.task import Result, Task
 
+from nornir_scrapli.result import ScrapliResult, process_command_result
+
 
 def send_command(
     task: Task,
@@ -20,8 +22,9 @@ def send_command(
         failed_when_contains: string or list of strings indicating failure if found in response
 
     Returns:
-        Result: nornir result object with Result.result value set to returned scrapli Response
-            object
+        Result: scrapli nornir result object; almost identical to a "normal" nornir result object,
+            but contains an additional attribute "scrapli_response" that contains the original
+            response from scrapli
 
     Raises:
         N/A
@@ -32,11 +35,10 @@ def send_command(
         command=command, strip_prompt=strip_prompt, failed_when_contains=failed_when_contains
     )
 
-    result = Result(
+    result = ScrapliResult(
         host=task.host,
-        result=scrapli_response.result,
-        failed=scrapli_response.failed,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
         changed=False,
     )
-    setattr(result, "scrapli_response", scrapli_response)
     return result

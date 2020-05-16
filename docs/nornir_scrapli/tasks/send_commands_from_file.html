@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
-<title>nornir_scrapli.functions API documentation</title>
-<meta name="description" content="nornir_scrapli.functions" />
+<title>nornir_scrapli.tasks.send_commands_from_file API documentation</title>
+<meta name="description" content="nornir_scrapli.tasks.send_commands" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,18 +17,63 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>nornir_scrapli.functions</code></h1>
+<h1 class="title">Module <code>nornir_scrapli.tasks.send_commands_from_file</code></h1>
 </header>
 <section id="section-intro">
-<p>nornir_scrapli.functions</p>
+<p>nornir_scrapli.tasks.send_commands</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;nornir_scrapli.functions&#34;&#34;&#34;
-from nornir_scrapli.functions.print_structured_result import print_structured_result
+<pre><code class="python">&#34;&#34;&#34;nornir_scrapli.tasks.send_commands&#34;&#34;&#34;
+from typing import List, Optional, Union
 
-__all__ = (&#34;print_structured_result&#34;,)</code></pre>
+from nornir.core.task import Result, Task
+
+from nornir_scrapli.result import ScrapliResult, process_command_result
+
+
+def send_commands_from_file(
+    task: Task,
+    file: str,
+    strip_prompt: bool = True,
+    failed_when_contains: Optional[Union[str, List[str]]] = None,
+    stop_on_failed: bool = False,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Send a list of commands from a file to device using scrapli
+
+    Args:
+        task: nornir task object
+        file: string path to file
+        strip_prompt: True/False strip prompt from returned output
+        failed_when_contains: string or list of strings indicating failure if found in response
+        stop_on_failed: True/False stop executing commands if a command fails, returns results as of
+            current execution
+
+    Returns:
+        Result: nornir result object with Result.result value set to returned scrapli Response
+            object
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.send_commands_from_file(
+        file=file,
+        strip_prompt=strip_prompt,
+        failed_when_contains=failed_when_contains,
+        stop_on_failed=stop_on_failed,
+    )
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=False,
+    )
+    return result</code></pre>
 </details>
 </section>
 <section>
@@ -38,93 +83,81 @@ __all__ = (&#34;print_structured_result&#34;,)</code></pre>
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="nornir_scrapli.functions.print_structured_result"><code class="name flex">
-<span>def <span class="ident">print_structured_result</span></span>(<span>result: nornir.core.task.Result, host: Union[str, NoneType] = None, nr_vars: Union[List[str], NoneType] = None, failed: bool = False, severity_level: int = 20, parser: str = 'textfsm', to_dict: bool = True, fail_to_string: bool = False) -> NoneType</span>
+<dt id="nornir_scrapli.tasks.send_commands_from_file.send_commands_from_file"><code class="name flex">
+<span>def <span class="ident">send_commands_from_file</span></span>(<span>task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False) -> nornir.core.task.Result</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Prints the :obj:<code>nornir.core.task.Result</code> from a previous task to screen</p>
-<h2 id="arguments">Arguments</h2>
+<div class="desc"><p>Send a list of commands from a file to device using scrapli</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>result</code></strong> :&ensp;<code>from a previous task</code></dt>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>file</code></strong></dt>
+<dd>string path to file</dd>
+<dt><strong><code>strip_prompt</code></strong></dt>
+<dd>True/False strip prompt from returned output</dd>
+<dt><strong><code>failed_when_contains</code></strong></dt>
+<dd>string or list of strings indicating failure if found in response</dd>
+<dt><strong><code>stop_on_failed</code></strong></dt>
+<dd>True/False stop executing commands if a command fails, returns results as of
+current execution</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set to returned scrapli Response
+object</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>N/A</code></dt>
 <dd>&nbsp;</dd>
-<dt><strong><code>host</code></strong> :&ensp;<code>nornir host object for the task</code></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>nr_vars</code></strong> :&ensp;<code>Which attributes you want to print</code></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>failed</code></strong> :&ensp;<code>if </code>True<code> assume the task failed</code></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>severity_level</code></strong> :&ensp;<code>Print only errors with this severity level</code> or <code>higher</code></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>parser</code></strong> :&ensp;<code>textfsm|genie -- parser to parse output with</code></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>fail_to_string</code></strong> :&ensp;<code>fallback to printing unstructured output</code> or <code>have tasks skipped (because</code></dt>
-<dd>print_result won't print empty lists which scrapli returns if parsing fails)</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def print_structured_result(
-    result: Result,
-    host: Optional[str] = None,
-    nr_vars: Optional[List[str]] = None,
-    failed: bool = False,
-    severity_level: int = logging.INFO,
-    parser: str = &#34;textfsm&#34;,
-    to_dict: bool = True,
-    fail_to_string: bool = False,
-) -&gt; None:
+<pre><code class="python">def send_commands_from_file(
+    task: Task,
+    file: str,
+    strip_prompt: bool = True,
+    failed_when_contains: Optional[Union[str, List[str]]] = None,
+    stop_on_failed: bool = False,
+) -&gt; Result:
     &#34;&#34;&#34;
-    Prints the :obj:`nornir.core.task.Result` from a previous task to screen
+    Send a list of commands from a file to device using scrapli
 
-    Arguments:
-        result: from a previous task
-        host: nornir host object for the task
-        nr_vars: Which attributes you want to print
-        failed: if `True` assume the task failed
-        severity_level: Print only errors with this severity level or higher
-        parser: textfsm|genie -- parser to parse output with
-        fail_to_string: fallback to printing unstructured output or have tasks skipped (because
-            print_result won&#39;t print empty lists which scrapli returns if parsing fails)
+    Args:
+        task: nornir task object
+        file: string path to file
+        strip_prompt: True/False strip prompt from returned output
+        failed_when_contains: string or list of strings indicating failure if found in response
+        stop_on_failed: True/False stop executing commands if a command fails, returns results as of
+            current execution
+
+    Returns:
+        Result: nornir result object with Result.result value set to returned scrapli Response
+            object
+
+    Raises:
+        N/A
 
     &#34;&#34;&#34;
-    updated_agg_result = AggregatedResult(result.name)
-    for hostname, multi_result in result.items():
-        updated_multi_result = MultiResult(result.name)
-        for individual_result in multi_result:
-            scrapli_responses = getattr(individual_result, &#34;scrapli_response&#34;, None)
-            if isinstance(scrapli_responses, Response):
-                scrapli_responses = [scrapli_responses]
-            if not scrapli_responses:
-                updated_multi_result.append(individual_result)
-                continue
-            for scrapli_response in scrapli_responses:
-                parser_method = getattr(scrapli_response, f&#34;{parser}_parse_output&#34;)
-                updated_result = Result(
-                    host=individual_result.host,
-                    changed=individual_result.changed,
-                    diff=individual_result.diff,
-                    exception=individual_result.exception,
-                    failed=individual_result.failed,
-                    name=individual_result.name,
-                    severity_level=individual_result.severity_level,
-                    stderr=individual_result.stderr,
-                    stdout=individual_result.stdout,
-                )
-                structured_result = parser_method(to_dict=to_dict)
-                if not structured_result and fail_to_string:
-                    updated_result.result = scrapli_response.result
-                else:
-                    updated_result.result = structured_result
-                updated_multi_result.append(updated_result)
-        if updated_multi_result:
-            updated_agg_result[hostname] = updated_multi_result  # noqa
+    scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.send_commands_from_file(
+        file=file,
+        strip_prompt=strip_prompt,
+        failed_when_contains=failed_when_contains,
+        stop_on_failed=stop_on_failed,
+    )
 
-    LOCK.acquire()
-    try:
-        _print_result(updated_agg_result, host, nr_vars, failed, severity_level)
-    finally:
-        LOCK.release()</code></pre>
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=False,
+    )
+    return result</code></pre>
 </details>
 </dd>
 </dl>
@@ -140,12 +173,12 @@ __all__ = (&#34;print_structured_result&#34;,)</code></pre>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="nornir_scrapli" href="../index.html">nornir_scrapli</a></code></li>
+<li><code><a title="nornir_scrapli.tasks" href="index.html">nornir_scrapli.tasks</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="nornir_scrapli.functions.print_structured_result" href="#nornir_scrapli.functions.print_structured_result">print_structured_result</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.send_commands_from_file.send_commands_from_file" href="#nornir_scrapli.tasks.send_commands_from_file.send_commands_from_file">send_commands_from_file</a></code></li>
 </ul>
 </li>
 </ul>

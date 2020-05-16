@@ -3,6 +3,8 @@ from typing import List, Optional, Union
 
 from nornir.core.task import Result, Task
 
+from nornir_scrapli.result import ScrapliResult, process_command_result
+
 
 def send_commands(
     task: Task,
@@ -38,12 +40,10 @@ def send_commands(
         stop_on_failed=stop_on_failed,
     )
 
-    failed = True
-    if not all([response.failed for response in scrapli_response]):
-        failed = False
-
-    full_results = "\n\n".join([response.result for response in scrapli_response])
-
-    result = Result(host=task.host, result=full_results, failed=failed, changed=False)
-    setattr(result, "scrapli_response", scrapli_response)
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=False,
+    )
     return result
