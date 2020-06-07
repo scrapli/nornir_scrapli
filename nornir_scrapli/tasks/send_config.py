@@ -1,4 +1,4 @@
-"""nornir_scrapli.tasks.send_configs"""
+"""nornir_scrapli.tasks.send_config"""
 from typing import List, Optional, Union
 
 from nornir.core.task import Result, Task
@@ -6,9 +6,9 @@ from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 from nornir_scrapli.result import ScrapliResult, process_config_result
 
 
-def send_configs(
+def send_config(
     task: Task,
-    configs: List[str],
+    config: str,
     dry_run: bool = False,
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
@@ -16,11 +16,11 @@ def send_configs(
     privilege_level: str = "",
 ) -> Result:
     """
-    Send configs to device using scrapli
+    Send a config to device using scrapli
 
     Args:
         task: nornir task object
-        configs: list of strings to send to device in config mode
+        config: string configuration to send to the device, supports sending multi-line strings
         dry_run: Whether to apply changes or not; if dry run, will ensure that it is possible to
             enter config mode, but will NOT send any configs
         strip_prompt: True/False strip prompt from returned output
@@ -54,8 +54,8 @@ def send_configs(
         scrapli_conn.acquire_priv(scrapli_conn.default_desired_privilege_level)
         return ScrapliResult(host=task.host, result=None, scrapli_response=None, changed=False)
 
-    scrapli_response = scrapli_conn.send_configs(
-        configs=configs,
+    scrapli_response = scrapli_conn.send_config(
+        config=config,
         strip_prompt=strip_prompt,
         failed_when_contains=failed_when_contains,
         stop_on_failed=stop_on_failed,

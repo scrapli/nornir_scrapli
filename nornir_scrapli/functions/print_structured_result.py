@@ -1,10 +1,9 @@
 """nornir_scrapli.functions.print_structured_result"""
 import logging
 import threading
-from typing import List, Optional
 
 from nornir.core.task import AggregatedResult, MultiResult, Result
-from nornir.plugins.functions.text import _print_result
+from nornir_utils.plugins.functions.print_result import _print_result
 from scrapli.response import Response
 
 LOCK = threading.Lock()
@@ -12,8 +11,6 @@ LOCK = threading.Lock()
 
 def print_structured_result(
     result: Result,
-    host: Optional[str] = None,
-    nr_vars: Optional[List[str]] = None,
     failed: bool = False,
     severity_level: int = logging.INFO,
     parser: str = "textfsm",
@@ -25,11 +22,11 @@ def print_structured_result(
 
     Arguments:
         result: from a previous task
-        host: nornir host object for the task
-        nr_vars: Which attributes you want to print
         failed: if `True` assume the task failed
         severity_level: Print only errors with this severity level or higher
         parser: textfsm|genie -- parser to parse output with
+        to_dict: output structured data in dict form instead -- basically put k:v instead of just
+            lists of lists of values for textfsm output
         fail_to_string: fallback to printing unstructured output or have tasks skipped (because
             print_result won't print empty lists which scrapli returns if parsing fails)
 
@@ -68,6 +65,8 @@ def print_structured_result(
 
     LOCK.acquire()
     try:
-        _print_result(updated_agg_result, host, nr_vars, failed, severity_level)
+        _print_result(
+            result=updated_agg_result, attrs=None, failed=failed, severity_level=severity_level
+        )
     finally:
         LOCK.release()

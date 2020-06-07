@@ -2,6 +2,8 @@
 """nornir_scrapli - scrapli nornir plugin"""
 import setuptools
 
+from nornir_scrapli import __version__
+
 __author__ = "Carl Montanari"
 
 with open("README.md", "r") as f:
@@ -9,7 +11,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="nornir_scrapli",
-    version="2020.04.11",
+    version=__version__,
     author=__author__,
     author_email="carl.r.montanari@gmail.com",
     description="scrapli Nornir plugin",
@@ -17,7 +19,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/carlmontanari/nornir_scrapli",
     packages=setuptools.find_packages(),
-    install_requires=["scrapli>=2020.04.11", "nornir>=2.4.0,<3.0.0"],
+    install_requires=["scrapli>=2020.06.06", "nornir>=3.0.0a0"],
     extras_require={},
     classifiers=[
         "License :: OSI Approved :: MIT License",
@@ -29,4 +31,8 @@ setuptools.setup(
         "Operating System :: MacOS",
     ],
     python_requires=">=3.6",
+    entry_points="""
+    [nornir.plugins.connections]
+    scrapli=nornir_scrapli.connection:Scrapli
+    """,
 )

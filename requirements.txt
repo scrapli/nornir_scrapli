@@ -1,2 +1,5 @@
-scrapli>=2020.05.09
-nornir>=2.4.0,<3.0.0
+scrapli>=2020.06.06
+nornir>=3.0.0a0
+nornir-utils>=0.1.0a1
+textfsm>=1.1.0
+ntc_templates>=1.4.0

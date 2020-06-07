@@ -1,4 +1,0 @@
-# preparing for nornir 3 release
-scrapli>=2020.05.09
-nornir @ git+git://github.com/nornir-automation/nornir.git@3.0.0
-nornir-utils

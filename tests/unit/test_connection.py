@@ -1,16 +1,13 @@
 import os
 
 import pytest
+
 from nornir import InitNornir
 from nornir.core.connections import Connections
-
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 
 
 def test_connection_registration(nornir):
-    assert "scrapli" not in Connections.available
-    from nornir_scrapli.tasks import get_prompt
-
     assert "scrapli" in Connections.available
 
 
@@ -39,11 +36,12 @@ def test_connection_invalid_platform():
     with pytest.raises(NornirScrapliInvalidPlatform) as exc:
         nornir = InitNornir(
             inventory={
+                "plugin": "YAMLInventory",
                 "options": {
                     "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                     "group_file": "{}/inventory_data/bad_groups.yaml".format(dir_path),
                     "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-                }
+                },
             },
             dry_run=True,
         )

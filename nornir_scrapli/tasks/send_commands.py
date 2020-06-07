@@ -2,7 +2,6 @@
 from typing import List, Optional, Union
 
 from nornir.core.task import Result, Task
-
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 

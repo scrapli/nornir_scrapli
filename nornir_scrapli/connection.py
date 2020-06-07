@@ -2,11 +2,10 @@
 from typing import Any, Dict, Optional
 
 from nornir.core.configuration import Config
-from nornir.core.connections import ConnectionPlugin, Connections
+from nornir.core.connections import ConnectionPlugin
+from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 from scrapli.driver import GenericDriver
 from scrapli.driver.core import EOSDriver, IOSXEDriver, IOSXRDriver, JunosDriver, NXOSDriver
-
-from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 
 CONNECTION_NAME = "scrapli"
 PLATFORM_MAP = {
@@ -26,25 +25,7 @@ NAPALM_PLATFORM_MAP = {
 }
 
 
-def register() -> None:
-    """
-    Register scrapli connection plugin to nornir
-
-    Args:
-        N/A
-
-    Returns:
-        N/A
-
-    Raises:
-        N/A
-
-    """
-    if CONNECTION_NAME not in Connections.available:
-        Connections.register(CONNECTION_NAME, Scrapli)
-
-
-class Scrapli(ConnectionPlugin):
+class Scrapli(ConnectionPlugin):  # type: ignore
     """Scrapli connection plugin for nornir"""
 
     def open(
@@ -71,7 +52,7 @@ class Scrapli(ConnectionPlugin):
             configuration: nornir configuration
 
         Returns:
-            N/A
+            N/A  # noqa: DAR202
 
         Raises:
             NornirScrapliInvalidPlatform: if no platform or an invalid scrapli/napalm platform
@@ -109,7 +90,7 @@ class Scrapli(ConnectionPlugin):
             N/A
 
         Returns:
-            N/A
+            N/A  # noqa: DAR202
 
         Raises:
             N/A

@@ -1,5 +1,5 @@
 """nornir_scrapli.result"""
-from typing import TYPE_CHECKING, Any, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 from nornir.core.task import Result
 from scrapli.response import MultiResponse, Response
@@ -27,14 +27,11 @@ def process_command_result(scrapli_response: Union[Response, MultiResponse]) -> 
     return "\n\n".join([response.result for response in scrapli_response])
 
 
-def process_config_result(
-    configs: Union[str, List[str]], scrapli_response: Union[Response, MultiResponse]
-) -> str:
+def process_config_result(scrapli_response: Union[Response, MultiResponse]) -> str:
     """
     Process and return string of scrapli response(s)
 
     Args:
-        configs: string or list of strings that were sent to device
         scrapli_response: scrapli Response or MultiResponse object
 
     Returns:
@@ -45,12 +42,21 @@ def process_config_result(
 
     """
     full_results = ""
-    for config, response in zip(configs, scrapli_response):
-        full_results += "\n".join([config, response.result])
+    if isinstance(scrapli_response, Response):
+        for config_input, config_result in zip(
+            scrapli_response.channel_input.split("\n"), scrapli_response.result.split("\n")
+        ):
+            if config_input == config_result:
+                full_results += f"{config_input}\n"
+            else:
+                full_results += "\n".join([config_input, config_result])
+    else:
+        for response in scrapli_response:
+            full_results += "\n".join([response.channel_input, response.result])
     return full_results
 
 
-class ScrapliResult(Result):
+class ScrapliResult(Result):  # type: ignore
     def __init__(
         self,
         host: "Host",
@@ -73,7 +79,7 @@ class ScrapliResult(Result):
             kwargs: keyword arguments to pass to nornir Result
 
         Returns:
-            N/A  # noqa DAR201
+            N/A  # noqa: DAR202
 
         Raises:
             N/A

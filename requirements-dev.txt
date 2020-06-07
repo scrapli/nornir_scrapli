@@ -1,14 +1,14 @@
-tox>=3.14.6
+nox>=2020.5.24
 black>=19.10b0
 isort>=4.3.21
-mypy>=0.770
-pytest>=5.4.1
-pytest-cov>=2.8.1
+mypy>=0.780
+pytest>=5.4.3
+pytest-cov>=2.9.0
 pylama>=7.7.1
-pycodestyle>=2.5.0
+pycodestyle>=2.6.0
 pydocstyle>=5.0.2
-pylint>=2.4.4
-textfsm>=1.1.0
-ntc_templates>=1.4.0
-pdoc3>=0.7.5
+pylint>=2.5.2
+darglint>=1.4.0
+pdoc3>=0.8.1 ; sys_platform != "win32"
+-e git+https://github.com/scrapli/scrapli_stubs@master#egg=scrapli_stubs
 -r requirements.txt
