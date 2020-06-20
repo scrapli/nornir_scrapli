@@ -3,12 +3,7 @@ import os
 import pytest
 
 from nornir import InitNornir
-from nornir.core.connections import Connections
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
-
-
-def test_connection_registration(nornir):
-    assert "scrapli" in Connections.available
 
 
 def test_connection_setup(nornir, monkeypatch):

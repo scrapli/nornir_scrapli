@@ -2,7 +2,6 @@
 from typing import Any, Dict, Optional
 
 from nornir.core.configuration import Config
-from nornir.core.connections import ConnectionPlugin
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 from scrapli.driver import GenericDriver
 from scrapli.driver.core import EOSDriver, IOSXEDriver, IOSXRDriver, JunosDriver, NXOSDriver
@@ -25,7 +24,7 @@ NAPALM_PLATFORM_MAP = {
 }
 
 
-class Scrapli(ConnectionPlugin):  # type: ignore
+class Scrapli:
     """Scrapli connection plugin for nornir"""
 
     def open(
@@ -59,6 +58,8 @@ class Scrapli(ConnectionPlugin):  # type: ignore
                 string is provided
 
         """
+        # for now not trying to get ssh config out of configuration, but should in the future...
+        _ = configuration
         extras = extras or {}
 
         parameters: Dict[str, Any] = {
@@ -80,7 +81,7 @@ class Scrapli(ConnectionPlugin):  # type: ignore
 
         connection = scrapli_driver(**parameters)
         connection.open()
-        self.connection = connection
+        self.connection = connection  # pylint: disable=W0201
 
     def close(self) -> None:
         """
