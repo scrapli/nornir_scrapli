@@ -19,7 +19,7 @@ def test_send_config(nornir, monkeypatch):
         privilege_level="",
     ):
         response = Response(host="fake_as_heck", channel_input=config)
-        response._record_response("some stuff about whatever")
+        response._record_response(b"some stuff about whatever")
         return response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)

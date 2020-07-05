@@ -1,4 +1,4 @@
-scrapli>=2020.06.06
+scrapli>=2020.07.04
 nornir>=3.0.0b1
 nornir-utils>=0.1.0
 textfsm>=1.1.0

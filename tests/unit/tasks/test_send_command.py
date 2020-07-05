@@ -10,7 +10,7 @@ def test_send_command(nornir, monkeypatch):
 
     def mock_send_command(cls, command, strip_prompt, failed_when_contains):
         response = Response(host="fake_as_heck", channel_input=command)
-        response._record_response("some stuff about whatever")
+        response._record_response(b"some stuff about whatever")
         return response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
