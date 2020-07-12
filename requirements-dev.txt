@@ -1,14 +1,14 @@
-tox>=3.14.6
+tox>=3.16.1
 black>=19.10b0
-isort>=4.3.21
-mypy>=0.770
-pytest>=5.4.1
-pytest-cov>=2.8.1
+isort==4.3.21
+mypy>=0.782
+pytest>=5.4.3
+pytest-cov>=2.10.0
 pylama>=7.7.1
-pycodestyle>=2.5.0
+pycodestyle>=2.6.0
 pydocstyle>=5.0.2
-pylint>=2.4.4
+pylint>=2.5.3
 textfsm>=1.1.0
 ntc_templates>=1.4.0
-pdoc3>=0.7.5
+pdoc3>=0.8.3
 -r requirements.txt

@@ -11,6 +11,10 @@ nornir_scrapli
 
 nornir_scrapli -- [scrapli](https://github.com/carlmontanari/scrapli)'s plugin for nornir.
 
+NOTE: the current release on PyPi is for Nornir 2.x, the develop branch of this repository supports Nonrir 3.x and
+ will be released to PyPi when Nornir 3.x is released. The develop branch has a fair amount of improvements, better
+  testing, better docs, etc., so if you are feeling adventurous use Nonrir 3.x and the develop branch of this repo!
+
 
 # Table of Contents
 
