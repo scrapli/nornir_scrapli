@@ -9,6 +9,11 @@
 nornir_scrapli
 ==============
 
+*NOTE* this readme is fairly out of date. The develop branch of this repo is setup for Nornir 3.x+ (which has not
+ been "officially" released, but is available on pypi with the `--pre` pip flag), while the master branch is
+  functional with Nornir 2.x. The master branch is much messier, and less well tested but works just fine... as soon
+   as Nornir 3.x is out officially develop will get merged to master and a new pypi release pushed.  
+
 nornir_scrapli -- [scrapli](https://github.com/carlmontanari/scrapli)'s plugin for nornir.
 
 Feel free to join the very awesome networktocode slack workspace [here](https://networktocode.slack.com/), where you
