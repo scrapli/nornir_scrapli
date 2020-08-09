@@ -1,6 +1,7 @@
 """nornir_scrapli.tasks.send_configs_from_file"""
-from nornir.core.task import List, Result, Task, Union
 from typing import Optional
+
+from nornir.core.task import List, Result, Task, Union
 
 
 def send_configs_from_file(
@@ -44,15 +45,6 @@ def send_configs_from_file(
             failed=True,
             changed=False,
         )
-    if file is None:
-        return Result(
-            host=task.host,
-            result="No configs file provided...",
-            failed=True,
-            changed=False,
-        )
-    if isinstance(file, str):
-        file = file
 
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
 
@@ -74,8 +66,6 @@ def send_configs_from_file(
     if not all([response.failed for response in scrapli_response]):
         failed = False
 
-    result = Result(
-        host=task.host, result=scrapli_response.result, failed=failed, changed=True
-    )
+    result = Result(host=task.host, result=scrapli_response.result, failed=failed, changed=True)
     setattr(result, "scrapli_response", scrapli_response)
     return result
