@@ -1,8 +1,8 @@
 import pytest
-
-from nornir.core.exceptions import NornirExecutionError
 from scrapli.driver.core import IOSXEDriver
 from scrapli.response import Response
+
+from nornir.core.exceptions import NornirExecutionError
 
 
 def test_send_commands(nornir, monkeypatch):

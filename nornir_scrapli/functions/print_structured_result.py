@@ -2,9 +2,10 @@
 import logging
 import threading
 
+from scrapli.response import Response
+
 from nornir.core.task import AggregatedResult, MultiResult, Result
 from nornir_utils.plugins.functions.print_result import _print_result
-from scrapli.response import Response
 
 LOCK = threading.Lock()
 

@@ -80,7 +80,10 @@ def send_interactive(
     )
 
     result = Result(
-        host=task.host, result=scrapli_response, failed=scrapli_response.failed, changed=True,
+        host=task.host,
+        result=scrapli_response,
+        failed=scrapli_response.failed,
+        changed=True,
     )
     setattr(result, "scrapli_response", scrapli_response)
     return result

@@ -1,10 +1,11 @@
 """nornir_scrapli.connection"""
 from typing import Any, Dict, Optional
 
-from nornir.core.configuration import Config
-from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 from scrapli.driver import GenericDriver
 from scrapli.driver.core import EOSDriver, IOSXEDriver, IOSXRDriver, JunosDriver, NXOSDriver
+
+from nornir.core.configuration import Config
+from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 
 CONNECTION_NAME = "scrapli"
 PLATFORM_MAP = {

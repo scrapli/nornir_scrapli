@@ -1,7 +1,8 @@
-from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 from scrapli.driver import GenericDriver
 from scrapli.driver.core import IOSXEDriver
 from scrapli.response import Response
+
+from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 
 
 def test_send_configs(nornir, monkeypatch):
@@ -49,7 +50,9 @@ def test_send_configs_dry_run(nornir, monkeypatch):
     monkeypatch.setattr(IOSXEDriver, "acquire_priv", mock_acquire_priv)
 
     result = nornir.run(
-        task=send_configs, dry_run=True, configs=["interface loopback123", "description neat"],
+        task=send_configs,
+        dry_run=True,
+        configs=["interface loopback123", "description neat"],
     )
     assert result["sea-ios-1"].result is None
     assert result["sea-ios-1"].failed is False
@@ -65,7 +68,9 @@ def test_send_configs_generic_driver(nornir_generic, monkeypatch):
     monkeypatch.setattr(GenericDriver, "open", mock_open)
 
     result = nornir_generic.run(
-        task=send_configs, dry_run=True, configs=["interface loopback123", "description neat"],
+        task=send_configs,
+        dry_run=True,
+        configs=["interface loopback123", "description neat"],
     )
     assert (
         "nornir_scrapli.exceptions.NornirScrapliNoConfigModeGenericDriver"

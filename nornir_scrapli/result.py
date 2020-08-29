@@ -1,8 +1,9 @@
 """nornir_scrapli.result"""
 from typing import TYPE_CHECKING, Any, Optional, Union
 
-from nornir.core.task import Result
 from scrapli.response import MultiResponse, Response
+
+from nornir.core.task import Result
 
 if TYPE_CHECKING:
     from nornir.core.inventory import Host  # pylint: disable=C0412

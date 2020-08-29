@@ -1,9 +1,9 @@
 import pytest
+from scrapli.response import Response
 
 from nornir.core.inventory import Host
 from nornir.core.task import AggregatedResult, MultiResult, Result
 from nornir_scrapli.functions import print_structured_result
-from scrapli.response import Response
 
 IOSXE_SHOW_VERSION = """Cisco IOS XE Software, Version 16.04.01
 Cisco IOS Software [Everest], CSR1000V Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 16.4.1, RELEASE SOFTWARE (fc2)

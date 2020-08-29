@@ -1,8 +1,10 @@
 lint:
-	python -m isort -rc -y .
-	python -m black .
-	python -m pylama .
-	python -m pydocstyle .
+	python -m isort nornir_scrapli/
+	python -m isort tests/
+	python -m black nornir_scrapli/
+	python -m black tests/
+	python -m pylama nornir_scrapli/
+	python -m pydocstyle nornir_scrapli/
 	python -m mypy nornir_scrapli/
 
 cov:
