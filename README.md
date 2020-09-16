@@ -44,6 +44,18 @@ pip install nornir-scrapli
 
 ## A Simple Example
 
+Example config file:
+
+```yaml
+---
+inventory:
+  plugin: YAMLInventory
+  options:
+    host_file: "nornir_data/hosts.yaml"
+    group_file: "nornir_data/groups.yaml"
+    defaults_file: "nornir_data/defaults.yaml"
+```
+
 Example inventory file (host/group/default, see "real" Nornir docs for lots more info!):
 ```yaml
 ---
@@ -97,7 +109,21 @@ send_configs result:
 
 ## Supported Platforms
 
-nornir_scrapli supports the "core" scrapli drivers. See [scrapli docs](https://github.com/carlmontanari/scrapli#supported-platforms) for more info.
+nornir_scrapli supports the "core" scrapli drivers, as well as the GenericDriver. See [scrapli docs](https://github.com
+/carlmontanari/scrapli#supported-platforms) for more info. The `platform` argument in the inventory data should use
+ the "normal" NAPALM style platform names or `generic`. In the hopefully near term this will be improved further to
+  support `scrapli_community` platforms as well.
+
+Example platform values (for inventory data):
+
+```
+platform: cisco_iosxe
+platform: cisco_iosxr
+platform: cisco_nxos
+platform: arista_eos
+platform: juniper_junos
+platform: generic
+```
 
 
 # Documentation
@@ -118,12 +144,13 @@ make docs
 
 # General Information
 
-Nornir has historically contained it's plugins within the actual Nornir codebase itself, this however is changing. At
- time of writing (4 April 2020) the end state of how plugins will work is not 100% solidified, but this should get
-  fairly close, and it works with current and hopefully future Nornir!
+Nornir has historically contained it's plugins within the actual Nornir codebase itself, this however has changed! As
+ of mid September 2020, Nornir 3.0.0 has been officially released -- this move to the 3.x.x version now expects
+  plugins to be external to the code base. If you are looking for pre 3.x.x support, please use the `2020.09.01
+  ` version.
 
-If you have used Nornir before, this package should be very similar, but not exactly the same. Since the plugins
- currently/used to live in Nornir you could simply import them from the appropriate package as such:
+If you have used Nornir before (pre 3.x.x), this package should be very similar to what you already know. Since the
+ plugins used to live in Nornir you could simply import them from the appropriate package as such:
  
 ```python
 from nornir.plugins.tasks.networking import netconf_get_config
@@ -136,11 +163,8 @@ With nornir_scrapli you simply install this package along side "regular" Nornir,
 from nornir_scrapli.tasks import send_command
 ```
 
-As soon as a nornir_scrapli task is imported, it (nornir_scrapli) will register as a connection, and things should
+As soon as a nornir_scrapli task is imported, it (`nornir_scrapli`) will register as a connection, and things should
  work as normal from there!
-
-This is obviously all in a "beta" state until Nornir 3.0 is officially released and the template for what plugins
- should look like is solidified, so use with care!
 
 The last important difference with nornir_scrapli is that in addition to the "normal" data in the Nornir Result
  object, nornir_scrapli also assigns the scrapli `Response` object (or list of `Response` objects) to the
