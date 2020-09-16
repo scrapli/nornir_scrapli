@@ -17,7 +17,7 @@ setuptools.setup(
     description="scrapli Nornir plugin",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/carlmontanari/nornir_scrapli",
+    url="https://github.com/scrapli/nornir_scrapli",
     packages=setuptools.find_packages(),
     install_requires=["scrapli>=2020.06.06", "nornir>=3.0.0a0"],
     extras_require={},
