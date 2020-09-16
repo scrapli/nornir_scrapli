@@ -1,13 +1,14 @@
 """nornir_scrapli.tasks.send_interactive"""
-from typing import Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
-from nornir.core.task import List, Result, Task
+from nornir.core.task import Result, Task
 
 
 def send_interactive(
     task: Task,
     interact_events: List[Tuple[str, str, Optional[bool]]],
     failed_when_contains: Optional[Union[str, List[str]]] = None,
+    privilege_level: str = "",
 ) -> Result:
     """
     Send inputs in an interactive fashion using scrapli; usually used to handle prompts
@@ -61,6 +62,7 @@ def send_interactive(
             not provided it is assumed the input is "normal" (not hidden)
         failed_when_contains: list of strings that, if present in final output, represent a
             failed command/interaction
+        privilege_level: name of the privilege level to operate in
 
     Returns:
         Result: nornir result object with Result.result value set to returned scrapli Response
@@ -72,11 +74,16 @@ def send_interactive(
     """
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
     scrapli_response = scrapli_conn.send_interactive(
-        interact_events=interact_events, failed_when_contains=failed_when_contains
+        interact_events=interact_events,
+        failed_when_contains=failed_when_contains,
+        privilege_level=privilege_level,
     )
 
     result = Result(
-        host=task.host, result=scrapli_response, failed=scrapli_response.failed, changed=True,
+        host=task.host,
+        result=scrapli_response,
+        failed=scrapli_response.failed,
+        changed=True,
     )
     setattr(result, "scrapli_response", scrapli_response)
     return result

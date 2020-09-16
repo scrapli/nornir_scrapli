@@ -1,8 +1,8 @@
 import pytest
-from nornir.core.inventory import Host
-from nornir.core.task import AggregatedResult, MultiResult, Result
 from scrapli.response import Response
 
+from nornir.core.inventory import Host
+from nornir.core.task import AggregatedResult, MultiResult, Result
 from nornir_scrapli.functions import print_structured_result
 
 IOSXE_SHOW_VERSION = """Cisco IOS XE Software, Version 16.04.01
@@ -85,11 +85,11 @@ RAW_RESULT = "\n".join([IOSXE_SHOW_VERSION, IOSXE_SHOW_IP_ROUTE])
 TEST_SCRAPLI_RESPONSE_ONE = Response(
     host="sea-ios-1", channel_input="show version", textfsm_platform="cisco_iosxe"
 )
-TEST_SCRAPLI_RESPONSE_ONE._record_response(result=IOSXE_SHOW_VERSION)
+TEST_SCRAPLI_RESPONSE_ONE._record_response(result=IOSXE_SHOW_VERSION.encode())
 TEST_SCRAPLI_RESPONSE_TWO = Response(
     host="sea-ios-1", channel_input="show ip route", textfsm_platform="cisco_iosxe"
 )
-TEST_SCRAPLI_RESPONSE_TWO._record_response(result=IOSXE_SHOW_IP_ROUTE)
+TEST_SCRAPLI_RESPONSE_TWO._record_response(result=IOSXE_SHOW_IP_ROUTE.encode())
 TEST_SCRAPLI_RESPONSE = [TEST_SCRAPLI_RESPONSE_ONE, TEST_SCRAPLI_RESPONSE_TWO]
 
 TEST_HOST = Host(name="sea-ios-1")

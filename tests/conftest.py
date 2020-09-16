@@ -1,6 +1,7 @@
 import os
 
 import pytest
+
 from nornir import InitNornir
 from nornir.core.state import GlobalState
 
@@ -14,13 +15,15 @@ def nornir():
 
     nornir = InitNornir(
         inventory={
+            "plugin": "YAMLInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
                 "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            }
+            },
         },
         dry_run=True,
+        logging={"enabled": False},
     )
     nornir.data = global_data
     return nornir
@@ -33,13 +36,15 @@ def nornir_generic():
 
     nornir = InitNornir(
         inventory={
+            "plugin": "YAMLInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts_generic.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
                 "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            }
+            },
         },
         dry_run=True,
+        logging={"enabled": False},
     )
     nornir.data = global_data
     return nornir
@@ -52,13 +57,15 @@ def nornir_raise_on_error():
 
     nornir = InitNornir(
         inventory={
+            "plugin": "YAMLInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
                 "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            }
+            },
         },
         core={"raise_on_error": True},
+        logging={"enabled": False},
         dry_run=True,
     )
     nornir.data = global_data

@@ -1,11 +1,10 @@
 """nornir_scrapli.connection"""
 from typing import Any, Dict, Optional
 
-from nornir.core.configuration import Config
-from nornir.core.connections import ConnectionPlugin, Connections
 from scrapli.driver import GenericDriver
 from scrapli.driver.core import EOSDriver, IOSXEDriver, IOSXRDriver, JunosDriver, NXOSDriver
 
+from nornir.core.configuration import Config
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 
 CONNECTION_NAME = "scrapli"
@@ -26,25 +25,7 @@ NAPALM_PLATFORM_MAP = {
 }
 
 
-def register() -> None:
-    """
-    Register scrapli connection plugin to nornir
-
-    Args:
-        N/A
-
-    Returns:
-        N/A
-
-    Raises:
-        N/A
-
-    """
-    if CONNECTION_NAME not in Connections.available:
-        Connections.register(CONNECTION_NAME, Scrapli)
-
-
-class Scrapli(ConnectionPlugin):
+class Scrapli:
     """Scrapli connection plugin for nornir"""
 
     def open(
@@ -71,13 +52,15 @@ class Scrapli(ConnectionPlugin):
             configuration: nornir configuration
 
         Returns:
-            N/A
+            N/A  # noqa: DAR202
 
         Raises:
             NornirScrapliInvalidPlatform: if no platform or an invalid scrapli/napalm platform
                 string is provided
 
         """
+        # for now not trying to get ssh config out of configuration, but should in the future...
+        _ = configuration
         extras = extras or {}
 
         parameters: Dict[str, Any] = {
@@ -99,7 +82,7 @@ class Scrapli(ConnectionPlugin):
 
         connection = scrapli_driver(**parameters)
         connection.open()
-        self.connection = connection
+        self.connection = connection  # pylint: disable=W0201
 
     def close(self) -> None:
         """
@@ -109,7 +92,7 @@ class Scrapli(ConnectionPlugin):
             N/A
 
         Returns:
-            N/A
+            N/A  # noqa: DAR202
 
         Raises:
             N/A

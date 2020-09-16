@@ -15,4 +15,7 @@ task_plugins:
   - nornir_scrapli.tasks.get_prompt
   - nornir_scrapli.tasks.send_command
   - nornir_scrapli.tasks.send_commands
+  - nornir_scrapli.tasks.send_commands_from_file
+  - nornir_scrapli.tasks.send_config
   - nornir_scrapli.tasks.send_configs
+  - nornir_scrapli.tasks.send_interactive
