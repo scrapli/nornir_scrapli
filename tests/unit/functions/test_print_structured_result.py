@@ -83,11 +83,17 @@ L        10.0.0.15/32 is directly connected, GigabitEthernet1"""
 RAW_RESULT = "\n".join([IOSXE_SHOW_VERSION, IOSXE_SHOW_IP_ROUTE])
 
 TEST_SCRAPLI_RESPONSE_ONE = Response(
-    host="sea-ios-1", channel_input="show version", textfsm_platform="cisco_iosxe"
+    host="sea-ios-1",
+    channel_input="show version",
+    textfsm_platform="cisco_iosxe",
+    genie_platform="iosxe",
 )
 TEST_SCRAPLI_RESPONSE_ONE._record_response(result=IOSXE_SHOW_VERSION.encode())
 TEST_SCRAPLI_RESPONSE_TWO = Response(
-    host="sea-ios-1", channel_input="show ip route", textfsm_platform="cisco_iosxe"
+    host="sea-ios-1",
+    channel_input="show ip route",
+    textfsm_platform="cisco_iosxe",
+    genie_platform="iosxe",
 )
 TEST_SCRAPLI_RESPONSE_TWO._record_response(result=IOSXE_SHOW_IP_ROUTE.encode())
 TEST_SCRAPLI_RESPONSE = [TEST_SCRAPLI_RESPONSE_ONE, TEST_SCRAPLI_RESPONSE_TWO]
@@ -104,7 +110,7 @@ TEST_AGG_RESULT[TEST_HOST.name] = TEST_MULTI_RESULT
 
 
 @pytest.mark.parametrize(
-    "to_dict",
+    "structured_result",
     [
         (
             True,
@@ -117,10 +123,50 @@ TEST_AGG_RESULT[TEST_HOST.name] = TEST_MULTI_RESULT
     ],
     ids=["True", "False"],
 )
-def test_print_structured_result(capsys, to_dict):
-    print_structured_result(TEST_AGG_RESULT, to_dict=to_dict[0])
+def test_print_structured_result(capsys, structured_result):
+    print_structured_result(TEST_AGG_RESULT, to_dict=structured_result[0])
     captured = capsys.readouterr()
-    assert captured.out == to_dict[1]
+    assert captured.out == structured_result[1]
+
+
+@pytest.mark.parametrize(
+    "structured_result",
+    [
+        (
+            True,
+            "\x1b[1m\x1b[36msend_commands*******************************************************************\n\x1b[1m\x1b[34m* sea-ios-1 ** changed : False *************************************************\n\x1b[1m\x1b[32mvvvv send_commands ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\n{ 'version': { 'chassis': 'CSR1000V',\n               'chassis_sn': '9FKLJWM5EB0',\n               'compiled_by': 'mcpre',\n               'compiled_date': 'Sun 27-Nov-16 13:02',\n               'curr_config_register': '0x2102',\n               'disks': { 'bootflash:.': { 'disk_size': '7774207',\n                                           'type_of_disk': 'virtual hard disk'},\n                          'webui:.': {'disk_size': '0', 'type_of_disk': ''}},\n               'hostname': 'csr1000v',\n               'image_id': 'X86_64_LINUX_IOSD-UNIVERSALK9-M',\n               'image_type': 'production image',\n               'last_reload_reason': 'reload',\n               'license_level': 'ax',\n               'license_type': 'Default. No valid license found.',\n               'main_mem': '2052375',\n               'mem_size': { 'non-volatile configuration': '32768',\n                             'physical': '3985132'},\n               'next_reload_license_level': 'ax',\n               'number_of_intfs': {'Gigabit Ethernet': '10'},\n               'os': 'IOS-XE',\n               'platform': 'CSR1000V',\n               'processor_type': 'VXE',\n               'returned_to_rom_by': 'reload',\n               'rom': 'IOS-XE ROMMON',\n               'rtr_type': 'CSR1000V',\n               'system_image': 'bootflash:packages.conf',\n               'uptime': '2 hours, 43 minutes',\n               'uptime_this_cp': '2 hours, 45 minutes',\n               'version': '16.4.1',\n               'version_short': '16.4'}}\n\x1b[1m\x1b[32m---- send_commands ** changed : False ------------------------------------------ INFO\n{ 'vrf': { 'default': { 'address_family': { 'ipv4': { 'routes': { '10.0.0.0/24': { 'active': True,\n                                                                                   'next_hop': { 'outgoing_interface': { 'GigabitEthernet1': { 'outgoing_interface': 'GigabitEthernet1'}}},\n                                                                                   'route': '10.0.0.0/24',\n                                                                                   'source_protocol': 'connected',\n                                                                                   'source_protocol_codes': 'C'},\n                                                                  '10.0.0.15/32': { 'active': True,\n                                                                                    'next_hop': { 'outgoing_interface': { 'GigabitEthernet1': { 'outgoing_interface': 'GigabitEthernet1'}}},\n                                                                                    'route': '10.0.0.15/32',\n                                                                                    'source_protocol': 'local',\n                                                                                    'source_protocol_codes': 'L'}}}}}}}\n\x1b[1m\x1b[32m^^^^ END send_commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
+        ),
+        (
+            False,
+            "\x1b[1m\x1b[36msend_commands*******************************************************************\n\x1b[1m\x1b[34m* sea-ios-1 ** changed : False *************************************************\n\x1b[1m\x1b[32mvvvv send_commands ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\n{ 'version': { 'chassis': 'CSR1000V',\n               'chassis_sn': '9FKLJWM5EB0',\n               'compiled_by': 'mcpre',\n               'compiled_date': 'Sun 27-Nov-16 13:02',\n               'curr_config_register': '0x2102',\n               'disks': { 'bootflash:.': { 'disk_size': '7774207',\n                                           'type_of_disk': 'virtual hard disk'},\n                          'webui:.': {'disk_size': '0', 'type_of_disk': ''}},\n               'hostname': 'csr1000v',\n               'image_id': 'X86_64_LINUX_IOSD-UNIVERSALK9-M',\n               'image_type': 'production image',\n               'last_reload_reason': 'reload',\n               'license_level': 'ax',\n               'license_type': 'Default. No valid license found.',\n               'main_mem': '2052375',\n               'mem_size': { 'non-volatile configuration': '32768',\n                             'physical': '3985132'},\n               'next_reload_license_level': 'ax',\n               'number_of_intfs': {'Gigabit Ethernet': '10'},\n               'os': 'IOS-XE',\n               'platform': 'CSR1000V',\n               'processor_type': 'VXE',\n               'returned_to_rom_by': 'reload',\n               'rom': 'IOS-XE ROMMON',\n               'rtr_type': 'CSR1000V',\n               'system_image': 'bootflash:packages.conf',\n               'uptime': '2 hours, 43 minutes',\n               'uptime_this_cp': '2 hours, 45 minutes',\n               'version': '16.4.1',\n               'version_short': '16.4'}}\n\x1b[1m\x1b[32m---- send_commands ** changed : False ------------------------------------------ INFO\n{ 'vrf': { 'default': { 'address_family': { 'ipv4': { 'routes': { '10.0.0.0/24': { 'active': True,\n                                                                                   'next_hop': { 'outgoing_interface': { 'GigabitEthernet1': { 'outgoing_interface': 'GigabitEthernet1'}}},\n                                                                                   'route': '10.0.0.0/24',\n                                                                                   'source_protocol': 'connected',\n                                                                                   'source_protocol_codes': 'C'},\n                                                                  '10.0.0.15/32': { 'active': True,\n                                                                                    'next_hop': { 'outgoing_interface': { 'GigabitEthernet1': { 'outgoing_interface': 'GigabitEthernet1'}}},\n                                                                                    'route': '10.0.0.15/32',\n                                                                                    'source_protocol': 'local',\n                                                                                    'source_protocol_codes': 'L'}}}}}}}\n\x1b[1m\x1b[32m^^^^ END send_commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
+        ),
+    ],
+    ids=["True", "False"],
+)
+def test_print_structured_result_genie(capsys, structured_result):
+    print_structured_result(TEST_AGG_RESULT, parser="genie")
+    captured = capsys.readouterr()
+    assert captured.out == structured_result[1]
+
+
+@pytest.mark.parametrize(
+    "structured_result",
+    [
+        (
+            True,
+            "\x1b[1m\x1b[36msend_commands*******************************************************************\n\x1b[1m\x1b[34m* sea-ios-1 ** changed : False *************************************************\n\x1b[1m\x1b[32mvvvv send_commands ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\n{ 'version': { 'chassis': 'CSR1000V',\n               'chassis_sn': '9FKLJWM5EB0',\n               'compiled_by': 'mcpre',\n               'compiled_date': 'Sun 27-Nov-16 13:02',\n               'curr_config_register': '0x2102',\n               'disks': { 'bootflash:.': { 'disk_size': '7774207',\n                                           'type_of_disk': 'virtual hard disk'},\n                          'webui:.': {'disk_size': '0', 'type_of_disk': ''}},\n               'hostname': 'csr1000v',\n               'image_id': 'X86_64_LINUX_IOSD-UNIVERSALK9-M',\n               'image_type': 'production image',\n               'last_reload_reason': 'reload',\n               'license_level': 'ax',\n               'license_type': 'Default. No valid license found.',\n               'main_mem': '2052375',\n               'mem_size': { 'non-volatile configuration': '32768',\n                             'physical': '3985132'},\n               'next_reload_license_level': 'ax',\n               'number_of_intfs': {'Gigabit Ethernet': '10'},\n               'os': 'IOS-XE',\n               'platform': 'CSR1000V',\n               'processor_type': 'VXE',\n               'returned_to_rom_by': 'reload',\n               'rom': 'IOS-XE ROMMON',\n               'rtr_type': 'CSR1000V',\n               'system_image': 'bootflash:packages.conf',\n               'uptime': '2 hours, 43 minutes',\n               'uptime_this_cp': '2 hours, 45 minutes',\n               'version': '16.4.1',\n               'version_short': '16.4'}}\n\x1b[1m\x1b[32m---- send_commands ** changed : False ------------------------------------------ INFO\n{ 'vrf': { 'default': { 'address_family': { 'ipv4': { 'routes': { '10.0.0.0/24': { 'active': True,\n                                                                                   'next_hop': { 'outgoing_interface': { 'GigabitEthernet1': { 'outgoing_interface': 'GigabitEthernet1'}}},\n                                                                                   'route': '10.0.0.0/24',\n                                                                                   'source_protocol': 'connected',\n                                                                                   'source_protocol_codes': 'C'},\n                                                                  '10.0.0.15/32': { 'active': True,\n                                                                                    'next_hop': { 'outgoing_interface': { 'GigabitEthernet1': { 'outgoing_interface': 'GigabitEthernet1'}}},\n                                                                                    'route': '10.0.0.15/32',\n                                                                                    'source_protocol': 'local',\n                                                                                    'source_protocol_codes': 'L'}}}}}}}\n\x1b[1m\x1b[32m^^^^ END send_commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
+        ),
+        (
+            False,
+            "\x1b[1m\x1b[36msend_commands*******************************************************************\n\x1b[1m\x1b[34m* sea-ios-1 ** changed : False *************************************************\n\x1b[1m\x1b[32mvvvv send_commands ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\n{ 'version': { 'chassis': 'CSR1000V',\n               'chassis_sn': '9FKLJWM5EB0',\n               'compiled_by': 'mcpre',\n               'compiled_date': 'Sun 27-Nov-16 13:02',\n               'curr_config_register': '0x2102',\n               'disks': { 'bootflash:.': { 'disk_size': '7774207',\n                                           'type_of_disk': 'virtual hard disk'},\n                          'webui:.': {'disk_size': '0', 'type_of_disk': ''}},\n               'hostname': 'csr1000v',\n               'image_id': 'X86_64_LINUX_IOSD-UNIVERSALK9-M',\n               'image_type': 'production image',\n               'last_reload_reason': 'reload',\n               'license_level': 'ax',\n               'license_type': 'Default. No valid license found.',\n               'main_mem': '2052375',\n               'mem_size': { 'non-volatile configuration': '32768',\n                             'physical': '3985132'},\n               'next_reload_license_level': 'ax',\n               'number_of_intfs': {'Gigabit Ethernet': '10'},\n               'os': 'IOS-XE',\n               'platform': 'CSR1000V',\n               'processor_type': 'VXE',\n               'returned_to_rom_by': 'reload',\n               'rom': 'IOS-XE ROMMON',\n               'rtr_type': 'CSR1000V',\n               'system_image': 'bootflash:packages.conf',\n               'uptime': '2 hours, 43 minutes',\n               'uptime_this_cp': '2 hours, 45 minutes',\n               'version': '16.4.1',\n               'version_short': '16.4'}}\n\x1b[1m\x1b[32m---- send_commands ** changed : False ------------------------------------------ INFO\n{ 'vrf': { 'default': { 'address_family': { 'ipv4': { 'routes': { '10.0.0.0/24': { 'active': True,\n                                                                                   'next_hop': { 'outgoing_interface': { 'GigabitEthernet1': { 'outgoing_interface': 'GigabitEthernet1'}}},\n                                                                                   'route': '10.0.0.0/24',\n                                                                                   'source_protocol': 'connected',\n                                                                                   'source_protocol_codes': 'C'},\n                                                                  '10.0.0.15/32': { 'active': True,\n                                                                                    'next_hop': { 'outgoing_interface': { 'GigabitEthernet1': { 'outgoing_interface': 'GigabitEthernet1'}}},\n                                                                                    'route': '10.0.0.15/32',\n                                                                                    'source_protocol': 'local',\n                                                                                    'source_protocol_codes': 'L'}}}}}}}\n\x1b[1m\x1b[32m^^^^ END send_commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
+        ),
+    ],
+    ids=["True", "False"],
+)
+def test_print_structured_result_genie_to_dict(capsys, structured_result):
+    print_structured_result(TEST_AGG_RESULT, parser="genie")
+    captured = capsys.readouterr()
+    assert captured.out == structured_result[1]
 
 
 def test_print_structured_result_fallback(capsys):

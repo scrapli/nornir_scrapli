@@ -19,8 +19,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/scrapli/nornir_scrapli",
     packages=setuptools.find_packages(),
-    install_requires=["scrapli>=2020.06.06", "nornir>=3.0.0a0"],
-    extras_require={},
+    install_requires=["scrapli>=2020.06.06", "nornir>=3.0.0"],
+    extras_require={
+        "textfsm": ["textfsm>=1.1.0", "ntc-templates>=1.1.0"],
+        "genie": ["genie>=20.2", "pyats>=20.2"],
+    },
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
