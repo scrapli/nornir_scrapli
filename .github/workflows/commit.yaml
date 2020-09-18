@@ -53,4 +53,4 @@ jobs:
           python -m pip install setuptools
           python -m pip install nox
       - name: run nox
-        run: python -m nox -p ${{ matrix.version }} -k "not darglint"
+        run: python -m nox -p $FRIENDLY_PYTHON_VERSION -k "not darglint"
