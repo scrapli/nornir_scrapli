@@ -23,7 +23,7 @@ setuptools.setup(
         "scrapli>=2020.06.06",
         "scrapli_community>=2020.08.08",
         "scrapli_netconf>=2020.07.26",
-        "nornir>=3.0.0,<4.0.0"
+        "nornir>=3.0.0,<4.0.0",
     ],
     extras_require={
         "textfsm": ["textfsm>=1.1.0,<2.0.0", "ntc-templates>=1.1.0,<2.0.0"],
