@@ -1,0 +1,21 @@
+---
+sea:
+  data:
+    site_code: sea
+    timezone: PST
+    timezone_summer: PDT
+    timezone_offset: 8
+    name_servers:
+      - 8.8.8.8
+      - 8.8.4.4
+    ospf_process_id: 1
+
+iosxe:
+  platform: ios
+  connection_options:
+    scrapli:
+      platform: scrapli_networkdriver
+      port: 22
+      extras:
+        ssh_config_file: True
+        auth_strict_key: False

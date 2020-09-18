@@ -29,6 +29,14 @@
 </summary>
 <pre><code class="python">&#34;&#34;&#34;nornir_scrapli.tasks&#34;&#34;&#34;
 from nornir_scrapli.tasks.get_prompt import get_prompt
+from nornir_scrapli.tasks.netconf_commit import netconf_commit
+from nornir_scrapli.tasks.netconf_discard import netconf_discard
+from nornir_scrapli.tasks.netconf_edit_config import netconf_edit_config
+from nornir_scrapli.tasks.netconf_get import netconf_get
+from nornir_scrapli.tasks.netconf_get_config import netconf_get_config
+from nornir_scrapli.tasks.netconf_lock import netconf_lock
+from nornir_scrapli.tasks.netconf_rpc import netconf_rpc
+from nornir_scrapli.tasks.netconf_unlock import netconf_unlock
 from nornir_scrapli.tasks.send_command import send_command
 from nornir_scrapli.tasks.send_commands import send_commands
 from nornir_scrapli.tasks.send_commands_from_file import send_commands_from_file
@@ -39,6 +47,14 @@ from nornir_scrapli.tasks.send_interactive import send_interactive
 
 __all__ = (
     &#34;get_prompt&#34;,
+    &#34;netconf_commit&#34;,
+    &#34;netconf_discard&#34;,
+    &#34;netconf_edit_config&#34;,
+    &#34;netconf_get&#34;,
+    &#34;netconf_get_config&#34;,
+    &#34;netconf_lock&#34;,
+    &#34;netconf_rpc&#34;,
+    &#34;netconf_unlock&#34;,
     &#34;send_command&#34;,
     &#34;send_commands&#34;,
     &#34;send_commands_from_file&#34;,
@@ -94,6 +110,456 @@ __all__ = (
     scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
     prompt = scrapli_conn.get_prompt()
     return Result(host=task.host, result=prompt, failed=False, changed=False)</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.netconf_commit"><code class="name flex">
+<span>def <span class="ident">netconf_commit</span></span>(<span>task: nornir.core.task.Task) ‑> nornir.core.task.Result</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Commit the device config with scrapli_netconf</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set the string result of the
+get operation</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def netconf_commit(
+    task: Task,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Commit the device config with scrapli_netconf
+
+    Args:
+        task: nornir task object
+
+    Returns:
+        Result: nornir result object with Result.result value set the string result of the
+            get operation
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.commit()
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=True,
+    )
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.netconf_discard"><code class="name flex">
+<span>def <span class="ident">netconf_discard</span></span>(<span>task: nornir.core.task.Task) ‑> nornir.core.task.Result</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Discard the device config with scrapli_netconf</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set the string result of the
+get operation</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def netconf_discard(
+    task: Task,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Discard the device config with scrapli_netconf
+
+    Args:
+        task: nornir task object
+
+    Returns:
+        Result: nornir result object with Result.result value set the string result of the
+            get operation
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.discard()
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=True,
+    )
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.netconf_edit_config"><code class="name flex">
+<span>def <span class="ident">netconf_edit_config</span></span>(<span>task: nornir.core.task.Task, config: str, target: str = 'running') ‑> nornir.core.task.Result</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Edit config from the device with scrapli_netconf</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>config</code></strong></dt>
+<dd>configuration to send to device</dd>
+<dt><strong><code>target</code></strong></dt>
+<dd>configuration source to target; running|startup|candidate</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set the string result of the
+get_config operation</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def netconf_edit_config(
+    task: Task,
+    config: str,
+    target: str = &#34;running&#34;,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Edit config from the device with scrapli_netconf
+
+    Args:
+        task: nornir task object
+        config: configuration to send to device
+        target: configuration source to target; running|startup|candidate
+
+    Returns:
+        Result: nornir result object with Result.result value set the string result of the
+            get_config operation
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.edit_config(config=config, target=target)
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=True,
+    )
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.netconf_get"><code class="name flex">
+<span>def <span class="ident">netconf_get</span></span>(<span>task: nornir.core.task.Task, filter_: str, filter_type: str = 'subtree') ‑> nornir.core.task.Result</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get from the device with scrapli_netconf</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>filter_</code></strong></dt>
+<dd>string filter to apply to the get</dd>
+<dt><strong><code>filter_type</code></strong></dt>
+<dd>type of filter; subtree|xpath</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set the string result of the
+get operation</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def netconf_get(
+    task: Task,
+    filter_: str,
+    filter_type: str = &#34;subtree&#34;,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Get from the device with scrapli_netconf
+
+    Args:
+        task: nornir task object
+        filter_: string filter to apply to the get
+        filter_type: type of filter; subtree|xpath
+
+    Returns:
+        Result: nornir result object with Result.result value set the string result of the
+            get operation
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.get(filter_=filter_, filter_type=filter_type)
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=False,
+    )
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.netconf_get_config"><code class="name flex">
+<span>def <span class="ident">netconf_get_config</span></span>(<span>task: nornir.core.task.Task, source: str = 'running', filters: Union[str, List[str], NoneType] = None, filter_type: str = 'subtree') ‑> nornir.core.task.Result</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get config from the device with scrapli_netconf</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>source</code></strong></dt>
+<dd>configuration source to get; typically one of running|startup|candidate</dd>
+<dt><strong><code>filters</code></strong></dt>
+<dd>string or list of strings of filters to apply to configuration</dd>
+<dt><strong><code>filter_type</code></strong></dt>
+<dd>type of filter; subtree|xpath</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set the string result of the
+get_config operation</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def netconf_get_config(
+    task: Task,
+    source: str = &#34;running&#34;,
+    filters: Optional[Union[str, List[str]]] = None,
+    filter_type: str = &#34;subtree&#34;,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Get config from the device with scrapli_netconf
+
+    Args:
+        task: nornir task object
+        source: configuration source to get; typically one of running|startup|candidate
+        filters: string or list of strings of filters to apply to configuration
+        filter_type: type of filter; subtree|xpath
+
+    Returns:
+        Result: nornir result object with Result.result value set the string result of the
+            get_config operation
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.get_config(
+        source=source, filters=filters, filter_type=filter_type
+    )
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=False,
+    )
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.netconf_lock"><code class="name flex">
+<span>def <span class="ident">netconf_lock</span></span>(<span>task: nornir.core.task.Task, target: str) ‑> nornir.core.task.Result</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Lock the device with scrapli_netconf</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>target</code></strong></dt>
+<dd>configuration source to target; running|startup|candidate</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set the string result of the
+get operation</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def netconf_lock(
+    task: Task,
+    target: str,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Lock the device with scrapli_netconf
+
+    Args:
+        task: nornir task object
+        target: configuration source to target; running|startup|candidate
+
+    Returns:
+        Result: nornir result object with Result.result value set the string result of the
+            get operation
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.lock(target=target)
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=True,
+    )
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.netconf_rpc"><code class="name flex">
+<span>def <span class="ident">netconf_rpc</span></span>(<span>task: nornir.core.task.Task, filter_: str) ‑> nornir.core.task.Result</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Send a "bare" rcp to the device with scrapli_netconf</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>filter_</code></strong></dt>
+<dd>filter/rpc to execute</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set the string result of the
+get operation</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def netconf_rpc(
+    task: Task,
+    filter_: str,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Send a &#34;bare&#34; rcp to the device with scrapli_netconf
+
+    Args:
+        task: nornir task object
+        filter_: filter/rpc to execute
+
+    Returns:
+        Result: nornir result object with Result.result value set the string result of the
+            get operation
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.rpc(filter_=filter_)
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=True,
+    )
+    return result</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.tasks.netconf_unlock"><code class="name flex">
+<span>def <span class="ident">netconf_unlock</span></span>(<span>task: nornir.core.task.Task, target: str) ‑> nornir.core.task.Result</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Unlock the device with scrapli_netconf</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>task</code></strong></dt>
+<dd>nornir task object</dd>
+<dt><strong><code>target</code></strong></dt>
+<dd>configuration source to target; running|startup|candidate</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Result</code></dt>
+<dd>nornir result object with Result.result value set the string result of the
+get operation</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def netconf_unlock(
+    task: Task,
+    target: str,
+) -&gt; Result:
+    &#34;&#34;&#34;
+    Unlock the device with scrapli_netconf
+
+    Args:
+        task: nornir task object
+        target: configuration source to target; running|startup|candidate
+
+    Returns:
+        Result: nornir result object with Result.result value set the string result of the
+            get operation
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+    scrapli_response = scrapli_conn.unlock(target=target)
+
+    result = ScrapliResult(
+        host=task.host,
+        result=process_command_result(scrapli_response=scrapli_response),
+        scrapli_response=scrapli_response,
+        changed=True,
+    )
+    return result</code></pre>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_command"><code class="name flex">
@@ -811,6 +1277,14 @@ object</dd>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="nornir_scrapli.tasks.get_prompt" href="#nornir_scrapli.tasks.get_prompt">get_prompt</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.netconf_commit" href="#nornir_scrapli.tasks.netconf_commit">netconf_commit</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.netconf_discard" href="#nornir_scrapli.tasks.netconf_discard">netconf_discard</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.netconf_edit_config" href="#nornir_scrapli.tasks.netconf_edit_config">netconf_edit_config</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.netconf_get" href="#nornir_scrapli.tasks.netconf_get">netconf_get</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.netconf_get_config" href="#nornir_scrapli.tasks.netconf_get_config">netconf_get_config</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.netconf_lock" href="#nornir_scrapli.tasks.netconf_lock">netconf_lock</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.netconf_rpc" href="#nornir_scrapli.tasks.netconf_rpc">netconf_rpc</a></code></li>
+<li><code><a title="nornir_scrapli.tasks.netconf_unlock" href="#nornir_scrapli.tasks.netconf_unlock">netconf_unlock</a></code></li>
 <li><code><a title="nornir_scrapli.tasks.send_command" href="#nornir_scrapli.tasks.send_command">send_command</a></code></li>
 <li><code><a title="nornir_scrapli.tasks.send_commands" href="#nornir_scrapli.tasks.send_commands">send_commands</a></code></li>
 <li><code><a title="nornir_scrapli.tasks.send_commands_from_file" href="#nornir_scrapli.tasks.send_commands_from_file">send_commands_from_file</a></code></li>
