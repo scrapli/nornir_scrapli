@@ -9,6 +9,7 @@ from nornir.core.configuration import Config
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 
 CONNECTION_NAME = "scrapli"
+
 PLATFORM_MAP = {
     "ios": "cisco_iosxe",
     "nxos": "cisco_nxos",
@@ -65,7 +66,7 @@ class ScrapliCore:
 
         parameters.update(extras)
 
-        if platform is None:
+        if not platform:
             raise NornirScrapliInvalidPlatform(
                 f"No `platform` provided in inventory for host `{hostname}`"
             )
@@ -74,12 +75,10 @@ class ScrapliCore:
             platform = PLATFORM_MAP.get(platform)
 
         if platform == "generic":
-            scrapli_driver = GenericDriver
-            connection = scrapli_driver(**parameters)
+            connection = GenericDriver(**parameters)
         else:
-            scrapli_driver = Scrapli
             try:
-                connection = scrapli_driver(**parameters, platform=platform)
+                connection = Scrapli(**parameters, platform=platform)  # type: ignore
             except ModuleNotFoundError as exc:
                 raise NornirScrapliInvalidPlatform(
                     f"Provided platform `{platform}` is not a valid scrapli or napalm platform, "
