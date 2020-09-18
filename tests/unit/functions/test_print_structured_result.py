@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 from scrapli.response import Response
 
@@ -129,6 +131,9 @@ def test_print_structured_result(capsys, structured_result):
     assert captured.out == structured_result[1]
 
 
+@pytest.mark.skipif(
+    sys.version_info.minor > 8, reason="genie not currently available for python 3.9"
+)
 @pytest.mark.parametrize(
     "structured_result",
     [
@@ -149,6 +154,9 @@ def test_print_structured_result_genie(capsys, structured_result):
     assert captured.out == structured_result[1]
 
 
+@pytest.mark.skipif(
+    sys.version_info.minor > 8, reason="genie not currently available for python 3.9"
+)
 @pytest.mark.parametrize(
     "structured_result",
     [
