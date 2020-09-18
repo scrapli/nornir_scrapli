@@ -5,5 +5,5 @@ nornir>=3.0.0,<4.0.0
 nornir-utils>=0.1.0
 textfsm>=1.1.0,<2.0.0
 ntc_templates>=1.1.0,<2.0.0
-genie>=20.2 ; sys_platform != "win32"
-pyats>=20.2 ; sys_platform != "win32"
+genie>=20.2 ; sys_platform != "win32" and python_version < "3.9"
+pyats>=20.2 ; sys_platform != "win32" and python_version < "3.9"
