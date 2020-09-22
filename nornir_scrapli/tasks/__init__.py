@@ -1,5 +1,6 @@
 """nornir_scrapli.tasks"""
 from nornir_scrapli.tasks.get_prompt import get_prompt
+from nornir_scrapli.tasks.netconf_capabilities import netconf_capabilities
 from nornir_scrapli.tasks.netconf_commit import netconf_commit
 from nornir_scrapli.tasks.netconf_discard import netconf_discard
 from nornir_scrapli.tasks.netconf_edit_config import netconf_edit_config
@@ -18,6 +19,7 @@ from nornir_scrapli.tasks.send_interactive import send_interactive
 
 __all__ = (
     "get_prompt",
+    "netconf_capabilities",
     "netconf_commit",
     "netconf_discard",
     "netconf_edit_config",

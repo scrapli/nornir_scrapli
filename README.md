@@ -269,6 +269,7 @@ Send a list of configurations from a file to the device
 
 Note that not all devices will support all operations!
 
+- netconf_capabilities - Get list of capabilities as exchanged during netconf connection establishment
 - [netconf_commit](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.commit) -
 Commit the configuration on the device
 - [netconf_discard](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.discard) -
