@@ -22,7 +22,7 @@ setuptools.setup(
     install_requires=[
         "scrapli>=2020.06.06",
         "scrapli_community>=2020.08.08",
-        "scrapli_netconf>=2020.07.26",
+        "scrapli_netconf>=2020.09.23",
         "nornir>=3.0.0,<4.0.0",
     ],
     extras_require={

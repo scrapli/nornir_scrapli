@@ -276,6 +276,7 @@ Commit the configuration on the device
 Discard the configuration on the device
 - [netconf_edit_config](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.edit_config) -
 Edit the configuration on the device
+- netconf_delete_config - Delete a given datastore on the device
 - [netconf_get](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.get) -
 Get a subtree or xpath from the device
 - [netconf_get_config](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.get_config) =
@@ -286,3 +287,4 @@ Lock the datastore on the device
 Unlock the datastore on the device
 - [netconf_rpc](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.rpc) -
 Send a "bare" RPC to the device
+- netconf_validate - Execute the `validate` rpc against a given datastore
