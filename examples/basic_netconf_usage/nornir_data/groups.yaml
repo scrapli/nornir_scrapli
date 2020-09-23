@@ -1,0 +1,9 @@
+---
+iosxe:
+  platform: ios
+  connection_options:
+    scrapli_netconf:
+      port: 830
+      extras:
+        ssh_config_file: True
+        auth_strict_key: False

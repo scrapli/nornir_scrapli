@@ -1,0 +1,5 @@
+---
+iosxe1:
+  hostname: 172.18.0.11
+  groups:
+    - iosxe
