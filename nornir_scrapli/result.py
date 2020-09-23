@@ -24,7 +24,8 @@ def process_command_result(scrapli_response: Union[Response, MultiResponse]) -> 
 
     """
     if isinstance(scrapli_response, Response):
-        return scrapli_response.result
+        result: str = scrapli_response.result
+        return result
     return "\n\n".join([response.result for response in scrapli_response])
 
 
@@ -110,7 +111,8 @@ class ScrapliResult(Result):  # type: ignore
         if scrapli_response is None:
             return False
         if isinstance(scrapli_response, Response):
-            return scrapli_response.failed
+            failed: bool = scrapli_response.failed
+            return failed
         if any([response.failed for response in scrapli_response]):
             return True
         return False

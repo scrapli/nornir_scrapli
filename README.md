@@ -9,7 +9,8 @@
 nornir_scrapli
 ==============
 
-nornir_scrapli -- [scrapli](https://github.com/carlmontanari/scrapli)'s plugin for nornir.
+nornir_scrapli -- [scrapli](https://github.com/carlmontanari/scrapli)'s and 
+[scrapli_netconf](https://github.com/scrapli/scrapli_netconf)'s plugin for nornir!
 
 Feel free to join the very awesome networktocode slack workspace [here](https://networktocode.slack.com/), where you
  will find a `scrapli` channel where you can discuss anything about scrapli, as well as tons of other channels covering
@@ -24,6 +25,7 @@ Feel free to join the very awesome networktocode slack workspace [here](https://
 - [Supported Platforms](#supported-platforms)
 - [Documentation](#documentation)
 - [General Information](#general-information)
+- [Available Tasks](#available-tasks)
 
 
 # Quick Start Guide
@@ -51,7 +53,8 @@ inventory:
     defaults_file: "nornir_data/defaults.yaml"
 ```
 
-Example inventory file (host/group/default, see "real" Nornir docs for lots more info!):
+Example inventory file (host/group/default, see "real" Nornir docs for lots more info!) -- please notice that there
+ is a `scrapli` and a `scrapli_netconf` connection type here!:
 ```yaml
 ---
 iosxe-1:
@@ -60,6 +63,11 @@ iosxe-1:
     scrapli:
       platform: cisco_iosxe
       port: 22
+      extras:
+        ssh_config_file: True
+        auth_strict_key: False
+    scrapli_netconf:
+      port: 830
       extras:
         ssh_config_file: True
         auth_strict_key: False
@@ -102,12 +110,49 @@ send_configs result:
 
 ```
 
+Netconf tasks are imported from the same package and in the same fashion as the "core" `scrapli` tasks:
+
+```python
+from nornir_scrapli.tasks import (
+    netconf_lock,
+    netconf_unlock,
+    netconf_edit_config,
+    netconf_get,
+    netconf_get_config,
+    netconf_rpc
+)
+```
+
+And are executed in the same fashion as well:
+
+```python
+config = """<config>
+    <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+        <interface>
+            <name>GigabitEthernet1</name>
+            <description>scrapli was here!</description>
+        </interface>
+    </interfaces>
+</config>"""
+result = nr.run(task=netconf_edit_config, config=config)
+print(result['iosxe1'][0].result)
+print(result['iosxe1'][0].scrapli_response.xml_result)
+```
+
+When using the `scrapli-netconf` tasks the result object `result` will be the string of the returned data from the
+ device. As with all other `nornir-scrapli` results, the `scrapli_response` object will be assigned to the `Result
+ ` object and will contain all of the "normal" `scrapli` response object data (or `scrapli-netconf` response data
+ ), such as the `elapsed_time`, `raw_result`, `xml_result`, etc. -- you can see this in the above example!
+
+
 ## Supported Platforms
 
-nornir_scrapli supports the "core" scrapli drivers, as well as the GenericDriver. See [scrapli docs](https://github.com
-/carlmontanari/scrapli#supported-platforms) for more info. The `platform` argument in the inventory data should use
- the "normal" NAPALM style platform names or `generic`. In the hopefully near term this will be improved further to
-  support `scrapli_community` platforms as well.
+nornir_scrapli supports the "core" scrapli drivers, the GenericDriver (for use with linux hosts generally speaking
+), and the [scrapli_community](https://github.com/scrapli/scrapli_community) platforms as well! See
+[scrapli core docs](https://github.com/carlmontanari/scrapli#supported-platforms) and the
+[scrapli community docs](https://github.com/scrapli/scrapli_community#supported-platforms) for more info. The `platform
+` argument in the inventory data should use the "normal" NAPALM style platform names, `generic`, or the name of the
+ scrapli_community platform (i.e. `huawei_vrp`)). 
 
 Example platform values (for inventory data):
 
@@ -118,6 +163,7 @@ platform: cisco_nxos
 platform: arista_eos
 platform: juniper_junos
 platform: generic
+platform: huawei_vrp
 ```
 
 
@@ -191,3 +237,54 @@ This function acts pretty much exactly like the "normal" print result function, 
 ```python
 print_structured_result(my_agg_result, parser="genie", fail_to_string=True)
 ```
+
+
+# Available Tasks
+
+All tasks presented here are methods that live in `scrapli` or `scrapli_netconf` -- these tasks are simply "wrapped
+" in such a way that they may be used within the constructs of `nornir`! The links below link back to the `scrapli
+` or `scrapli_netconf` docs for the given method -- in all (or very nearly all?) cases, the same arguments that the
+ underlying library supports will be exposed to `nornir`!
+
+## Scrapli "core" Tasks
+
+- [get_prompt](https://carlmontanari.github.io/scrapli/docs/scrapli/driver/index.html#scrapli.driver.GenericDriver.get_prompt) -
+Get the current prompt of the device
+- [send_command](https://carlmontanari.github.io/scrapli/docs/scrapli/driver/index.html#scrapli.driver.NetworkDriver.send_command) -
+Send a single command to the device
+- [send_commands](https://carlmontanari.github.io/scrapli/docs/scrapli/driver/index.html#scrapli.driver.GenericDriver.send_commands) -
+Send a list of commands to the device
+- [send_commands_from_file](https://carlmontanari.github.io/scrapli/docs/scrapli/driver/index.html#scrapli.driver.GenericDriver.send_commands_from_file) -
+Send a list of commands from a file to the device
+- [send_config](https://carlmontanari.github.io/scrapli/docs/scrapli/driver/index.html#scrapli.driver.NetworkDriver.send_config) -
+Send a configuration to the device
+- [send_configs](https://carlmontanari.github.io/scrapli/docs/scrapli/driver/index.html#scrapli.driver.NetworkDriver.send_configs) -
+Send a list of configurations to the device
+- [send_configs_from_file](https://carlmontanari.github.io/scrapli/docs/scrapli/driver/index.html#scrapli.driver.NetworkDriver.send_configs_from_file) -
+Send a list of configurations from a file to the device
+- [send_interactive](https://carlmontanari.github.io/scrapli/docs/scrapli/driver/index.html#scrapli.driver.GenericDriver.send_interactive) -
+"Interact" with the device (handle prompts and inputs and things like that)
+
+## Scrapli Netconf Tasks
+
+Note that not all devices will support all operations!
+
+- netconf_capabilities - Get list of capabilities as exchanged during netconf connection establishment
+- [netconf_commit](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.commit) -
+Commit the configuration on the device
+- [netconf_discard](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.discard) -
+Discard the configuration on the device
+- [netconf_edit_config](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.edit_config) -
+Edit the configuration on the device
+- netconf_delete_config - Delete a given datastore on the device
+- [netconf_get](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.get) -
+Get a subtree or xpath from the device
+- [netconf_get_config](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.get_config) =
+Get the configuration from the device
+- [netconf_lock](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.lock) -
+Lock the datastore on the device
+- [netconf_unlock](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.unlock) -
+Unlock the datastore on the device
+- [netconf_rpc](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.rpc) -
+Send a "bare" RPC to the device
+- netconf_validate - Execute the `validate` rpc against a given datastore

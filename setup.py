@@ -19,9 +19,14 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/scrapli/nornir_scrapli",
     packages=setuptools.find_packages(),
-    install_requires=["scrapli>=2020.06.06", "nornir>=3.0.0"],
+    install_requires=[
+        "scrapli>=2020.06.06",
+        "scrapli_community>=2020.08.08",
+        "scrapli_netconf>=2020.09.23",
+        "nornir>=3.0.0,<4.0.0",
+    ],
     extras_require={
-        "textfsm": ["textfsm>=1.1.0", "ntc-templates>=1.1.0"],
+        "textfsm": ["textfsm>=1.1.0,<2.0.0", "ntc-templates>=1.1.0,<2.0.0"],
         "genie": ["genie>=20.2", "pyats>=20.2"],
     },
     classifiers=[
@@ -30,12 +35,14 @@ setuptools.setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Operating System :: POSIX :: Linux",
         "Operating System :: MacOS",
     ],
     python_requires=">=3.6",
     entry_points="""
     [nornir.plugins.connections]
-    scrapli=nornir_scrapli.connection:Scrapli
+    scrapli=nornir_scrapli.connection:ScrapliCore
+    scrapli_netconf=nornir_scrapli.connection:ScrapliNetconf
     """,
 )

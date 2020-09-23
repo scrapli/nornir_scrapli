@@ -30,31 +30,24 @@
 <pre><code class="python">&#34;&#34;&#34;nornir_scrapli.connection&#34;&#34;&#34;
 from typing import Any, Dict, Optional
 
+from scrapli import Scrapli
 from scrapli.driver import GenericDriver
-from scrapli.driver.core import EOSDriver, IOSXEDriver, IOSXRDriver, JunosDriver, NXOSDriver
+from scrapli_netconf.driver import NetconfScrape
 
 from nornir.core.configuration import Config
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 
 CONNECTION_NAME = &#34;scrapli&#34;
 PLATFORM_MAP = {
-    &#34;cisco_iosxe&#34;: IOSXEDriver,
-    &#34;cisco_nxos&#34;: NXOSDriver,
-    &#34;cisco_iosxr&#34;: IOSXRDriver,
-    &#34;arista_eos&#34;: EOSDriver,
-    &#34;juniper_junos&#34;: JunosDriver,
-    &#34;generic&#34;: GenericDriver,
-}
-NAPALM_PLATFORM_MAP = {
-    &#34;ios&#34;: IOSXEDriver,
-    &#34;nxos&#34;: NXOSDriver,
-    &#34;iosxr&#34;: IOSXRDriver,
-    &#34;eos&#34;: EOSDriver,
-    &#34;junos&#34;: JunosDriver,
+    &#34;ios&#34;: &#34;cisco_iosxe&#34;,
+    &#34;nxos&#34;: &#34;cisco_nxos&#34;,
+    &#34;iosxr&#34;: &#34;cisco_iosxr&#34;,
+    &#34;eos&#34;: &#34;arista_eos&#34;,
+    &#34;junos&#34;: &#34;juniper_junos&#34;,
 }
 
 
-class Scrapli:
+class ScrapliCore:
     &#34;&#34;&#34;Scrapli connection plugin for nornir&#34;&#34;&#34;
 
     def open(
@@ -101,21 +94,102 @@ class Scrapli:
 
         parameters.update(extras)
 
-        scrapli_driver = None
-        if platform is not None:
-            scrapli_driver = PLATFORM_MAP.get(platform, NAPALM_PLATFORM_MAP.get(platform, None))
-        if scrapli_driver is None:
+        if platform is None:
             raise NornirScrapliInvalidPlatform(
-                f&#34;Provided platform `{platform}` is not a valid scrapli or napalm platform.&#34;
+                f&#34;No `platform` provided in inventory for host `{hostname}`&#34;
             )
 
-        connection = scrapli_driver(**parameters)
+        if platform in PLATFORM_MAP:
+            platform = PLATFORM_MAP.get(platform)
+
+        if platform == &#34;generic&#34;:
+            scrapli_driver = GenericDriver
+            connection = scrapli_driver(**parameters)
+        else:
+            scrapli_driver = Scrapli
+            try:
+                connection = scrapli_driver(**parameters, platform=platform)
+            except ModuleNotFoundError as exc:
+                raise NornirScrapliInvalidPlatform(
+                    f&#34;Provided platform `{platform}` is not a valid scrapli or napalm platform, &#34;
+                    &#34;or is not a valid scrapli-community platform.&#34;
+                ) from exc
+
         connection.open()
         self.connection = connection  # pylint: disable=W0201
 
     def close(self) -&gt; None:
         &#34;&#34;&#34;
         Close a scrapli connection to a device
+
+        Args:
+            N/A
+
+        Returns:
+            N/A  # noqa: DAR202
+
+        Raises:
+            N/A
+
+        &#34;&#34;&#34;
+        self.connection.close()
+
+
+class ScrapliNetconf:
+    &#34;&#34;&#34;Scrapli NETCONF connection plugin for nornir&#34;&#34;&#34;
+
+    def open(
+        self,
+        hostname: Optional[str],
+        username: Optional[str],
+        password: Optional[str],
+        port: Optional[int],
+        platform: Optional[str],
+        extras: Optional[Dict[str, Any]] = None,
+        configuration: Optional[Config] = None,
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Open a scrapli connection to a device
+
+        Args:
+            hostname: hostname from nornir inventory
+            username: username from nornir inventory/connection_options for scrapli
+            password: password from nornir inventory/connection_options for scrapli
+            port: port from nornir inventory/connection_options for scrapli
+            platform: platform from nornir inventory/connection_options for scrapli; ignored with
+                scrapli netconf
+            extras: extras dict from connection_options for scrapli -- pass all other scrapli
+                arguments here
+            configuration: nornir configuration
+
+        Returns:
+            N/A  # noqa: DAR202
+
+        Raises:
+            N/A
+
+        &#34;&#34;&#34;
+        # for now not trying to get ssh config out of configuration, but should in the future...
+        # platform is irrelevant for scrapli netconf for now
+        _, _ = configuration, platform
+        extras = extras or {}
+
+        parameters: Dict[str, Any] = {
+            &#34;host&#34;: hostname,
+            &#34;auth_username&#34;: username or &#34;&#34;,
+            &#34;auth_password&#34;: password or &#34;&#34;,
+            &#34;port&#34;: port or 22,
+        }
+
+        parameters.update(extras)
+
+        connection = NetconfScrape(**parameters)
+        connection.open()
+        self.connection = connection  # pylint: disable=W0201
+
+    def close(self) -&gt; None:
+        &#34;&#34;&#34;
+        Close a scrapli netconf connection to a device
 
         Args:
             N/A
@@ -139,8 +213,8 @@ class Scrapli:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="nornir_scrapli.connection.Scrapli"><code class="flex name class">
-<span>class <span class="ident">Scrapli</span></span>
+<dt id="nornir_scrapli.connection.ScrapliCore"><code class="flex name class">
+<span>class <span class="ident">ScrapliCore</span></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Scrapli connection plugin for nornir</p></div>
@@ -148,7 +222,7 @@ class Scrapli:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Scrapli:
+<pre><code class="python">class ScrapliCore:
     &#34;&#34;&#34;Scrapli connection plugin for nornir&#34;&#34;&#34;
 
     def open(
@@ -195,15 +269,27 @@ class Scrapli:
 
         parameters.update(extras)
 
-        scrapli_driver = None
-        if platform is not None:
-            scrapli_driver = PLATFORM_MAP.get(platform, NAPALM_PLATFORM_MAP.get(platform, None))
-        if scrapli_driver is None:
+        if platform is None:
             raise NornirScrapliInvalidPlatform(
-                f&#34;Provided platform `{platform}` is not a valid scrapli or napalm platform.&#34;
+                f&#34;No `platform` provided in inventory for host `{hostname}`&#34;
             )
 
-        connection = scrapli_driver(**parameters)
+        if platform in PLATFORM_MAP:
+            platform = PLATFORM_MAP.get(platform)
+
+        if platform == &#34;generic&#34;:
+            scrapli_driver = GenericDriver
+            connection = scrapli_driver(**parameters)
+        else:
+            scrapli_driver = Scrapli
+            try:
+                connection = scrapli_driver(**parameters, platform=platform)
+            except ModuleNotFoundError as exc:
+                raise NornirScrapliInvalidPlatform(
+                    f&#34;Provided platform `{platform}` is not a valid scrapli or napalm platform, &#34;
+                    &#34;or is not a valid scrapli-community platform.&#34;
+                ) from exc
+
         connection.open()
         self.connection = connection  # pylint: disable=W0201
 
@@ -225,7 +311,7 @@ class Scrapli:
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="nornir_scrapli.connection.Scrapli.close"><code class="name flex">
+<dt id="nornir_scrapli.connection.ScrapliCore.close"><code class="name flex">
 <span>def <span class="ident">close</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
@@ -258,7 +344,7 @@ class Scrapli:
     self.connection.close()</code></pre>
 </details>
 </dd>
-<dt id="nornir_scrapli.connection.Scrapli.open"><code class="name flex">
+<dt id="nornir_scrapli.connection.ScrapliCore.open"><code class="name flex">
 <span>def <span class="ident">open</span></span>(<span>self, hostname: Union[str, NoneType], username: Union[str, NoneType], password: Union[str, NoneType], port: Union[int, NoneType], platform: Union[str, NoneType], extras: Union[Dict[str, Any], NoneType] = None, configuration: Union[nornir.core.configuration.Config, NoneType] = None) ‑> NoneType</span>
 </code></dt>
 <dd>
@@ -338,15 +424,224 @@ string is provided</dd>
 
     parameters.update(extras)
 
-    scrapli_driver = None
-    if platform is not None:
-        scrapli_driver = PLATFORM_MAP.get(platform, NAPALM_PLATFORM_MAP.get(platform, None))
-    if scrapli_driver is None:
+    if platform is None:
         raise NornirScrapliInvalidPlatform(
-            f&#34;Provided platform `{platform}` is not a valid scrapli or napalm platform.&#34;
+            f&#34;No `platform` provided in inventory for host `{hostname}`&#34;
         )
 
-    connection = scrapli_driver(**parameters)
+    if platform in PLATFORM_MAP:
+        platform = PLATFORM_MAP.get(platform)
+
+    if platform == &#34;generic&#34;:
+        scrapli_driver = GenericDriver
+        connection = scrapli_driver(**parameters)
+    else:
+        scrapli_driver = Scrapli
+        try:
+            connection = scrapli_driver(**parameters, platform=platform)
+        except ModuleNotFoundError as exc:
+            raise NornirScrapliInvalidPlatform(
+                f&#34;Provided platform `{platform}` is not a valid scrapli or napalm platform, &#34;
+                &#34;or is not a valid scrapli-community platform.&#34;
+            ) from exc
+
+    connection.open()
+    self.connection = connection  # pylint: disable=W0201</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="nornir_scrapli.connection.ScrapliNetconf"><code class="flex name class">
+<span>class <span class="ident">ScrapliNetconf</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Scrapli NETCONF connection plugin for nornir</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ScrapliNetconf:
+    &#34;&#34;&#34;Scrapli NETCONF connection plugin for nornir&#34;&#34;&#34;
+
+    def open(
+        self,
+        hostname: Optional[str],
+        username: Optional[str],
+        password: Optional[str],
+        port: Optional[int],
+        platform: Optional[str],
+        extras: Optional[Dict[str, Any]] = None,
+        configuration: Optional[Config] = None,
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Open a scrapli connection to a device
+
+        Args:
+            hostname: hostname from nornir inventory
+            username: username from nornir inventory/connection_options for scrapli
+            password: password from nornir inventory/connection_options for scrapli
+            port: port from nornir inventory/connection_options for scrapli
+            platform: platform from nornir inventory/connection_options for scrapli; ignored with
+                scrapli netconf
+            extras: extras dict from connection_options for scrapli -- pass all other scrapli
+                arguments here
+            configuration: nornir configuration
+
+        Returns:
+            N/A  # noqa: DAR202
+
+        Raises:
+            N/A
+
+        &#34;&#34;&#34;
+        # for now not trying to get ssh config out of configuration, but should in the future...
+        # platform is irrelevant for scrapli netconf for now
+        _, _ = configuration, platform
+        extras = extras or {}
+
+        parameters: Dict[str, Any] = {
+            &#34;host&#34;: hostname,
+            &#34;auth_username&#34;: username or &#34;&#34;,
+            &#34;auth_password&#34;: password or &#34;&#34;,
+            &#34;port&#34;: port or 22,
+        }
+
+        parameters.update(extras)
+
+        connection = NetconfScrape(**parameters)
+        connection.open()
+        self.connection = connection  # pylint: disable=W0201
+
+    def close(self) -&gt; None:
+        &#34;&#34;&#34;
+        Close a scrapli netconf connection to a device
+
+        Args:
+            N/A
+
+        Returns:
+            N/A  # noqa: DAR202
+
+        Raises:
+            N/A
+
+        &#34;&#34;&#34;
+        self.connection.close()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="nornir_scrapli.connection.ScrapliNetconf.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Close a scrapli netconf connection to a device</p>
+<h2 id="args">Args</h2>
+<p>N/A</p>
+<h2 id="returns">Returns</h2>
+<p>N/A
+# noqa: DAR202</p>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close(self) -&gt; None:
+    &#34;&#34;&#34;
+    Close a scrapli netconf connection to a device
+
+    Args:
+        N/A
+
+    Returns:
+        N/A  # noqa: DAR202
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    self.connection.close()</code></pre>
+</details>
+</dd>
+<dt id="nornir_scrapli.connection.ScrapliNetconf.open"><code class="name flex">
+<span>def <span class="ident">open</span></span>(<span>self, hostname: Union[str, NoneType], username: Union[str, NoneType], password: Union[str, NoneType], port: Union[int, NoneType], platform: Union[str, NoneType], extras: Union[Dict[str, Any], NoneType] = None, configuration: Union[nornir.core.configuration.Config, NoneType] = None) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Open a scrapli connection to a device</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>hostname</code></strong></dt>
+<dd>hostname from nornir inventory</dd>
+<dt><strong><code>username</code></strong></dt>
+<dd>username from nornir inventory/connection_options for scrapli</dd>
+<dt><strong><code>password</code></strong></dt>
+<dd>password from nornir inventory/connection_options for scrapli</dd>
+<dt><strong><code>port</code></strong></dt>
+<dd>port from nornir inventory/connection_options for scrapli</dd>
+<dt><strong><code>platform</code></strong></dt>
+<dd>platform from nornir inventory/connection_options for scrapli; ignored with
+scrapli netconf</dd>
+<dt><strong><code>extras</code></strong></dt>
+<dd>extras dict from connection_options for scrapli &ndash; pass all other scrapli
+arguments here</dd>
+<dt><strong><code>configuration</code></strong></dt>
+<dd>nornir configuration</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>N/A
+# noqa: DAR202</p>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def open(
+    self,
+    hostname: Optional[str],
+    username: Optional[str],
+    password: Optional[str],
+    port: Optional[int],
+    platform: Optional[str],
+    extras: Optional[Dict[str, Any]] = None,
+    configuration: Optional[Config] = None,
+) -&gt; None:
+    &#34;&#34;&#34;
+    Open a scrapli connection to a device
+
+    Args:
+        hostname: hostname from nornir inventory
+        username: username from nornir inventory/connection_options for scrapli
+        password: password from nornir inventory/connection_options for scrapli
+        port: port from nornir inventory/connection_options for scrapli
+        platform: platform from nornir inventory/connection_options for scrapli; ignored with
+            scrapli netconf
+        extras: extras dict from connection_options for scrapli -- pass all other scrapli
+            arguments here
+        configuration: nornir configuration
+
+    Returns:
+        N/A  # noqa: DAR202
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    # for now not trying to get ssh config out of configuration, but should in the future...
+    # platform is irrelevant for scrapli netconf for now
+    _, _ = configuration, platform
+    extras = extras or {}
+
+    parameters: Dict[str, Any] = {
+        &#34;host&#34;: hostname,
+        &#34;auth_username&#34;: username or &#34;&#34;,
+        &#34;auth_password&#34;: password or &#34;&#34;,
+        &#34;port&#34;: port or 22,
+    }
+
+    parameters.update(extras)
+
+    connection = NetconfScrape(**parameters)
     connection.open()
     self.connection = connection  # pylint: disable=W0201</code></pre>
 </details>
@@ -370,10 +665,17 @@ string is provided</dd>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="nornir_scrapli.connection.Scrapli" href="#nornir_scrapli.connection.Scrapli">Scrapli</a></code></h4>
+<h4><code><a title="nornir_scrapli.connection.ScrapliCore" href="#nornir_scrapli.connection.ScrapliCore">ScrapliCore</a></code></h4>
 <ul class="">
-<li><code><a title="nornir_scrapli.connection.Scrapli.close" href="#nornir_scrapli.connection.Scrapli.close">close</a></code></li>
-<li><code><a title="nornir_scrapli.connection.Scrapli.open" href="#nornir_scrapli.connection.Scrapli.open">open</a></code></li>
+<li><code><a title="nornir_scrapli.connection.ScrapliCore.close" href="#nornir_scrapli.connection.ScrapliCore.close">close</a></code></li>
+<li><code><a title="nornir_scrapli.connection.ScrapliCore.open" href="#nornir_scrapli.connection.ScrapliCore.open">open</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="nornir_scrapli.connection.ScrapliNetconf" href="#nornir_scrapli.connection.ScrapliNetconf">ScrapliNetconf</a></code></h4>
+<ul class="">
+<li><code><a title="nornir_scrapli.connection.ScrapliNetconf.close" href="#nornir_scrapli.connection.ScrapliNetconf.close">close</a></code></li>
+<li><code><a title="nornir_scrapli.connection.ScrapliNetconf.open" href="#nornir_scrapli.connection.ScrapliNetconf.open">open</a></code></li>
 </ul>
 </li>
 </ul>
