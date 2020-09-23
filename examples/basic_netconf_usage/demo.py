@@ -1,13 +1,14 @@
-from nornir import InitNornir
 from nornir_utils.plugins.functions.print_result import print_result
+
+from nornir import InitNornir
 from nornir_scrapli.tasks import (
     netconf_capabilities,
-    netconf_lock,
-    netconf_unlock,
     netconf_edit_config,
     netconf_get,
     netconf_get_config,
+    netconf_lock,
     netconf_rpc,
+    netconf_unlock,
 )
 
 
@@ -59,11 +60,11 @@ def main() -> None:
     print_result(result)
 
     # checking out the result object you can see the original scrapli response object as well
-    print(dir(result['iosxe1'][0]))
-    print(type(result['iosxe1'][0].scrapli_response))
-    print(dir(result['iosxe1'][0].scrapli_response))
-    print(result['iosxe1'][0].scrapli_response.elapsed_time)
-    print(result['iosxe1'][0].scrapli_response.xml_result)
+    print(dir(result["iosxe1"][0]))
+    print(type(result["iosxe1"][0].scrapli_response))
+    print(dir(result["iosxe1"][0].scrapli_response))
+    print(result["iosxe1"][0].scrapli_response.elapsed_time)
+    print(result["iosxe1"][0].scrapli_response.xml_result)
 
 
 if __name__ == "__main__":
