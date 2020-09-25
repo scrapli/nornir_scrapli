@@ -73,6 +73,11 @@ iosxe-1:
         auth_strict_key: False
 ```
 
+**NOTE:** `scrapli-netconf` has no concept (at the moment!) of "platforms" - it simply implements RFC compliant
+ NETCONF RPCs, so you do not need to pass `iosxr`, `junos` or anything like that to the `scrapli_netconf` connection
+  options section!
+
+
 ```python
 from nornir import InitNornir
 from nornir_scrapli.tasks import (

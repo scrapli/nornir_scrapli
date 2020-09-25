@@ -15,11 +15,11 @@ from nornir_scrapli.tasks import (
 def main() -> None:
     nr = InitNornir(config_file="nornir_data/config.yaml")
 
-    result = nr.run(task=netconf_capabilities)
-    print_result(result)
+    capabilities_result = nr.run(task=netconf_capabilities)
+    print_result(capabilities_result)
 
-    result = nr.run(task=netconf_get_config)
-    print_result(result)
+    config_result = nr.run(task=netconf_get_config)
+    print_result(config_result)
 
     filter_ = """<interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
       <interface>
