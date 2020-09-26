@@ -22,10 +22,14 @@ Feel free to join the very awesome networktocode slack workspace [here](https://
 - [Quick Start Guide](#quick-start-guide)
   - [Installation](#installation)
   - [A Simple Example](#a-simple-example)
+  - [Additional Examples](#additional-examples)
 - [Supported Platforms](#supported-platforms)
 - [Documentation](#documentation)
 - [General Information](#general-information)
 - [Available Tasks](#available-tasks)
+  - [Telnet/SSH Tasks](#scrapli-core-tasks)
+  - [NETCONF Tasks](#scrapli-netconf-tasks)
+- [Available Functions](#available-functions)
 
 
 # Quick Start Guide
@@ -150,7 +154,13 @@ When using the `scrapli-netconf` tasks the result object `result` will be the st
  ), such as the `elapsed_time`, `raw_result`, `xml_result`, etc. -- you can see this in the above example!
 
 
-## Supported Platforms
+## Additional Examples
+
+- [NETCONF Usage](/examples/basic_netconf_usage)
+- [Structured Data](/examples/structured_data)
+
+
+# Supported Platforms
 
 nornir_scrapli supports the "core" scrapli drivers, the GenericDriver (for use with linux hosts generally speaking
 ), and the [scrapli_community](https://github.com/scrapli/scrapli_community) platforms as well! See
@@ -293,3 +303,12 @@ Unlock the datastore on the device
 - [netconf_rpc](https://scrapli.github.io/scrapli_netconf/docs/scrapli_netconf/index.html#scrapli_netconf.NetconfScrape.rpc) -
 Send a "bare" RPC to the device
 - netconf_validate - Execute the `validate` rpc against a given datastore
+
+
+# Available Functions
+
+- [print_structured_result](/nornir_scrapli) -- this function is very similar to the "normal" `print_result` function
+ that now ships with the `nornir_utils` library (historically with nornir "core"), except it contains several
+  additional arguments, most importantly the `parser` argument allows you to select `textfsm` or `genie` to decide
+   which parser to use to parse the unstructured data stored in the results object. Please see the structured
+    results example [here](/examples/structured_data) for more details.

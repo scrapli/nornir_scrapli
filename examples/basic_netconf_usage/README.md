@@ -1,5 +1,5 @@
-basic_usage
-===========
+basic_netconf_usage
+===================
 
 This directory contains a very simple setup to demo basic usage of `scrapli-netconf` with `nornir`.
 

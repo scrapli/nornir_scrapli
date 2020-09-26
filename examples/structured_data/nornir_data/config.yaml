@@ -1,0 +1,9 @@
+---
+inventory:
+  plugin: YAMLInventory
+  options:
+    host_file: "nornir_data/hosts.yaml"
+    group_file: "nornir_data/groups.yaml"
+    defaults_file: "nornir_data/defaults.yaml"
+logging:
+  enabled: False
