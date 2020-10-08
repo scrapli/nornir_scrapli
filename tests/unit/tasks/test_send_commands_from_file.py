@@ -21,6 +21,7 @@ def test_send_commands_from_file(nornir, monkeypatch):
         failed_when_contains="",
         stop_on_failed=False,
         privilege_level="",
+        timeout_ops=None,
     ):
         with open(file, "r") as f:
             commands = f.read().splitlines()
