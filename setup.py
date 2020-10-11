@@ -9,6 +9,9 @@ __author__ = "Carl Montanari"
 with open("README.md", "r") as f:
     README = f.read()
 
+with open("requirements.txt", "r") as f:
+    INSTALL_REQUIRES = f.read().splitlines()
+
 setuptools.setup(
     name="nornir_scrapli",
     version=__version__,
@@ -19,16 +22,8 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/scrapli/nornir_scrapli",
     packages=setuptools.find_packages(),
-    install_requires=[
-        "scrapli>=2020.06.06",
-        "scrapli_community>=2020.08.08",
-        "scrapli_netconf>=2020.09.23",
-        "nornir>=3.0.0,<4.0.0",
-    ],
-    extras_require={
-        "textfsm": ["textfsm>=1.1.0,<2.0.0", "ntc-templates>=1.1.0,<2.0.0"],
-        "genie": ["genie>=20.2", "pyats>=20.2"],
-    },
+    install_requires=INSTALL_REQUIRES,
+    extras_require={},
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",

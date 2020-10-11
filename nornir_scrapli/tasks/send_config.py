@@ -14,6 +14,7 @@ def send_config(
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
     privilege_level: str = "",
+    timeout_ops: Optional[float] = None,
 ) -> Result:
     """
     Send a config to device using scrapli
@@ -33,6 +34,10 @@ def send_config(
             JunosDriver. You can also pass in a name of a configuration session such as
             "my-config-session" if you have registered a session using the
             "register_config_session" method of the EOSDriver or NXOSDriver.
+        timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
+            the duration of the operation, value is reset to initial value after operation is
+            completed. Note that this is the timeout value PER CONFIG sent, not for the total
+            of the configs being sent!
 
     Returns:
         Result: nornir result object with Result.result value set to returned scrapli Response
@@ -60,6 +65,7 @@ def send_config(
         failed_when_contains=failed_when_contains,
         stop_on_failed=stop_on_failed,
         privilege_level=privilege_level,
+        timeout_ops=timeout_ops,
     )
 
     result = ScrapliResult(

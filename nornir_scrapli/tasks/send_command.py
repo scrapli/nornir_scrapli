@@ -10,6 +10,7 @@ def send_command(
     command: str,
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
+    timeout_ops: Optional[float] = None,
 ) -> Result:
     """
     Send a single command to device using scrapli
@@ -19,6 +20,9 @@ def send_command(
         command: string to send to device in privilege exec mode
         strip_prompt: True/False strip prompt from returned output
         failed_when_contains: string or list of strings indicating failure if found in response
+        timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
+            the duration of the operation, value is reset to initial value after operation is
+            completed
 
     Returns:
         Result: scrapli nornir result object; almost identical to a "normal" nornir result object,
@@ -31,7 +35,10 @@ def send_command(
     """
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
     scrapli_response = scrapli_conn.send_command(
-        command=command, strip_prompt=strip_prompt, failed_when_contains=failed_when_contains
+        command=command,
+        strip_prompt=strip_prompt,
+        failed_when_contains=failed_when_contains,
+        timeout_ops=timeout_ops,
     )
 
     result = ScrapliResult(

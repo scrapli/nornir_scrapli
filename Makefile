@@ -1,7 +1,9 @@
 lint:
 	python -m isort nornir_scrapli/
+	python -m isort examples/
 	python -m isort tests/
 	python -m black nornir_scrapli/
+	python -m black examples/
 	python -m black tests/
 	python -m pylama nornir_scrapli/
 	python -m pydocstyle nornir_scrapli/
