@@ -1,5 +1,5 @@
-scrapli>=2020.07.04
-scrapli_netconf>=2020.09.23
+scrapli>=2020.10.10
+scrapli_netconf>=2020.10.10
 scrapli_community>=2020.08.08
 nornir>=3.0.0,<4.0.0
 nornir-utils>=0.1.0
