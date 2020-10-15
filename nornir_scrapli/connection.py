@@ -148,7 +148,7 @@ class ScrapliNetconf:
             "host": hostname,
             "auth_username": username or "",
             "auth_password": password or "",
-            "port": port or 22,
+            "port": port or 830,
         }
 
         parameters.update(extras)
