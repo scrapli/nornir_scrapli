@@ -80,3 +80,35 @@ def test_connection_netconf_setup(nornir_netconf, monkeypatch):
     assert scrapli_conn.transport.auth_password == "VR-netlab9"
     assert scrapli_conn.transport.auth_strict_key is False
     assert isinstance(scrapli_conn, NetconfScrape)
+
+
+def test_connection_global_ssh_config_setting_overridden(nornir_global_ssh, monkeypatch):
+    from scrapli_netconf.driver import NetconfScrape
+
+    def mock_open(cls):
+        pass
+
+    monkeypatch.setattr(NetconfScrape, "open", mock_open)
+    scrapli_conn = nornir_global_ssh.inventory.hosts["sea-ios-1"].get_connection(
+        "scrapli_netconf", nornir_global_ssh.config
+    )
+    assert nornir_global_ssh.config.ssh.config_file == "notarealfile!"
+    assert scrapli_conn._initialization_args["ssh_config_file"] == os.path.expanduser(
+        "~/.ssh/config"
+    )
+
+
+def test_connection_global_ssh_config_setting_no_connection_option_ssh(
+    nornir_global_ssh_no_connection_option_ssh, monkeypatch
+):
+    from scrapli.driver.driver import Scrape
+
+    def mock_open(cls):
+        pass
+
+    monkeypatch.setattr(Scrape, "open", mock_open)
+    scrapli_conn = nornir_global_ssh_no_connection_option_ssh.inventory.hosts[
+        "sea-ios-1"
+    ].get_connection("scrapli", nornir_global_ssh_no_connection_option_ssh.config)
+    assert nornir_global_ssh_no_connection_option_ssh.config.ssh.config_file is False
+    assert scrapli_conn._initialization_args["ssh_config_file"] == ""
