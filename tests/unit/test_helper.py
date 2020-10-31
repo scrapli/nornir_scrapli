@@ -1,3 +1,5 @@
+from scrapli.helper import strip_ansi
+
 from nornir_scrapli.helper import diff_xml_text
 
 
@@ -43,11 +45,7 @@ def test_diff_xml_text():
         </agent>
     </netconf-yang>
 </data>"""
-    expected_diff = """--- 
-
-+++ 
-
-@@ -5,7 +5,6 @@
+    expected_diff = """@@ -5,7 +5,6 @@
 
              <netconf-vrf-table>
                  <vrf>
@@ -67,4 +65,4 @@ def test_diff_xml_text():
          </agent>
      </netconf-yang>"""
     actual_diff = diff_xml_text(document_one=xml_one, document_two=xml_two)
-    assert actual_diff == expected_diff
+    assert strip_ansi(actual_diff.encode()).decode() == expected_diff

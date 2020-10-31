@@ -1,6 +1,10 @@
 """nornir_scrapli.helper"""
 import difflib
 
+ANSI_GREEN = "\033[92m"
+ANSI_RED = "\033[91m"
+ANSI_END = "\033[0m"
+
 
 def diff_xml_text(document_one: str, document_two: str) -> str:
     """
@@ -24,4 +28,17 @@ def diff_xml_text(document_one: str, document_two: str) -> str:
     document_one_lines = [line for line in document_one.splitlines() if "message-id" not in line]
     document_two_lines = [line for line in document_two.splitlines() if "message-id" not in line]
     diff = difflib.unified_diff(document_one_lines, document_two_lines)
-    return "\n".join(diff)
+
+    diff_lines = []
+    for line in diff:
+        if line.startswith("---") or line.startswith("+++"):
+            # may as well just strip out the header lines and such, we dont care about them
+            continue
+        if line.startswith("+"):
+            diff_lines.append(f"{ANSI_GREEN}{line}{ANSI_END}")
+        elif line.startswith("-"):
+            diff_lines.append(f"{ANSI_RED}{line}{ANSI_END}")
+        else:
+            diff_lines.append(line)
+
+    return "\n".join(diff_lines)
