@@ -8,12 +8,18 @@ def test_netconf_edit_config(nornir_netconf, monkeypatch):
     def mock_open(cls):
         pass
 
+    def mock_get_config(cls, source):
+        response = Response(host="fake_as_heck", channel_input="blah")
+        response._record_response(b"some stuff about whatever")
+        return response
+
     def mock_edit_config(cls, config, target):
         response = Response(host="fake_as_heck", channel_input="blah")
         response._record_response(b"some stuff about whatever")
         return response
 
     monkeypatch.setattr(NetconfScrape, "open", mock_open)
+    monkeypatch.setattr(NetconfScrape, "get_config", mock_get_config)
     monkeypatch.setattr(NetconfScrape, "edit_config", mock_edit_config)
 
     result = nornir_netconf.run(task=netconf_edit_config, config="blah", target="blah")

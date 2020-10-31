@@ -9,7 +9,7 @@ from nornir_scrapli.result import ScrapliResult, process_config_result
 def send_configs_from_file(
     task: Task,
     file: str,
-    dry_run: bool = False,
+    dry_run: Optional[bool] = None,
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
@@ -53,7 +53,9 @@ def send_configs_from_file(
 
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
 
-    if dry_run:
+    _task_dry_run = dry_run if dry_run is not None else task.global_dry_run
+
+    if _task_dry_run:
         # if dry run, try to acquire config mode then back out; do not send any configurations!
         scrapli_conn.acquire_priv("configuration")
         scrapli_conn.acquire_priv(scrapli_conn.default_desired_privilege_level)

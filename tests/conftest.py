@@ -3,9 +3,6 @@ import os
 import pytest
 
 from nornir import InitNornir
-from nornir.core.state import GlobalState
-
-global_data = GlobalState(dry_run=True)
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -22,11 +19,30 @@ def nornir():
                 "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
             },
         },
+        dry_run=False,
+        logging={"enabled": False},
+    )
+    return nornir
+
+
+@pytest.fixture(scope="function", autouse=True)
+def nornir_global_dry_run():
+    """Initializes nornir"""
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    nornir_global_dry_run = InitNornir(
+        inventory={
+            "plugin": "YAMLInventory",
+            "options": {
+                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
+                "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
+                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
+            },
+        },
         dry_run=True,
         logging={"enabled": False},
     )
-    nornir.data = global_data
-    return nornir
+    return nornir_global_dry_run
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -43,10 +59,9 @@ def nornir_community():
                 "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
             },
         },
-        dry_run=True,
+        dry_run=False,
         logging={"enabled": False},
     )
-    nornir.data = global_data
     return nornir
 
 
@@ -64,10 +79,9 @@ def nornir_generic():
                 "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
             },
         },
-        dry_run=True,
+        dry_run=False,
         logging={"enabled": False},
     )
-    nornir.data = global_data
     return nornir
 
 
@@ -87,9 +101,8 @@ def nornir_raise_on_error():
         },
         core={"raise_on_error": True},
         logging={"enabled": False},
-        dry_run=True,
+        dry_run=False,
     )
-    nornir.data = global_data
     return nornir
 
 
@@ -107,14 +120,49 @@ def nornir_netconf():
                 "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
             },
         },
-        dry_run=True,
+        dry_run=False,
         logging={"enabled": False},
     )
-    nornir.data = global_data
     return nornir
 
 
 @pytest.fixture(scope="function", autouse=True)
-def reset_data():
-    global_data.dry_run = True
-    global_data.reset_failed_hosts()
+def nornir_global_ssh():
+    """Initializes nornir"""
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    nornir_global_ssh = InitNornir(
+        inventory={
+            "plugin": "YAMLInventory",
+            "options": {
+                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
+                "group_file": "{}/inventory_data/netconf_groups.yaml".format(dir_path),
+                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
+            },
+        },
+        dry_run=False,
+        logging={"enabled": False},
+        ssh={"config_file": "notarealfile!"},
+    )
+    return nornir_global_ssh
+
+
+@pytest.fixture(scope="function", autouse=True)
+def nornir_global_ssh_no_connection_option_ssh():
+    """Initializes nornir"""
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    nornir_global_ssh_no_connection_option_ssh = InitNornir(
+        inventory={
+            "plugin": "YAMLInventory",
+            "options": {
+                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
+                "group_file": "{}/inventory_data/no_ssh_config_groups.yaml".format(dir_path),
+                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
+            },
+        },
+        dry_run=False,
+        logging={"enabled": False},
+        ssh={"config_file": False},
+    )
+    return nornir_global_ssh_no_connection_option_ssh
