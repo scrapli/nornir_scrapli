@@ -1,6 +1,7 @@
 import os
 
 import pytest
+from scrapli.helper import resolve_ssh_config
 
 from nornir import InitNornir
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
@@ -93,9 +94,7 @@ def test_connection_global_ssh_config_setting_overridden(nornir_global_ssh, monk
         "scrapli_netconf", nornir_global_ssh.config
     )
     assert nornir_global_ssh.config.ssh.config_file == "notarealfile!"
-    assert scrapli_conn._initialization_args["ssh_config_file"] == os.path.expanduser(
-        "~/.ssh/config"
-    )
+    assert scrapli_conn._initialization_args["ssh_config_file"] == resolve_ssh_config("")
 
 
 def test_connection_global_ssh_config_setting_no_connection_option_ssh(
