@@ -14,7 +14,7 @@ def diff_xml_text(document_one: str, document_two: str) -> str:
         document_two: string of xml doc 2
 
     Returns:
-        diff: unified diff of the two input documents
+        str: unified diff of the two input documents
 
     Raises:
         N/A
