@@ -12,6 +12,14 @@ with open("README.md", "r") as f:
 with open("requirements.txt", "r") as f:
     INSTALL_REQUIRES = f.read().splitlines()
 
+EXTRAS_REQUIRE = {
+    "genie": [],
+}
+
+for extra in EXTRAS_REQUIRE:
+    with open(f"requirements-{extra}.txt", "r") as f:
+        EXTRAS_REQUIRE[extra] = f.read().splitlines()
+
 setuptools.setup(
     name="nornir_scrapli",
     version=__version__,
@@ -23,7 +31,7 @@ setuptools.setup(
     url="https://github.com/scrapli/nornir_scrapli",
     packages=setuptools.find_packages(),
     install_requires=INSTALL_REQUIRES,
-    extras_require={},
+    extras_require=EXTRAS_REQUIRE,
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",

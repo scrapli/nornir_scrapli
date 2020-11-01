@@ -55,6 +55,27 @@ def test_send_config_dry_run(nornir, monkeypatch):
     assert result["sea-ios-1"].changed is False
 
 
+def test_send_config_global_dry_run(nornir_global_dry_run, monkeypatch):
+    from nornir_scrapli.tasks import send_config
+
+    def mock_open(cls):
+        pass
+
+    def mock_acquire_priv(cls, priv):
+        return
+
+    monkeypatch.setattr(IOSXEDriver, "open", mock_open)
+    monkeypatch.setattr(IOSXEDriver, "acquire_priv", mock_acquire_priv)
+
+    result = nornir_global_dry_run.run(
+        task=send_config,
+        config="interface loopback123\ndescription neat",
+    )
+    assert result["sea-ios-1"].result is None
+    assert result["sea-ios-1"].failed is False
+    assert result["sea-ios-1"].changed is False
+
+
 def test_send_config_generic_driver(nornir_generic, monkeypatch):
     from nornir_scrapli.tasks import send_config
 

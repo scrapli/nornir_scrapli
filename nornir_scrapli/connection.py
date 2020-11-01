@@ -53,17 +53,21 @@ class ScrapliCore:
                 string is provided
 
         """
-        # for now not trying to get ssh config out of configuration, but should in the future...
-        _ = configuration
         extras = extras or {}
+        # 99.9% configuration will always be passed here... but to be consistent w/ the other
+        # plugins we'll leave the function signature same/same as the others
+        global_config = configuration.dict() if configuration else {}
 
         parameters: Dict[str, Any] = {
             "host": hostname,
             "auth_username": username or "",
             "auth_password": password or "",
             "port": port or 22,
+            "ssh_config_file": global_config.get("ssh", {}).get("config_file", False),
         }
 
+        # will override any of the configs from global nornir config (such as ssh config file) with
+        # options from "extras" (connection options)
         parameters.update(extras)
 
         if not platform:
@@ -139,18 +143,23 @@ class ScrapliNetconf:
             N/A
 
         """
-        # for now not trying to get ssh config out of configuration, but should in the future...
         # platform is irrelevant for scrapli netconf for now
-        _, _ = configuration, platform
+        _ = platform
         extras = extras or {}
+        # 99.9% configuration will always be passed here... but to be consistent w/ the other
+        # plugins we'll leave the function signature same/same as the others
+        global_config = configuration.dict() if configuration else {}
 
         parameters: Dict[str, Any] = {
             "host": hostname,
             "auth_username": username or "",
             "auth_password": password or "",
-            "port": port or 22,
+            "port": port or 830,
+            "ssh_config_file": global_config.get("ssh", {}).get("config_file", False),
         }
 
+        # will override any of the configs from global nornir config (such as ssh config file) with
+        # options from "extras" (connection options)
         parameters.update(extras)
 
         connection = NetconfScrape(**parameters)
