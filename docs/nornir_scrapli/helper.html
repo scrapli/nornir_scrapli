@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.1" />
-<title>nornir_scrapli API documentation</title>
-<meta name="description" content="scrapli&#39;s plugin for nornir" />
+<title>nornir_scrapli.helper API documentation</title>
+<meta name="description" content="nornir_scrapli.helper" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,51 +19,131 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>nornir_scrapli</code></h1>
+<h1 class="title">Module <code>nornir_scrapli.helper</code></h1>
 </header>
 <section id="section-intro">
-<p>scrapli's plugin for nornir</p>
+<p>nornir_scrapli.helper</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;scrapli&#39;s plugin for nornir&#34;&#34;&#34;
+<pre><code class="python">&#34;&#34;&#34;nornir_scrapli.helper&#34;&#34;&#34;
+import difflib
 
-__version__ = &#34;2020.11.01&#34;</code></pre>
+ANSI_GREEN = &#34;\033[92m&#34;
+ANSI_RED = &#34;\033[91m&#34;
+ANSI_END = &#34;\033[0m&#34;
+
+
+def diff_xml_text(document_one: str, document_two: str) -&gt; str:
+    &#34;&#34;&#34;
+    Diff xml text strings
+
+    Really could be just &#34;diff text&#34; but also ensuring we ignore the &#34;message-id&#34; lines. This is
+    really pretty simple and not always super great, but better than nothing for now!
+
+    Args:
+        document_one: string of xml doc 1
+        document_two: string of xml doc 2
+
+    Returns:
+        str: unified diff of the two input documents
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    # ignore message-id stuff -- maybe more in the future?
+    document_one_lines = [line for line in document_one.splitlines() if &#34;message-id&#34; not in line]
+    document_two_lines = [line for line in document_two.splitlines() if &#34;message-id&#34; not in line]
+    diff = difflib.unified_diff(document_one_lines, document_two_lines)
+
+    diff_lines = []
+    for line in diff:
+        if line.startswith(&#34;---&#34;) or line.startswith(&#34;+++&#34;):
+            # may as well just strip out the header lines and such, we dont care about them
+            continue
+        if line.startswith(&#34;+&#34;):
+            diff_lines.append(f&#34;{ANSI_GREEN}{line}{ANSI_END}&#34;)
+        elif line.startswith(&#34;-&#34;):
+            diff_lines.append(f&#34;{ANSI_RED}{line}{ANSI_END}&#34;)
+        else:
+            diff_lines.append(line)
+
+    return &#34;\n&#34;.join(diff_lines)</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="nornir_scrapli.connection" href="connection.html">nornir_scrapli.connection</a></code></dt>
+<dt id="nornir_scrapli.helper.diff_xml_text"><code class="name flex">
+<span>def <span class="ident">diff_xml_text</span></span>(<span>document_one: str, document_two: str) ‑> str</span>
+</code></dt>
 <dd>
-<div class="desc"><p>nornir_scrapli.connection</p></div>
-</dd>
-<dt><code class="name"><a title="nornir_scrapli.exceptions" href="exceptions.html">nornir_scrapli.exceptions</a></code></dt>
-<dd>
-<div class="desc"><p>nornir_scrapli.exceptions</p></div>
-</dd>
-<dt><code class="name"><a title="nornir_scrapli.functions" href="functions/index.html">nornir_scrapli.functions</a></code></dt>
-<dd>
-<div class="desc"><p>nornir_scrapli.functions</p></div>
-</dd>
-<dt><code class="name"><a title="nornir_scrapli.helper" href="helper.html">nornir_scrapli.helper</a></code></dt>
-<dd>
-<div class="desc"><p>nornir_scrapli.helper</p></div>
-</dd>
-<dt><code class="name"><a title="nornir_scrapli.result" href="result.html">nornir_scrapli.result</a></code></dt>
-<dd>
-<div class="desc"><p>nornir_scrapli.result</p></div>
-</dd>
-<dt><code class="name"><a title="nornir_scrapli.tasks" href="tasks/index.html">nornir_scrapli.tasks</a></code></dt>
-<dd>
-<div class="desc"><p>nornir_scrapli.tasks</p></div>
+<div class="desc"><p>Diff xml text strings</p>
+<p>Really could be just "diff text" but also ensuring we ignore the "message-id" lines. This is
+really pretty simple and not always super great, but better than nothing for now!</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>document_one</code></strong></dt>
+<dd>string of xml doc 1</dd>
+<dt><strong><code>document_two</code></strong></dt>
+<dd>string of xml doc 2</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>unified diff of the two input documents</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>N/A</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def diff_xml_text(document_one: str, document_two: str) -&gt; str:
+    &#34;&#34;&#34;
+    Diff xml text strings
+
+    Really could be just &#34;diff text&#34; but also ensuring we ignore the &#34;message-id&#34; lines. This is
+    really pretty simple and not always super great, but better than nothing for now!
+
+    Args:
+        document_one: string of xml doc 1
+        document_two: string of xml doc 2
+
+    Returns:
+        str: unified diff of the two input documents
+
+    Raises:
+        N/A
+
+    &#34;&#34;&#34;
+    # ignore message-id stuff -- maybe more in the future?
+    document_one_lines = [line for line in document_one.splitlines() if &#34;message-id&#34; not in line]
+    document_two_lines = [line for line in document_two.splitlines() if &#34;message-id&#34; not in line]
+    diff = difflib.unified_diff(document_one_lines, document_two_lines)
+
+    diff_lines = []
+    for line in diff:
+        if line.startswith(&#34;---&#34;) or line.startswith(&#34;+++&#34;):
+            # may as well just strip out the header lines and such, we dont care about them
+            continue
+        if line.startswith(&#34;+&#34;):
+            diff_lines.append(f&#34;{ANSI_GREEN}{line}{ANSI_END}&#34;)
+        elif line.startswith(&#34;-&#34;):
+            diff_lines.append(f&#34;{ANSI_RED}{line}{ANSI_END}&#34;)
+        else:
+            diff_lines.append(line)
+
+    return &#34;\n&#34;.join(diff_lines)</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -74,14 +154,14 @@ __version__ = &#34;2020.11.01&#34;</code></pre>
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li><code><a title="nornir_scrapli.connection" href="connection.html">nornir_scrapli.connection</a></code></li>
-<li><code><a title="nornir_scrapli.exceptions" href="exceptions.html">nornir_scrapli.exceptions</a></code></li>
-<li><code><a title="nornir_scrapli.functions" href="functions/index.html">nornir_scrapli.functions</a></code></li>
-<li><code><a title="nornir_scrapli.helper" href="helper.html">nornir_scrapli.helper</a></code></li>
-<li><code><a title="nornir_scrapli.result" href="result.html">nornir_scrapli.result</a></code></li>
-<li><code><a title="nornir_scrapli.tasks" href="tasks/index.html">nornir_scrapli.tasks</a></code></li>
+<li><code><a title="nornir_scrapli" href="index.html">nornir_scrapli</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="nornir_scrapli.helper.diff_xml_text" href="#nornir_scrapli.helper.diff_xml_text">diff_xml_text</a></code></li>
 </ul>
 </li>
 </ul>

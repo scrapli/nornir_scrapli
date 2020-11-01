@@ -326,7 +326,7 @@ get operation</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.netconf_edit_config"><code class="name flex">
-<span>def <span class="ident">netconf_edit_config</span></span>(<span>task: nornir.core.task.Task, config: str, target: str = 'running') ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">netconf_edit_config</span></span>(<span>task: nornir.core.task.Task, config: str, dry_run: Union[bool, NoneType] = None, diff: bool = False, target: str = 'running') ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Edit config from the device with scrapli_netconf</p>
@@ -336,6 +336,14 @@ get operation</dd>
 <dd>nornir task object</dd>
 <dt><strong><code>config</code></strong></dt>
 <dd>configuration to send to device</dd>
+<dt><strong><code>dry_run</code></strong></dt>
+<dd>if True config will be pushed and then discarded; will discard anything already
+pushed that has <em>not</em> been committed already, so be careful! :D; also note that this
+will only work if there is a candidate datastore &ndash; meaning that, for example, with
+IOSXE with a target of "running" there is no way to discard the configuration as it will
+already have been written to the running datastore</dd>
+<dt><strong><code>diff</code></strong></dt>
+<dd>capture/set diff of target datastore xml text of before/after edit config operation</dd>
 <dt><strong><code>target</code></strong></dt>
 <dd>configuration source to target; running|startup|candidate</dd>
 </dl>
@@ -354,6 +362,8 @@ get_config operation</dd>
 <pre><code class="python">def netconf_edit_config(
     task: Task,
     config: str,
+    dry_run: Optional[bool] = None,
+    diff: bool = False,
     target: str = &#34;running&#34;,
 ) -&gt; Result:
     &#34;&#34;&#34;
@@ -362,6 +372,12 @@ get_config operation</dd>
     Args:
         task: nornir task object
         config: configuration to send to device
+        dry_run: if True config will be pushed and then discarded; will discard anything already
+            pushed that has *not* been committed already, so be careful! :D; also note that this
+            will only work if there is a candidate datastore -- meaning that, for example, with
+            IOSXE with a target of &#34;running&#34; there is no way to discard the configuration as it will
+            already have been written to the running datastore
+        diff: capture/set diff of target datastore xml text of before/after edit config operation
         target: configuration source to target; running|startup|candidate
 
     Returns:
@@ -373,13 +389,32 @@ get_config operation</dd>
 
     &#34;&#34;&#34;
     scrapli_conn = task.host.get_connection(&#34;scrapli_netconf&#34;, task.nornir.config)
+
+    if diff:
+        original_config = scrapli_conn.get_config(source=target)
+
     scrapli_response = scrapli_conn.edit_config(config=config, target=target)
+
+    if diff:
+        edited_config = scrapli_conn.get_config(source=target)
+        diff_result = diff_xml_text(original_config.result, edited_config.result)
+    else:
+        diff_result = &#34;&#34;
+
+    _task_dry_run = dry_run if dry_run is not None else task.global_dry_run
+
+    if _task_dry_run:
+        scrapli_conn.discard()
+        changed = False
+    else:
+        changed = True
 
     result = ScrapliResult(
         host=task.host,
         result=process_command_result(scrapli_response=scrapli_response),
         scrapli_response=scrapli_response,
-        changed=True,
+        changed=changed,
+        diff=diff_result,
     )
     return result</code></pre>
 </details>
@@ -975,7 +1010,7 @@ object</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_config"><code class="name flex">
-<span>def <span class="ident">send_config</span></span>(<span>task: nornir.core.task.Task, config: str, dry_run: bool = False, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_config</span></span>(<span>task: nornir.core.task.Task, config: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send a config to device using scrapli</p>
@@ -1027,7 +1062,7 @@ host that is using the "generic" platform type</dd>
 <pre><code class="python">def send_config(
     task: Task,
     config: str,
-    dry_run: bool = False,
+    dry_run: Optional[bool] = None,
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
@@ -1071,7 +1106,9 @@ host that is using the "generic" platform type</dd>
 
     scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
 
-    if dry_run:
+    _task_dry_run = dry_run if dry_run is not None else task.global_dry_run
+
+    if _task_dry_run:
         # if dry run, try to acquire config mode then back out; do not send any configurations!
         scrapli_conn.acquire_priv(&#34;configuration&#34;)
         scrapli_conn.acquire_priv(scrapli_conn.default_desired_privilege_level)
@@ -1096,7 +1133,7 @@ host that is using the "generic" platform type</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_configs"><code class="name flex">
-<span>def <span class="ident">send_configs</span></span>(<span>task: nornir.core.task.Task, configs: List[str], dry_run: bool = False, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_configs</span></span>(<span>task: nornir.core.task.Task, configs: List[str], dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send configs to device using scrapli</p>
@@ -1148,7 +1185,7 @@ host that is using the "generic" platform type</dd>
 <pre><code class="python">def send_configs(
     task: Task,
     configs: List[str],
-    dry_run: bool = False,
+    dry_run: Optional[bool] = None,
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
@@ -1192,7 +1229,9 @@ host that is using the "generic" platform type</dd>
 
     scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
 
-    if dry_run:
+    _task_dry_run = dry_run if dry_run is not None else task.global_dry_run
+
+    if _task_dry_run:
         # if dry run, try to acquire config mode then back out; do not send any configurations!
         scrapli_conn.acquire_priv(&#34;configuration&#34;)
         scrapli_conn.acquire_priv(scrapli_conn.default_desired_privilege_level)
@@ -1217,7 +1256,7 @@ host that is using the "generic" platform type</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_configs_from_file"><code class="name flex">
-<span>def <span class="ident">send_configs_from_file</span></span>(<span>task: nornir.core.task.Task, file: str, dry_run: bool = False, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_configs_from_file</span></span>(<span>task: nornir.core.task.Task, file: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send configs from a file to device using scrapli</p>
@@ -1269,7 +1308,7 @@ host that is using the "generic" platform type</dd>
 <pre><code class="python">def send_configs_from_file(
     task: Task,
     file: str,
-    dry_run: bool = False,
+    dry_run: Optional[bool] = None,
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
@@ -1313,7 +1352,9 @@ host that is using the "generic" platform type</dd>
 
     scrapli_conn = task.host.get_connection(&#34;scrapli&#34;, task.nornir.config)
 
-    if dry_run:
+    _task_dry_run = dry_run if dry_run is not None else task.global_dry_run
+
+    if _task_dry_run:
         # if dry run, try to acquire config mode then back out; do not send any configurations!
         scrapli_conn.acquire_priv(&#34;configuration&#34;)
         scrapli_conn.acquire_priv(scrapli_conn.default_desired_privilege_level)
