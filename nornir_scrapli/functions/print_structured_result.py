@@ -6,13 +6,12 @@ from nornir_utils.plugins.functions.print_result import _print_result
 from scrapli.response import Response
 
 from nornir.core.task import AggregatedResult, MultiResult, Result
-from nornir_scrapli.result import ScrapliResult
 
 LOCK = threading.Lock()
 
 
 def print_structured_result(
-    result: ScrapliResult,
+    result: AggregatedResult,
     failed: bool = False,
     severity_level: int = logging.INFO,
     parser: str = "textfsm",
@@ -23,7 +22,7 @@ def print_structured_result(
     Prints the :obj:`nornir.core.task.Result` from a previous task to screen
 
     Arguments:
-        result: from a previous task
+        result: Nornir AggregateResult object from a previous task
         failed: if `True` assume the task failed
         severity_level: Print only errors with this severity level or higher
         parser: textfsm|genie -- parser to parse output with
