@@ -102,7 +102,7 @@ config_results = nr.run(
 print("get_prompt result:")
 print(prompt_results["iosxe-1"].result)
 print("send_command result:")
-print(prompt_results["iosxe-1"].result)
+print(command_results["iosxe-1"].result)
 print("send_configs result:")
 print(config_results["iosxe-1"].result)
 ```
