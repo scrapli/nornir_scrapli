@@ -42,7 +42,7 @@ def send_config(
             the duration of the operation, value is reset to initial value after operation is
             completed. Note that this is the timeout value PER CONFIG sent, not for the total
             of the configs being sent!
- 
+
     Returns:
         Result: nornir result object with Result.result value set to returned scrapli Response
             object
