@@ -11,6 +11,7 @@ def send_commands_from_file(
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
+    eager: bool = False,
     timeout_ops: Optional[float] = None,
 ) -> Result:
     """
@@ -23,6 +24,9 @@ def send_commands_from_file(
         failed_when_contains: string or list of strings indicating failure if found in response
         stop_on_failed: True/False stop executing commands if a command fails, returns results as of
             current execution
+        eager: if eager is True we do not read until prompt is seen at each command sent to the
+            channel. Do *not* use this unless you know what you are doing as it is possible that
+            it can make scrapli less reliable!
         timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
             the duration of the operation, value is reset to initial value after operation is
             completed
@@ -41,6 +45,7 @@ def send_commands_from_file(
         strip_prompt=strip_prompt,
         failed_when_contains=failed_when_contains,
         stop_on_failed=stop_on_failed,
+        eager=eager,
         timeout_ops=timeout_ops,
     )
 

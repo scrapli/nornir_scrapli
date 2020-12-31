@@ -18,6 +18,7 @@ def test_send_config(nornir, monkeypatch):
         failed_when_contains="",
         stop_on_failed=False,
         privilege_level="",
+        eager=False,
         timeout_ops=None,
     ):
         response = Response(host="fake_as_heck", channel_input=config)

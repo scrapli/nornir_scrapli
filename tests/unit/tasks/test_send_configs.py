@@ -18,6 +18,7 @@ def test_send_configs(nornir, monkeypatch):
         failed_when_contains="",
         stop_on_failed=False,
         privilege_level="",
+        eager=False,
         timeout_ops=None,
     ):
         responses = []

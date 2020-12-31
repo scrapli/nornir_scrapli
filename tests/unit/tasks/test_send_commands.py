@@ -12,7 +12,13 @@ def test_send_commands(nornir, monkeypatch):
         pass
 
     def mock_send_commands(
-        cls, commands, strip_prompt, failed_when_contains, stop_on_failed, timeout_ops=None
+        cls,
+        commands,
+        strip_prompt,
+        failed_when_contains,
+        stop_on_failed,
+        eager=False,
+        timeout_ops=None,
     ):
         response = Response(host="fake_as_heck", channel_input=commands[0])
         response._record_response(b"some stuff about whatever")
@@ -33,7 +39,9 @@ def test_send_commands_not_list(nornir_raise_on_error, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_acquire_priv(cls, desired_priv, failed_when_contains="", stop_on_failed=False):
+    def mock_acquire_priv(
+        cls, desired_priv, failed_when_contains="", eager=False, stop_on_failed=False
+    ):
         pass
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)

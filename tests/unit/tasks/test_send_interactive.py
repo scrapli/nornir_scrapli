@@ -8,7 +8,9 @@ def test_send_interactive(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_send_interactive(cls, interact_events, failed_when_contains=None, privilege_level=""):
+    def mock_send_interactive(
+        cls, interact_events, failed_when_contains=None, privilege_level="", timeout_ops=None
+    ):
         response = Response(
             host="fake_as_heck",
             channel_input=", ".join([event[0] for event in interact_events]),

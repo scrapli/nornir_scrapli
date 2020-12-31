@@ -8,7 +8,9 @@ def test_send_command(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_send_command(cls, command, strip_prompt, failed_when_contains, timeout_ops=None):
+    def mock_send_command(
+        cls, command, strip_prompt, failed_when_contains, eager=False, timeout_ops=None
+    ):
         response = Response(host="fake_as_heck", channel_input=command)
         response._record_response(b"some stuff about whatever")
         return response

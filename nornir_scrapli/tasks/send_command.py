@@ -10,6 +10,7 @@ def send_command(
     command: str,
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
+    eager: bool = False,
     timeout_ops: Optional[float] = None,
 ) -> Result:
     """
@@ -20,6 +21,9 @@ def send_command(
         command: string to send to device in privilege exec mode
         strip_prompt: True/False strip prompt from returned output
         failed_when_contains: string or list of strings indicating failure if found in response
+        eager: if eager is True we do not read until prompt is seen at each command sent to the
+            channel. Do *not* use this unless you know what you are doing as it is possible that
+            it can make scrapli less reliable!
         timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
             the duration of the operation, value is reset to initial value after operation is
             completed
@@ -38,6 +42,7 @@ def send_command(
         command=command,
         strip_prompt=strip_prompt,
         failed_when_contains=failed_when_contains,
+        eager=eager,
         timeout_ops=timeout_ops,
     )
 
