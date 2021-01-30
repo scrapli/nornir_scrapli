@@ -1,4 +1,4 @@
-scrapli>=2021.01.30a1
+scrapli>=2021.01.30a2
 scrapli_netconf>=2021.01.30a2
 scrapli_community>=2021.01.30a1
 nornir>=3.0.0,<4.0.0
