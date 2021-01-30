@@ -3,7 +3,8 @@ from typing import Any, Dict, Optional
 
 from scrapli import Scrapli
 from scrapli.driver import GenericDriver
-from scrapli_netconf.driver import NetconfScrape
+from scrapli.exceptions import ScrapliModuleNotFound
+from scrapli_netconf.driver import NetconfDriver
 
 from nornir.core.configuration import Config
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
@@ -83,7 +84,7 @@ class ScrapliCore:
         else:
             try:
                 connection = Scrapli(**parameters, platform=platform)  # type: ignore
-            except ModuleNotFoundError as exc:
+            except ScrapliModuleNotFound as exc:
                 raise NornirScrapliInvalidPlatform(
                     f"Provided platform `{platform}` is not a valid scrapli or napalm platform, "
                     "or is not a valid scrapli-community platform."
@@ -162,7 +163,7 @@ class ScrapliNetconf:
         # options from "extras" (connection options)
         parameters.update(extras)
 
-        connection = NetconfScrape(**parameters)
+        connection = NetconfDriver(**parameters)
         connection.open()
         self.connection = connection  # pylint: disable=W0201
 

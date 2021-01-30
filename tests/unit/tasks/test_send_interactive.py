@@ -15,7 +15,7 @@ def test_send_interactive(nornir, monkeypatch):
             host="fake_as_heck",
             channel_input=", ".join([event[0] for event in interact_events]),
         )
-        response._record_response(b"clear logg\nClear logging buffer [confirm]\n\ncsr1000v#")
+        response.record_response(b"clear logg\nClear logging buffer [confirm]\n\ncsr1000v#")
         return response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)

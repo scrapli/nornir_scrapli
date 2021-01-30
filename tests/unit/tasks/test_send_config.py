@@ -22,7 +22,7 @@ def test_send_config(nornir, monkeypatch):
         timeout_ops=None,
     ):
         response = Response(host="fake_as_heck", channel_input=config)
-        response._record_response(b"some stuff about whatever")
+        response.record_response(b"some stuff about whatever")
         return response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)

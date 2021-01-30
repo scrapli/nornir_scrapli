@@ -36,37 +36,37 @@ def resolve_ssh_config(ssh_config_file: str) -> str:
 
 
 def test_connection_core_setup(nornir, monkeypatch):
-    from scrapli.driver.driver import Scrape
+    from scrapli.driver.base.sync_driver import Driver
 
     def mock_open(cls):
         pass
 
-    monkeypatch.setattr(Scrape, "open", mock_open)
+    monkeypatch.setattr(Driver, "open", mock_open)
     scrapli_conn = nornir.inventory.hosts["sea-ios-1"].get_connection("scrapli", nornir.config)
-    assert scrapli_conn.transport.host == "172.18.0.11"
-    assert scrapli_conn.transport.port == 22
-    assert scrapli_conn.transport.auth_username == "vrnetlab"
-    assert scrapli_conn.transport.auth_password == "VR-netlab9"
-    assert scrapli_conn.transport.auth_strict_key is False
+    assert scrapli_conn.host == "172.18.0.11"
+    assert scrapli_conn.port == 22
+    assert scrapli_conn.auth_username == "vrnetlab"
+    assert scrapli_conn.auth_password == "VR-netlab9"
+    assert scrapli_conn.auth_strict_key is False
 
 
 def test_connection_core_community_platform(nornir_community, monkeypatch):
     # simple test to ensure scrapli community platforms load properly
-    from scrapli.driver.driver import Scrape
+    from scrapli.driver.base.sync_driver import Driver
 
     def mock_open(cls):
         pass
 
-    monkeypatch.setattr(Scrape, "open", mock_open)
+    monkeypatch.setattr(Driver, "open", mock_open)
 
     scrapli_conn = nornir_community.inventory.hosts["sea-ios-1"].get_connection(
         "scrapli", nornir_community.config
     )
-    assert scrapli_conn.transport.host == "172.18.0.11"
-    assert scrapli_conn.transport.port == 22
-    assert scrapli_conn.transport.auth_username == "vrnetlab"
-    assert scrapli_conn.transport.auth_password == "VR-netlab9"
-    assert scrapli_conn.transport.auth_strict_key is False
+    assert scrapli_conn.host == "172.18.0.11"
+    assert scrapli_conn.port == 22
+    assert scrapli_conn.auth_username == "vrnetlab"
+    assert scrapli_conn.auth_password == "VR-netlab9"
+    assert scrapli_conn.auth_strict_key is False
 
 
 def test_connection_core_invalid_platform():
@@ -94,48 +94,48 @@ def test_connection_core_invalid_platform():
 
 
 def test_connection_netconf_setup(nornir_netconf, monkeypatch):
-    from scrapli_netconf.driver import NetconfScrape
+    from scrapli_netconf.driver import NetconfDriver
 
     def mock_open(cls):
         pass
 
-    monkeypatch.setattr(NetconfScrape, "open", mock_open)
+    monkeypatch.setattr(NetconfDriver, "open", mock_open)
     scrapli_conn = nornir_netconf.inventory.hosts["sea-ios-1"].get_connection(
         "scrapli_netconf", nornir_netconf.config
     )
-    assert scrapli_conn.transport.host == "172.18.0.11"
-    assert scrapli_conn.transport.port == 830
-    assert scrapli_conn.transport.auth_username == "vrnetlab"
-    assert scrapli_conn.transport.auth_password == "VR-netlab9"
-    assert scrapli_conn.transport.auth_strict_key is False
-    assert isinstance(scrapli_conn, NetconfScrape)
+    assert scrapli_conn.host == "172.18.0.11"
+    assert scrapli_conn.port == 830
+    assert scrapli_conn.auth_username == "vrnetlab"
+    assert scrapli_conn.auth_password == "VR-netlab9"
+    assert scrapli_conn.auth_strict_key is False
+    assert isinstance(scrapli_conn, NetconfDriver)
 
 
 def test_connection_global_ssh_config_setting_overridden(nornir_global_ssh, monkeypatch):
-    from scrapli_netconf.driver import NetconfScrape
+    from scrapli_netconf.driver import NetconfDriver
 
     def mock_open(cls):
         pass
 
-    monkeypatch.setattr(NetconfScrape, "open", mock_open)
+    monkeypatch.setattr(NetconfDriver, "open", mock_open)
     scrapli_conn = nornir_global_ssh.inventory.hosts["sea-ios-1"].get_connection(
         "scrapli_netconf", nornir_global_ssh.config
     )
     assert nornir_global_ssh.config.ssh.config_file == "notarealfile!"
-    assert scrapli_conn._initialization_args["ssh_config_file"] == resolve_ssh_config("")
+    assert scrapli_conn.ssh_config_file == resolve_ssh_config("")
 
 
 def test_connection_global_ssh_config_setting_no_connection_option_ssh(
     nornir_global_ssh_no_connection_option_ssh, monkeypatch
 ):
-    from scrapli.driver.driver import Scrape
+    from scrapli.driver.base.sync_driver import Driver
 
     def mock_open(cls):
         pass
 
-    monkeypatch.setattr(Scrape, "open", mock_open)
+    monkeypatch.setattr(Driver, "open", mock_open)
     scrapli_conn = nornir_global_ssh_no_connection_option_ssh.inventory.hosts[
         "sea-ios-1"
     ].get_connection("scrapli", nornir_global_ssh_no_connection_option_ssh.config)
     assert nornir_global_ssh_no_connection_option_ssh.config.ssh.config_file is False
-    assert scrapli_conn._initialization_args["ssh_config_file"] == ""
+    assert scrapli_conn.ssh_config_file == ""

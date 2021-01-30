@@ -27,7 +27,7 @@ def test_send_commands_from_file(nornir, monkeypatch):
         with open(file, "r") as f:
             commands = f.read().splitlines()
         response = Response(host="fake_as_heck", channel_input=commands[0])
-        response._record_response(b"some stuff about whatever")
+        response.record_response(b"some stuff about whatever")
         return [response]
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
