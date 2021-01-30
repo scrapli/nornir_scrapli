@@ -41,12 +41,12 @@ __all__ = (&#34;print_structured_result&#34;,)</code></pre>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="nornir_scrapli.functions.print_structured_result"><code class="name flex">
-<span>def <span class="ident">print_structured_result</span></span>(<span>result: <a title="nornir_scrapli.result.ScrapliResult" href="../result.html#nornir_scrapli.result.ScrapliResult">ScrapliResult</a>, failed: bool = False, severity_level: int = 20, parser: str = 'textfsm', to_dict: bool = True, fail_to_string: bool = False) ‑> NoneType</span>
+<span>def <span class="ident">print_structured_result</span></span>(<span>result: nornir.core.task.AggregatedResult, failed: bool = False, severity_level: int = 20, parser: str = 'textfsm', to_dict: bool = True, fail_to_string: bool = False) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prints the :obj:<code>nornir.core.task.Result</code> from a previous task to screen</p>
 <h2 id="arguments">Arguments</h2>
-<p>result: from a previous task
+<p>result: Nornir AggregateResult object from a previous task
 failed: if <code>True</code> assume the task failed
 severity_level: Print only errors with this severity level or higher
 parser: textfsm|genie &ndash; parser to parse output with
@@ -59,7 +59,7 @@ print_result won't print empty lists which scrapli returns if parsing fails)</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def print_structured_result(
-    result: ScrapliResult,
+    result: AggregatedResult,
     failed: bool = False,
     severity_level: int = logging.INFO,
     parser: str = &#34;textfsm&#34;,
@@ -70,7 +70,7 @@ print_result won't print empty lists which scrapli returns if parsing fails)</p>
     Prints the :obj:`nornir.core.task.Result` from a previous task to screen
 
     Arguments:
-        result: from a previous task
+        result: Nornir AggregateResult object from a previous task
         failed: if `True` assume the task failed
         severity_level: Print only errors with this severity level or higher
         parser: textfsm|genie -- parser to parse output with

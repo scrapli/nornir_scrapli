@@ -842,7 +842,7 @@ response from scrapli</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_commands"><code class="name flex">
-<span>def <span class="ident">send_commands</span></span>(<span>task: nornir.core.task.Task, commands: List[str], strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_commands</span></span>(<span>task: nornir.core.task.Task, commands: List[str], strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send a list of commands to device using scrapli</p>
@@ -859,6 +859,10 @@ response from scrapli</dd>
 <dt><strong><code>stop_on_failed</code></strong></dt>
 <dd>True/False stop executing commands if a command fails, returns results as of
 current execution</dd>
+<dt><strong><code>eager</code></strong></dt>
+<dd>if eager is True we do not read until prompt is seen at each command sent to the
+channel. Do <em>not</em> use this unless you know what you are doing as it is possible that
+it can make scrapli less reliable!</dd>
 <dt><strong><code>timeout_ops</code></strong></dt>
 <dd>timeout ops value for this operation; only sets the timeout_ops value for
 the duration of the operation, value is reset to initial value after operation is
@@ -883,6 +887,7 @@ object</dd>
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
+    eager: bool = False,
     timeout_ops: Optional[float] = None,
 ) -&gt; Result:
     &#34;&#34;&#34;
@@ -895,6 +900,9 @@ object</dd>
         failed_when_contains: string or list of strings indicating failure if found in response
         stop_on_failed: True/False stop executing commands if a command fails, returns results as of
             current execution
+        eager: if eager is True we do not read until prompt is seen at each command sent to the
+            channel. Do *not* use this unless you know what you are doing as it is possible that
+            it can make scrapli less reliable!
         timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
             the duration of the operation, value is reset to initial value after operation is
             completed. Note that this is the timeout value PER COMMAND sent, not for the total
@@ -914,6 +922,7 @@ object</dd>
         strip_prompt=strip_prompt,
         failed_when_contains=failed_when_contains,
         stop_on_failed=stop_on_failed,
+        eager=eager,
         timeout_ops=timeout_ops,
     )
 
@@ -927,7 +936,7 @@ object</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_commands_from_file"><code class="name flex">
-<span>def <span class="ident">send_commands_from_file</span></span>(<span>task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_commands_from_file</span></span>(<span>task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send a list of commands from a file to device using scrapli</p>
@@ -944,6 +953,10 @@ object</dd>
 <dt><strong><code>stop_on_failed</code></strong></dt>
 <dd>True/False stop executing commands if a command fails, returns results as of
 current execution</dd>
+<dt><strong><code>eager</code></strong></dt>
+<dd>if eager is True we do not read until prompt is seen at each command sent to the
+channel. Do <em>not</em> use this unless you know what you are doing as it is possible that
+it can make scrapli less reliable!</dd>
 <dt><strong><code>timeout_ops</code></strong></dt>
 <dd>timeout ops value for this operation; only sets the timeout_ops value for
 the duration of the operation, value is reset to initial value after operation is
@@ -967,6 +980,7 @@ object</dd>
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
+    eager: bool = False,
     timeout_ops: Optional[float] = None,
 ) -&gt; Result:
     &#34;&#34;&#34;
@@ -979,6 +993,9 @@ object</dd>
         failed_when_contains: string or list of strings indicating failure if found in response
         stop_on_failed: True/False stop executing commands if a command fails, returns results as of
             current execution
+        eager: if eager is True we do not read until prompt is seen at each command sent to the
+            channel. Do *not* use this unless you know what you are doing as it is possible that
+            it can make scrapli less reliable!
         timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
             the duration of the operation, value is reset to initial value after operation is
             completed
@@ -997,6 +1014,7 @@ object</dd>
         strip_prompt=strip_prompt,
         failed_when_contains=failed_when_contains,
         stop_on_failed=stop_on_failed,
+        eager=eager,
         timeout_ops=timeout_ops,
     )
 
@@ -1010,7 +1028,7 @@ object</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_config"><code class="name flex">
-<span>def <span class="ident">send_config</span></span>(<span>task: nornir.core.task.Task, config: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_config</span></span>(<span>task: nornir.core.task.Task, config: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send a config to device using scrapli</p>
@@ -1037,6 +1055,10 @@ would be "configuration_exclusive" for IOSXRDriver, or "configuration_private" f
 JunosDriver. You can also pass in a name of a configuration session such as
 "my-config-session" if you have registered a session using the
 "register_config_session" method of the EOSDriver or NXOSDriver.</dd>
+<dt><strong><code>eager</code></strong></dt>
+<dd>if eager is True we do not read until prompt is seen at each command sent to the
+channel. Do <em>not</em> use this unless you know what you are doing as it is possible that
+it can make scrapli less reliable!</dd>
 <dt><strong><code>timeout_ops</code></strong></dt>
 <dd>timeout ops value for this operation; only sets the timeout_ops value for
 the duration of the operation, value is reset to initial value after operation is
@@ -1067,6 +1089,7 @@ host that is using the "generic" platform type</dd>
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
     privilege_level: str = &#34;&#34;,
+    eager: bool = False,
     timeout_ops: Optional[float] = None,
 ) -&gt; Result:
     &#34;&#34;&#34;
@@ -1087,6 +1110,9 @@ host that is using the "generic" platform type</dd>
             JunosDriver. You can also pass in a name of a configuration session such as
             &#34;my-config-session&#34; if you have registered a session using the
             &#34;register_config_session&#34; method of the EOSDriver or NXOSDriver.
+        eager: if eager is True we do not read until prompt is seen at each command sent to the
+             channel. Do *not* use this unless you know what you are doing as it is possible that
+             it can make scrapli less reliable!
         timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
             the duration of the operation, value is reset to initial value after operation is
             completed. Note that this is the timeout value PER CONFIG sent, not for the total
@@ -1120,6 +1146,7 @@ host that is using the "generic" platform type</dd>
         failed_when_contains=failed_when_contains,
         stop_on_failed=stop_on_failed,
         privilege_level=privilege_level,
+        eager=eager,
         timeout_ops=timeout_ops,
     )
 
@@ -1133,7 +1160,7 @@ host that is using the "generic" platform type</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_configs"><code class="name flex">
-<span>def <span class="ident">send_configs</span></span>(<span>task: nornir.core.task.Task, configs: List[str], dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_configs</span></span>(<span>task: nornir.core.task.Task, configs: List[str], dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send configs to device using scrapli</p>
@@ -1160,6 +1187,10 @@ would be "configuration_exclusive" for IOSXRDriver, or "configuration_private" f
 JunosDriver. You can also pass in a name of a configuration session such as
 "my-config-session" if you have registered a session using the
 "register_config_session" method of the EOSDriver or NXOSDriver.</dd>
+<dt><strong><code>eager</code></strong></dt>
+<dd>if eager is True we do not read until prompt is seen at each command sent to the
+channel. Do <em>not</em> use this unless you know what you are doing as it is possible that
+it can make scrapli less reliable!</dd>
 <dt><strong><code>timeout_ops</code></strong></dt>
 <dd>timeout ops value for this operation; only sets the timeout_ops value for
 the duration of the operation, value is reset to initial value after operation is
@@ -1190,6 +1221,7 @@ host that is using the "generic" platform type</dd>
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
     privilege_level: str = &#34;&#34;,
+    eager: bool = False,
     timeout_ops: Optional[float] = None,
 ) -&gt; Result:
     &#34;&#34;&#34;
@@ -1210,6 +1242,9 @@ host that is using the "generic" platform type</dd>
             JunosDriver. You can also pass in a name of a configuration session such as
             &#34;my-config-session&#34; if you have registered a session using the
             &#34;register_config_session&#34; method of the EOSDriver or NXOSDriver.
+        eager: if eager is True we do not read until prompt is seen at each command sent to the
+            channel. Do *not* use this unless you know what you are doing as it is possible that
+            it can make scrapli less reliable!
         timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
             the duration of the operation, value is reset to initial value after operation is
             completed. Note that this is the timeout value PER CONFIG sent, not for the total
@@ -1243,6 +1278,7 @@ host that is using the "generic" platform type</dd>
         failed_when_contains=failed_when_contains,
         stop_on_failed=stop_on_failed,
         privilege_level=privilege_level,
+        eager=eager,
         timeout_ops=timeout_ops,
     )
 
@@ -1256,7 +1292,7 @@ host that is using the "generic" platform type</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_configs_from_file"><code class="name flex">
-<span>def <span class="ident">send_configs_from_file</span></span>(<span>task: nornir.core.task.Task, file: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_configs_from_file</span></span>(<span>task: nornir.core.task.Task, file: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send configs from a file to device using scrapli</p>
@@ -1283,6 +1319,10 @@ would be "configuration_exclusive" for IOSXRDriver, or "configuration_private" f
 JunosDriver. You can also pass in a name of a configuration session such as
 "my-config-session" if you have registered a session using the
 "register_config_session" method of the EOSDriver or NXOSDriver.</dd>
+<dt><strong><code>eager</code></strong></dt>
+<dd>if eager is True we do not read until prompt is seen at each command sent to the
+channel. Do <em>not</em> use this unless you know what you are doing as it is possible that
+it can make scrapli less reliable!</dd>
 <dt><strong><code>timeout_ops</code></strong></dt>
 <dd>timeout ops value for this operation; only sets the timeout_ops value for
 the duration of the operation, value is reset to initial value after operation is
@@ -1313,6 +1353,7 @@ host that is using the "generic" platform type</dd>
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     stop_on_failed: bool = False,
     privilege_level: str = &#34;&#34;,
+    eager: bool = False,
     timeout_ops: Optional[float] = None,
 ) -&gt; Result:
     &#34;&#34;&#34;
@@ -1333,6 +1374,9 @@ host that is using the "generic" platform type</dd>
             JunosDriver. You can also pass in a name of a configuration session such as
             &#34;my-config-session&#34; if you have registered a session using the
             &#34;register_config_session&#34; method of the EOSDriver or NXOSDriver.
+        eager: if eager is True we do not read until prompt is seen at each command sent to the
+            channel. Do *not* use this unless you know what you are doing as it is possible that
+            it can make scrapli less reliable!
         timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
             the duration of the operation, value is reset to initial value after operation is
             completed. Note that this is the timeout value PER CONFIG sent, not for the total
@@ -1366,6 +1410,7 @@ host that is using the "generic" platform type</dd>
         failed_when_contains=failed_when_contains,
         stop_on_failed=stop_on_failed,
         privilege_level=privilege_level,
+        eager=eager,
         timeout_ops=timeout_ops,
     )
 
@@ -1379,7 +1424,7 @@ host that is using the "generic" platform type</dd>
 </details>
 </dd>
 <dt id="nornir_scrapli.tasks.send_interactive"><code class="name flex">
-<span>def <span class="ident">send_interactive</span></span>(<span>task: nornir.core.task.Task, interact_events: List[Tuple[str, str, Union[bool, NoneType]]], failed_when_contains: Union[str, List[str], NoneType] = None, privilege_level: str = '') ‑> nornir.core.task.Result</span>
+<span>def <span class="ident">send_interactive</span></span>(<span>task: nornir.core.task.Task, interact_events: List[Tuple[str, str, Union[bool, NoneType]]], failed_when_contains: Union[str, List[str], NoneType] = None, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Send inputs in an interactive fashion using scrapli; usually used to handle prompts</p>
@@ -1431,6 +1476,10 @@ not provided it is assumed the input is "normal" (not hidden)</dd>
 failed command/interaction</dd>
 <dt><strong><code>privilege_level</code></strong></dt>
 <dd>name of the privilege level to operate in</dd>
+<dt><strong><code>timeout_ops</code></strong></dt>
+<dd>timeout ops value for this operation; only sets the timeout_ops value for
+the duration of the operation, value is reset to initial value after operation is
+completed</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -1449,6 +1498,7 @@ object</dd>
     interact_events: List[Tuple[str, str, Optional[bool]]],
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     privilege_level: str = &#34;&#34;,
+    timeout_ops: Optional[float] = None,
 ) -&gt; Result:
     &#34;&#34;&#34;
     Send inputs in an interactive fashion using scrapli; usually used to handle prompts
@@ -1503,6 +1553,9 @@ object</dd>
         failed_when_contains: list of strings that, if present in final output, represent a
             failed command/interaction
         privilege_level: name of the privilege level to operate in
+        timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
+            the duration of the operation, value is reset to initial value after operation is
+            completed
 
     Returns:
         Result: nornir result object with Result.result value set to returned scrapli Response
@@ -1517,6 +1570,7 @@ object</dd>
         interact_events=interact_events,
         failed_when_contains=failed_when_contains,
         privilege_level=privilege_level,
+        timeout_ops=timeout_ops,
     )
 
     result = Result(

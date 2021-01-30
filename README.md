@@ -3,6 +3,7 @@
 [![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 
@@ -24,6 +25,7 @@ Feel free to join the very awesome networktocode slack workspace [here](https://
   - [A Simple Example](#a-simple-example)
   - [Additional Examples](#additional-examples)
 - [Supported Platforms](#supported-platforms)
+- [Using Different Transports](#using-different-transports)
 - [Documentation](#documentation)
 - [General Information](#general-information)
 - [Available Tasks](#available-tasks)
@@ -102,7 +104,7 @@ config_results = nr.run(
 print("get_prompt result:")
 print(prompt_results["iosxe-1"].result)
 print("send_command result:")
-print(prompt_results["iosxe-1"].result)
+print(command_results["iosxe-1"].result)
 print("send_configs result:")
 print(config_results["iosxe-1"].result)
 ```
@@ -180,6 +182,24 @@ platform: juniper_junos
 platform: generic
 platform: huawei_vrp
 ```
+
+
+# Using Different Transports
+
+nornir_scrapli supports all *synchronous* scrapli transport plugins. By default, the "system" transport will be used, 
+however you can change this in the `extras` section of your nornir inventory:
+
+```yaml
+connection_options:
+  scrapli:
+    port: 22
+    extras:
+      ssh_config_file: True
+      auth_strict_key: False
+      transport: ssh2
+```
+
+Note that you will need to install `scrapli_ssh2` or `scrapli_paramiko` if you want to use those transport plugins!
 
 
 # Documentation

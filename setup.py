@@ -2,9 +2,8 @@
 """nornir_scrapli - scrapli nornir plugin"""
 import setuptools
 
-from nornir_scrapli import __version__
-
 __author__ = "Carl Montanari"
+__version__ = "2021.01.29"
 
 with open("README.md", "r") as f:
     README = f.read()

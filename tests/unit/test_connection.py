@@ -1,10 +1,38 @@
 import os
+from pathlib import Path
 
 import pytest
-from scrapli.helper import resolve_ssh_config
 
 from nornir import InitNornir
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
+
+
+def resolve_ssh_config(ssh_config_file: str) -> str:
+    """
+    Resolve ssh configuration file from provided string
+    If provided string is empty (`""`) try to resolve system ssh config files located at
+    `~/.ssh/config` or `/etc/ssh/ssh_config`.
+
+    Args:
+        ssh_config_file: string representation of ssh config file to try to use
+
+    Returns:
+        str: string path to ssh config file or an empty string
+
+    Raises:
+        N/A
+
+    """
+    if Path(ssh_config_file).is_file():
+        resolved_ssh_config_file = str(Path(ssh_config_file))
+        return resolved_ssh_config_file
+    if Path(os.path.expanduser("~/.ssh/config")).is_file():
+        resolved_ssh_config_file = str(Path(os.path.expanduser("~/.ssh/config")))
+        return resolved_ssh_config_file
+    if Path("/etc/ssh/ssh_config").is_file():
+        resolved_ssh_config_file = str(Path("/etc/ssh/ssh_config"))
+        return resolved_ssh_config_file
+    return ""
 
 
 def test_connection_core_setup(nornir, monkeypatch):

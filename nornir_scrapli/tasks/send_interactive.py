@@ -9,6 +9,7 @@ def send_interactive(
     interact_events: List[Tuple[str, str, Optional[bool]]],
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     privilege_level: str = "",
+    timeout_ops: Optional[float] = None,
 ) -> Result:
     """
     Send inputs in an interactive fashion using scrapli; usually used to handle prompts
@@ -63,6 +64,9 @@ def send_interactive(
         failed_when_contains: list of strings that, if present in final output, represent a
             failed command/interaction
         privilege_level: name of the privilege level to operate in
+        timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
+            the duration of the operation, value is reset to initial value after operation is
+            completed
 
     Returns:
         Result: nornir result object with Result.result value set to returned scrapli Response
@@ -77,6 +81,7 @@ def send_interactive(
         interact_events=interact_events,
         failed_when_contains=failed_when_contains,
         privilege_level=privilege_level,
+        timeout_ops=timeout_ops,
     )
 
     result = Result(

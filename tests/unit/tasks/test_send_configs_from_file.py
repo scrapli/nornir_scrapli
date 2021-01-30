@@ -23,6 +23,7 @@ def test_send_configs_from_file(nornir, monkeypatch):
         failed_when_contains="",
         stop_on_failed=False,
         privilege_level="",
+        eager=False,
         timeout_ops=None,
     ):
         with open(file, "r") as f:
