@@ -1,5 +1,5 @@
 from scrapli.response import Response
-from scrapli_netconf import NetconfScrape
+from scrapli_netconf import NetconfDriver
 
 
 def test_netconf_rpc(nornir_netconf, monkeypatch):
@@ -10,11 +10,11 @@ def test_netconf_rpc(nornir_netconf, monkeypatch):
 
     def mock_rpc(cls, filter_):
         response = Response(host="fake_as_heck", channel_input="blah")
-        response._record_response(b"some stuff about whatever")
+        response.record_response(b"some stuff about whatever")
         return response
 
-    monkeypatch.setattr(NetconfScrape, "open", mock_open)
-    monkeypatch.setattr(NetconfScrape, "rpc", mock_rpc)
+    monkeypatch.setattr(NetconfDriver, "open", mock_open)
+    monkeypatch.setattr(NetconfDriver, "rpc", mock_rpc)
 
     result = nornir_netconf.run(task=netconf_rpc, filter_="blah")
     assert result["sea-ios-1"].result == "some stuff about whatever"

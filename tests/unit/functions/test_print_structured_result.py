@@ -90,14 +90,14 @@ TEST_SCRAPLI_RESPONSE_ONE = Response(
     textfsm_platform="cisco_iosxe",
     genie_platform="iosxe",
 )
-TEST_SCRAPLI_RESPONSE_ONE._record_response(result=IOSXE_SHOW_VERSION.encode())
+TEST_SCRAPLI_RESPONSE_ONE.record_response(result=IOSXE_SHOW_VERSION.encode())
 TEST_SCRAPLI_RESPONSE_TWO = Response(
     host="sea-ios-1",
     channel_input="show ip route",
     textfsm_platform="cisco_iosxe",
     genie_platform="iosxe",
 )
-TEST_SCRAPLI_RESPONSE_TWO._record_response(result=IOSXE_SHOW_IP_ROUTE.encode())
+TEST_SCRAPLI_RESPONSE_TWO.record_response(result=IOSXE_SHOW_IP_ROUTE.encode())
 TEST_SCRAPLI_RESPONSE = [TEST_SCRAPLI_RESPONSE_ONE, TEST_SCRAPLI_RESPONSE_TWO]
 
 TEST_HOST = Host(name="sea-ios-1")

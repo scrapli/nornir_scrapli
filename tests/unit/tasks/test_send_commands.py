@@ -21,7 +21,7 @@ def test_send_commands(nornir, monkeypatch):
         timeout_ops=None,
     ):
         response = Response(host="fake_as_heck", channel_input=commands[0])
-        response._record_response(b"some stuff about whatever")
+        response.record_response(b"some stuff about whatever")
         return [response]
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)

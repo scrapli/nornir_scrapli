@@ -1,0 +1,67 @@
+---
+site_name: Nornir Scrapli
+site_url: https://github.com/scrapli/nornir_scrapli
+site_description: "Scrapli's plugin for Nornir"
+site_author: Carl Montanari
+
+repo_name: scrapli/nornir_scrapli
+repo_url: https://github.com/scrapli/nornir_scrapli
+edit_uri: ''
+
+theme:
+    name: material
+    palette:
+      primary: 'black'
+      accent: 'teal'
+    icon:
+      repo: fontawesome/brands/github-alt
+
+nav:
+  - Scrapli Nornir: index.md
+  - User Guide:
+      - Quick Start Guide: user_guide/quickstart.md
+      - Project Details: user_guide/project_details.md
+      - Versioning: user_guide/versioning.md
+      - Installation: user_guide/installation.md
+      - Basic Usage: user_guide/basic_usage.md
+      - Available Tasks: user_guide/available_tasks.md
+      - Available Functions: user_guide/available_functions.md
+  - API Docs:
+    - Functions: api_docs/functions.md
+    - Tasks: api_docs/tasks.md
+    - Connection: api_docs/connection.md
+    - Exceptions: api_docs/exceptions.md
+    - Helper: api_docs/helper.md
+    - Result: api_docs/result.md
+  - More Scrapli:
+    - Scrapli: more_scrapli/scrapli.md
+    - Scrapli Netconf: more_scrapli/scrapli_netconf.md
+    - Scrapli Community: more_scrapli/scrapli_community.md
+    - Scrapli Stubs: more_scrapli/scrapli_stubs.md
+  - Other:
+    - Contributing: about/contributing.md
+    - Code of Conduct: about/code_of_conduct.md
+
+markdown_extensions:
+    - toc:
+        permalink: True
+    - admonition
+    - codehilite
+    - extra
+    - mdx_gh_links:
+        user: mkdocs
+        repo: mkdocs
+
+extra:
+    social:
+        - icon: fontawesome/brands/github-alt
+          link: 'https://github.com/carlmontanari/scrapli'
+        - icon: fontawesome/brands/twitter
+          link: 'https://twitter.com/carlrmontanari'
+        - icon: fontawesome/brands/linkedin
+          link: 'https://www.linkedin.com/in/carl-montanari-47888931/'
+        - icon: fontawesome/solid/globe
+          link: 'https://montanari.io'
+
+plugins:
+    - search

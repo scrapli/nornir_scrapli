@@ -23,10 +23,10 @@ def test_send_configs(nornir, monkeypatch):
     ):
         responses = []
         response = Response(host="fake_as_heck", channel_input=configs[0])
-        response._record_response(b"")
+        response.record_response(b"")
         responses.append(response)
         response = Response(host="fake_as_heck", channel_input=configs[1])
-        response._record_response(b"")
+        response.record_response(b"")
         responses.append(response)
         return responses
 
