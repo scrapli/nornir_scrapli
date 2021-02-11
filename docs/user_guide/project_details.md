@@ -2,7 +2,9 @@
 
 ## What is nornir_scrapli
 
-TODO
+nornir_scrapli is scrapli (and scrapli netconf's) plugin for Nornir. Nearly all (synchronous) methods of scrapli are 
+available/exposed in nornir scrapli. So if you enjoy scrapli, but also want the built-in concurrency and inventory 
+management afforded by nornir, this is the place to be!
 
 
 ## Supported Platforms
