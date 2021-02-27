@@ -113,6 +113,6 @@ class ScrapliResult(Result):  # type: ignore
         if isinstance(scrapli_response, Response):
             failed: bool = scrapli_response.failed
             return failed
-        if any([response.failed for response in scrapli_response]):
+        if any(response.failed for response in scrapli_response):
             return True
         return False
