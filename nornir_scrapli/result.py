@@ -58,7 +58,7 @@ def process_config_result(scrapli_response: Union[Response, MultiResponse]) -> s
     return full_results
 
 
-class ScrapliResult(Result):  # type: ignore
+class ScrapliResult(Result):
     def __init__(
         self,
         host: "Host",

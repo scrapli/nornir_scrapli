@@ -3,7 +3,7 @@ lint:
 	python -m black .
 	python -m pylama .
 	python -m pydocstyle .
-	python -m mypy nornir_scrapli/
+	python -m mypy nornir_scrapli/ --strict
 
 cov:
 	python -m pytest \
