@@ -2,6 +2,7 @@
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 from scrapli.response import MultiResponse, Response
+from scrapli_cfg.response import ScrapliCfgResponse
 
 from nornir.core.task import Result
 
@@ -110,7 +111,7 @@ class ScrapliResult(Result):
         """
         if scrapli_response is None:
             return False
-        if isinstance(scrapli_response, Response):
+        if isinstance(scrapli_response, (Response, ScrapliCfgResponse)):
             failed: bool = scrapli_response.failed
             return failed
         if any(response.failed for response in scrapli_response):

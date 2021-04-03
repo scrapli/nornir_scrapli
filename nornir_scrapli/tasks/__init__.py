@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks"""
+from nornir_scrapli.tasks.cfg.get_config import cfg_get_config
 from nornir_scrapli.tasks.get_prompt import get_prompt
 from nornir_scrapli.tasks.netconf_capabilities import netconf_capabilities
 from nornir_scrapli.tasks.netconf_commit import netconf_commit
@@ -20,6 +21,7 @@ from nornir_scrapli.tasks.send_configs_from_file import send_configs_from_file
 from nornir_scrapli.tasks.send_interactive import send_interactive
 
 __all__ = (
+    "cfg_get_config",
     "get_prompt",
     "netconf_capabilities",
     "netconf_commit",
