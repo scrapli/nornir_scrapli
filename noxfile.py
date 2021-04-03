@@ -156,6 +156,7 @@ def mypy(session):
         N/A
 
     """
+    session.install("-e", ".")
     session.install(f"mypy{DEV_REQUIREMENTS['mypy']}")
     session.run("mypy", "--strict", "nornir_scrapli/")
 

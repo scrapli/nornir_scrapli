@@ -83,7 +83,7 @@ class ScrapliCore:
             connection = GenericDriver(**parameters)
         else:
             try:
-                connection = Scrapli(**parameters, platform=platform)  # type: ignore
+                connection = Scrapli(**parameters, platform=platform)
             except ScrapliModuleNotFound as exc:
                 raise NornirScrapliInvalidPlatform(
                     f"Provided platform `{platform}` is not a valid scrapli or napalm platform, "
