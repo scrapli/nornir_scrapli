@@ -157,8 +157,6 @@ def mypy(session):
 
     """
     session.install(f"mypy{DEV_REQUIREMENTS['mypy']}")
-    session.install("-e", DEV_REQUIREMENTS["scrapli_stubs"].split()[1])
-    session.env["MYPYPATH"] = f"{session.virtualenv.location}/src/scrapli-stubs"
     session.run("mypy", "--strict", "nornir_scrapli/")
 
 
