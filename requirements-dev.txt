@@ -1,14 +1,13 @@
-nox==2020.12.31
 black==20.8b1
+darglint==1.7.0
 isort==5.8.0
 mypy==0.812
-pytest==6.2.2
-pytest-cov==2.11.1
-pylama==7.7.1
+nox==2020.12.31
 pycodestyle==2.7.0
 pydocstyle==6.0.0
-pylint==2.7.2
-darglint==1.7.0
--e git+https://github.com/scrapli/scrapli_stubs@master#egg=scrapli_stubs
--r requirements.txt
+pylama==7.7.1
+pylint==2.7.4
+pytest-cov==2.11.1
+pytest==6.2.2
 -r requirements-genie.txt
+-r requirements.txt
