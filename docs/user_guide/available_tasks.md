@@ -22,7 +22,7 @@ All tasks presented here are methods that live in `scrapli` or `scrapli_netconf`
 
 Note that not all devices will support all operations!
 
-- netconf_capabilities - Get list of capabilities as exchanged during netconf connection establishment
+- [netconf_capabilities](/nornir_scrapli/api_docs/tasks/#netconf_capabilities) - Get list of capabilities as exchanged during netconf connection establishment
 - [netconf_commit](/nornir_scrapli/api_docs/tasks/#commit) - Commit the configuration on the device
 - [netconf_discard](/nornir_scrapli/api_docs/tasks/#discard) - Discard the configuration on the device
 - [netconf_edit_config](/nornir_scrapli/api_docs/tasks/#edit_config) - Edit the configuration on the device
@@ -33,3 +33,13 @@ Note that not all devices will support all operations!
 - [netconf_unlock](/nornir_scrapli/api_docs/tasks/#unlock) - Unlock the datastore on the device
 - [netconf_rpc](/nornir_scrapli/api_docs/tasks/#rpc) - Send a "bare" RPC to the device
 - [netconf_validate](/nornir_scrapli/api_docs/tasks/#netconf_validate) - Execute the `validate` rpc against a given datastore
+
+
+## Scrapli Cfg Tasks
+
+- [cfg_abort_config](/nornir_scrapli/api_docs/tasks/#cfg_abort_config) - Abort a loaded candidate config
+- [cfg_commit_config](/nornir_scrapli/api_docs/tasks/#cfg_commit_config) - Commit a loaded candidate config
+- [cfg_diff_config](/nornir_scrapli/api_docs/tasks/#cfg_diff_config) - Diff a loaded candidate config
+- [cfg_get_config](/nornir_scrapli/api_docs/tasks/#cfg_get_config) - Get a target config
+- [cfg_get_version](/nornir_scrapli/api_docs/tasks/#cfg_get_version) - Get the device version string
+- [cfg_load_config](/nornir_scrapli/api_docs/tasks/#cfg_load_config) - Load a candidate config
