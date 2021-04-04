@@ -21,7 +21,7 @@ def cfg_load_config(task: Task, config: str, replace: bool = False, **kwargs: An
             see your specific platform for details
 
     Returns:
-       Result: nornir result object with Result.result value set the string result of the
+        Result: nornir result object with Result.result value set the string result of the
             load_config operation
 
     Raises:

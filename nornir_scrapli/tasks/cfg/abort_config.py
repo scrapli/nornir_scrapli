@@ -12,7 +12,7 @@ def cfg_abort_config(task: Task) -> Result:
         task: nornir task object
 
     Returns:
-       Result: nornir result object with Result.result value set the string result of the
+        Result: nornir result object with Result.result value set the string result of the
             load_config operation
 
     Raises:

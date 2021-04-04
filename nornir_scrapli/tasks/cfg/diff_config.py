@@ -16,7 +16,7 @@ def cfg_diff_config(task: Task, source: str = "running") -> Result:
         source: name of the config source to commit against, generally running|startup
 
     Returns:
-       Result: nornir result object with Result.result value set the string result of the
+        Result: nornir result object with Result.result value set the string result of the
             load_config operation
 
     Raises:
