@@ -64,7 +64,7 @@ class ScrapliResult(Result):
         self,
         host: "Host",
         result: Optional[str],
-        scrapli_response: Optional[Union[Response, MultiResponse]] = None,
+        scrapli_response: Optional[Union[Response, MultiResponse, ScrapliCfgResponse]] = None,
         changed: bool = False,
         **kwargs: Any,
     ):
@@ -95,7 +95,9 @@ class ScrapliResult(Result):
         self.scrapli_response = scrapli_response
 
     @staticmethod
-    def _process_failed(scrapli_response: Optional[Union[Response, MultiResponse]]) -> bool:
+    def _process_failed(
+        scrapli_response: Optional[Union[Response, MultiResponse, ScrapliCfgResponse]]
+    ) -> bool:
         """
         Process and return string of scrapli response(s)
 

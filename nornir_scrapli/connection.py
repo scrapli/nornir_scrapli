@@ -121,7 +121,36 @@ class ScrapliConfig:
     connection: ScrapliCfgPlatform
 
     @staticmethod
-    def spwan(task: Task) -> "ConnectionPlugin":
+    def get_connection(task: Task) -> ScrapliCfgPlatform:
+        """
+        Try to fetch scrapli-cfg conn, create it if it doesnt exist
+
+        This is a little different than "normal" in that we dont have a connection and we dont
+        create them in the "normal" nornir way -- we actually just steal the scrapli connection and
+        wrap the scrapli_cfg bits around it.
+
+        Args:
+            task: nornir Task object
+
+        Returns:
+            ScrapliCfg
+
+        Raises:
+            N/A
+
+        """
+        scrapli_cfg_conn: ScrapliCfgPlatform
+
+        try:
+            scrapli_cfg_conn = task.host.get_connection("scrapli_cfg", task.nornir.config)
+        except AttributeError:
+            task.host.connections["scrapli_cfg"] = ScrapliConfig.spawn(task=task)
+            scrapli_cfg_conn = task.host.get_connection("scrapli_cfg", task.nornir.config)
+
+        return scrapli_cfg_conn
+
+    @staticmethod
+    def spawn(task: Task) -> "ConnectionPlugin":
         """
         Spawn a ScrapliConfig object for a nornir host
 
