@@ -53,4 +53,7 @@ jobs:
           python -m pip install setuptools
           python -m pip install nox
       - name: run nox
+        env:
+          # needed to make the terminal a tty (i think? without this system ssh is super broken)
+          TERM: xterm
         run: python -m nox -p $FRIENDLY_PYTHON_VERSION -k "not darglint"

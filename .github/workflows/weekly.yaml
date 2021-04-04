@@ -2,10 +2,11 @@ name: Weekly Build
 
 on:
   schedule:
-    # weekly at 0700 PST/1400 UTC on Sunday
-    - cron: '0 14 * * 0'
+    # weekly at 0300 PST/1000 UTC on Sunday
+    - cron: '0 10 * * 0'
   workflow_dispatch:
 
+# in the future make this just call the commit workflow, but right now looks a little hacky to do in actions
 jobs:
   darglint:
     runs-on: ${{ matrix.os }}
@@ -57,5 +58,7 @@ jobs:
           python -m pip install setuptools
           python -m pip install nox
       - name: run nox
+        env:
+          # needed to make the terminal a tty (i think? without this system ssh is super broken)
+          TERM: xterm
         run: python -m nox -p $FRIENDLY_PYTHON_VERSION -k "not darglint"
-
