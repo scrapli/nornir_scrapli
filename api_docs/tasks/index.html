@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://github.com/scrapli/nornir_scrapli/api_docs/tasks/">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.8">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.4">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.cb6bc1d0.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.77f3fd56.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.39b8e14a.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
         
           
           
@@ -41,7 +41,7 @@
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
       
     
     
@@ -80,24 +80,24 @@
       
 
 <header class="md-header" data-md-component="header">
-  <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="https://github.com/scrapli/nornir_scrapli" title="Nornir Scrapli" class="md-header-nav__button md-logo" aria-label="Nornir Scrapli">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://github.com/scrapli/nornir_scrapli" title="Nornir Scrapli" class="md-header__button md-logo" aria-label="Nornir Scrapli">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
 
     </a>
-    <label class="md-header-nav__button md-icon" for="__drawer">
+    <label class="md-header__button md-icon" for="__drawer">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
     </label>
-    <div class="md-header-nav__title" data-md-component="header-title">
-      <div class="md-header-nav__ellipsis">
-        <div class="md-header-nav__topic">
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
           <span class="md-ellipsis">
             Nornir Scrapli
           </span>
         </div>
-        <div class="md-header-nav__topic">
+        <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
               Tasks
@@ -106,9 +106,12 @@
         </div>
       </div>
     </div>
+    <div class="md-header__options">
+      
+    </div>
     
-      <label class="md-header-nav__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
       </label>
       
 <div class="md-search" data-md-component="search" role="dialog">
@@ -117,10 +120,10 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
       </button>
     </form>
@@ -138,9 +141,9 @@
 </div>
     
     
-      <div class="md-header-nav__source">
+      <div class="md-header__source">
         
-<a href="https://github.com/scrapli/nornir_scrapli" title="Go to repository" class="md-source">
+<a href="https://github.com/scrapli/nornir_scrapli" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
@@ -164,7 +167,7 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -177,7 +180,7 @@
     <a href="https://github.com/scrapli/nornir_scrapli" title="Nornir Scrapli" class="md-nav__button md-logo" aria-label="Nornir Scrapli">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
 
     </a>
     Nornir Scrapli
@@ -185,7 +188,7 @@
   
     <div class="md-nav__source">
       
-<a href="https://github.com/scrapli/nornir_scrapli" title="Go to repository" class="md-source">
+<a href="https://github.com/scrapli/nornir_scrapli" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
@@ -224,19 +227,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
-      <label class="md-nav__link" for="nav-2">
+      <label class="md-nav__link" for="__nav_2">
         User Guide
         <span class="md-nav__icon md-icon"></span>
       </label>
       <nav class="md-nav" aria-label="User Guide" data-md-level="1">
-        <label class="md-nav__title" for="nav-2">
+        <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
           User Guide
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
-          
           
             
   
@@ -341,19 +343,18 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
-      <label class="md-nav__link" for="nav-3">
+      <label class="md-nav__link" for="__nav_3">
         API Docs
         <span class="md-nav__icon md-icon"></span>
       </label>
       <nav class="md-nav" aria-label="API Docs" data-md-level="1">
-        <label class="md-nav__title" for="nav-3">
+        <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
           API Docs
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
-          
           
             
   
@@ -400,7 +401,14 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sub-modules" class="md-nav__link">
+    Sub-modules
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#functions" class="md-nav__link">
@@ -409,6 +417,48 @@
   
     <nav class="md-nav" aria-label="Functions">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cfg_abort_config" class="md-nav__link">
+    cfg_abort_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_commit_config" class="md-nav__link">
+    cfg_commit_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_diff_config" class="md-nav__link">
+    cfg_diff_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_get_config" class="md-nav__link">
+    cfg_get_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_get_version" class="md-nav__link">
+    cfg_get_version
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_load_config" class="md-nav__link">
+    cfg_load_config
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#get_prompt" class="md-nav__link">
@@ -621,19 +671,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
       
-      <label class="md-nav__link" for="nav-4">
+      <label class="md-nav__link" for="__nav_4">
         More Scrapli
         <span class="md-nav__icon md-icon"></span>
       </label>
       <nav class="md-nav" aria-label="More Scrapli" data-md-level="1">
-        <label class="md-nav__title" for="nav-4">
+        <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           More Scrapli
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
-          
           
             
   
@@ -700,19 +749,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
-      <label class="md-nav__link" for="nav-5">
+      <label class="md-nav__link" for="__nav_5">
         Other
         <span class="md-nav__icon md-icon"></span>
       </label>
       <nav class="md-nav" aria-label="Other" data-md-level="1">
-        <label class="md-nav__title" for="nav-5">
+        <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
           Other
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
-          
           
             
   
@@ -752,7 +800,7 @@
             
             
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -766,7 +814,14 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sub-modules" class="md-nav__link">
+    Sub-modules
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#functions" class="md-nav__link">
@@ -775,6 +830,48 @@
   
     <nav class="md-nav" aria-label="Functions">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cfg_abort_config" class="md-nav__link">
+    cfg_abort_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_commit_config" class="md-nav__link">
+    cfg_commit_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_diff_config" class="md-nav__link">
+    cfg_diff_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_get_config" class="md-nav__link">
+    cfg_get_config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_get_version" class="md-nav__link">
+    cfg_get_version
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cfg_load_config" class="md-nav__link">
+    cfg_load_config
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#get_prompt" class="md-nav__link">
@@ -922,16 +1019,17 @@
               </div>
             
           
-          <div class="md-content">
+          <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
                 
                 <p><link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin></p>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () =&gt; hljs.initHighlighting())</script></p>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+
 <h1 id="module-nornir_scraplitasks">Module nornir_scrapli.tasks<a class="headerlink" href="#module-nornir_scraplitasks" title="Permanent link">&para;</a></h1>
 <p>nornir_scrapli.tasks</p>
 <details class="source">
@@ -941,18 +1039,24 @@
     <pre>
         <code class="python">
 """nornir_scrapli.tasks"""
+from nornir_scrapli.tasks.cfg.abort_config import cfg_abort_config
+from nornir_scrapli.tasks.cfg.commit_config import cfg_commit_config
+from nornir_scrapli.tasks.cfg.diff_config import cfg_diff_config
+from nornir_scrapli.tasks.cfg.get_config import cfg_get_config
+from nornir_scrapli.tasks.cfg.get_version import cfg_get_version
+from nornir_scrapli.tasks.cfg.load_config import cfg_load_config
 from nornir_scrapli.tasks.get_prompt import get_prompt
-from nornir_scrapli.tasks.netconf_capabilities import netconf_capabilities
-from nornir_scrapli.tasks.netconf_commit import netconf_commit
-from nornir_scrapli.tasks.netconf_delete_config import netconf_delete_config
-from nornir_scrapli.tasks.netconf_discard import netconf_discard
-from nornir_scrapli.tasks.netconf_edit_config import netconf_edit_config
-from nornir_scrapli.tasks.netconf_get import netconf_get
-from nornir_scrapli.tasks.netconf_get_config import netconf_get_config
-from nornir_scrapli.tasks.netconf_lock import netconf_lock
-from nornir_scrapli.tasks.netconf_rpc import netconf_rpc
-from nornir_scrapli.tasks.netconf_unlock import netconf_unlock
-from nornir_scrapli.tasks.netconf_validate import netconf_validate
+from nornir_scrapli.tasks.netconf.capabilities import netconf_capabilities
+from nornir_scrapli.tasks.netconf.commit import netconf_commit
+from nornir_scrapli.tasks.netconf.delete_config import netconf_delete_config
+from nornir_scrapli.tasks.netconf.discard import netconf_discard
+from nornir_scrapli.tasks.netconf.edit_config import netconf_edit_config
+from nornir_scrapli.tasks.netconf.get import netconf_get
+from nornir_scrapli.tasks.netconf.get_config import netconf_get_config
+from nornir_scrapli.tasks.netconf.lock import netconf_lock
+from nornir_scrapli.tasks.netconf.rpc import netconf_rpc
+from nornir_scrapli.tasks.netconf.unlock import netconf_unlock
+from nornir_scrapli.tasks.netconf.validate import netconf_validate
 from nornir_scrapli.tasks.send_command import send_command
 from nornir_scrapli.tasks.send_commands import send_commands
 from nornir_scrapli.tasks.send_commands_from_file import send_commands_from_file
@@ -962,6 +1066,12 @@ from nornir_scrapli.tasks.send_configs_from_file import send_configs_from_file
 from nornir_scrapli.tasks.send_interactive import send_interactive
 
 __all__ = (
+    "cfg_abort_config",
+    "cfg_commit_config",
+    "cfg_diff_config",
+    "cfg_get_config",
+    "cfg_get_version",
+    "cfg_load_config",
     "get_prompt",
     "netconf_capabilities",
     "netconf_commit",
@@ -986,7 +1096,113 @@ __all__ = (
     </pre>
 </details>
 
+<h2 id="sub-modules">Sub-modules<a class="headerlink" href="#sub-modules" title="Permanent link">&para;</a></h2>
+<ul>
+<li>nornir_scrapli.tasks.cfg</li>
+<li>nornir_scrapli.tasks.netconf</li>
+</ul>
 <h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h2>
+<h4 id="cfg_abort_config">cfg_abort_config<a class="headerlink" href="#cfg_abort_config" title="Permanent link">&para;</a></h4>
+<p><code>cfg_abort_config(task: nornir.core.task.Task) ‑&gt; nornir.core.task.Result</code></p>
+<div class="codehilite"><pre><span></span><code>Abort a device candidate config with scrapli-cfg
+
+Args:
+    task: nornir task object
+
+Returns:
+    Result: nornir result object with Result.result value set the string result of the
+        load_config operation
+
+Raises:
+    N/A
+</code></pre></div>
+
+<h4 id="cfg_commit_config">cfg_commit_config<a class="headerlink" href="#cfg_commit_config" title="Permanent link">&para;</a></h4>
+<p><code>cfg_commit_config(task: nornir.core.task.Task, source: str = 'running') ‑&gt; nornir.core.task.Result</code></p>
+<div class="codehilite"><pre><span></span><code>Commit a device candidate config with scrapli-cfg
+
+Args:
+    task: nornir task object
+    source: name of the config source to commit against, generally running|startup
+
+Returns:
+    Result: nornir result object with Result.result value set the string result of the
+        load_config operation
+
+Raises:
+    N/A
+</code></pre></div>
+
+<h4 id="cfg_diff_config">cfg_diff_config<a class="headerlink" href="#cfg_diff_config" title="Permanent link">&para;</a></h4>
+<p><code>cfg_diff_config(task: nornir.core.task.Task, source: str = 'running') ‑&gt; nornir.core.task.Result</code></p>
+<div class="codehilite"><pre><span></span><code>Diff a device candidate config vs a source config with scrapli-cfg
+
+The &quot;device diff&quot; is stored as the result. You can access the side by side or unified scrapli
+cfg diffs via the &quot;scrapli_response&quot; object stored in the result!
+
+Args:
+    task: nornir task object
+    source: name of the config source to commit against, generally running|startup
+
+Returns:
+    Result: nornir result object with Result.result value set the string result of the
+        load_config operation
+
+Raises:
+    N/A
+</code></pre></div>
+
+<h4 id="cfg_get_config">cfg_get_config<a class="headerlink" href="#cfg_get_config" title="Permanent link">&para;</a></h4>
+<p><code>cfg_get_config(task: nornir.core.task.Task, source: str = 'running') ‑&gt; nornir.core.task.Result</code></p>
+<div class="codehilite"><pre><span></span><code>Get device config with scrapli-cfg
+
+Args:
+    task: nornir task object
+    source: config source to get
+
+Returns:
+    Result: nornir result object with Result.result value set to current prompt
+
+Raises:
+    N/A
+</code></pre></div>
+
+<h4 id="cfg_get_version">cfg_get_version<a class="headerlink" href="#cfg_get_version" title="Permanent link">&para;</a></h4>
+<p><code>cfg_get_version(task: nornir.core.task.Task) ‑&gt; nornir.core.task.Result</code></p>
+<div class="codehilite"><pre><span></span><code>Get device version with scrapli-cfg
+
+Args:
+    task: nornir task object
+
+Returns:
+    Result: nornir result object with Result.result value set to current version of device
+
+Raises:
+    N/A
+</code></pre></div>
+
+<h4 id="cfg_load_config">cfg_load_config<a class="headerlink" href="#cfg_load_config" title="Permanent link">&para;</a></h4>
+<p><code>cfg_load_config(task: nornir.core.task.Task, config: str, replace: bool = False, **kwargs: Any) ‑&gt; nornir.core.task.Result</code></p>
+<div class="codehilite"><pre><span></span><code>Load device config with scrapli-cfg
+
+Note that `changed` will still be `False` because this is just loading a candidate config!
+
+Args:
+    task: nornir task object
+    config: string of the configuration to load
+    replace: replace the configuration or not, if false configuration will be loaded as a
+        merge operation
+    kwargs: additional kwargs that the implementing classes may need for their platform,
+        see your specific platform for details
+
+Returns:
+    Result: nornir result object with Result.result value set the string result of the
+        load_config operation
+
+Raises:
+    N/A
+</code></pre></div>
+
 <h4 id="get_prompt">get_prompt<a class="headerlink" href="#get_prompt" title="Permanent link">&para;</a></h4>
 <p><code>get_prompt(task: nornir.core.task.Task) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Get current prompt from device using scrapli
@@ -1000,7 +1216,6 @@ Returns:
 Raises:
     N/A
 </code></pre></div>
-
 
 <h4 id="netconf_capabilities">netconf_capabilities<a class="headerlink" href="#netconf_capabilities" title="Permanent link">&para;</a></h4>
 <p><code>netconf_capabilities(task: nornir.core.task.Task) ‑&gt; nornir.core.task.Result</code></p>
@@ -1017,7 +1232,6 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="netconf_commit">netconf_commit<a class="headerlink" href="#netconf_commit" title="Permanent link">&para;</a></h4>
 <p><code>netconf_commit(task: nornir.core.task.Task) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Commit the device config with scrapli_netconf
@@ -1032,7 +1246,6 @@ Returns:
 Raises:
     N/A
 </code></pre></div>
-
 
 <h4 id="netconf_delete_config">netconf_delete_config<a class="headerlink" href="#netconf_delete_config" title="Permanent link">&para;</a></h4>
 <p><code>netconf_delete_config(task: nornir.core.task.Task, target: str = 'candidate') ‑&gt; nornir.core.task.Result</code></p>
@@ -1050,7 +1263,6 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="netconf_discard">netconf_discard<a class="headerlink" href="#netconf_discard" title="Permanent link">&para;</a></h4>
 <p><code>netconf_discard(task: nornir.core.task.Task) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Discard the device config with scrapli_netconf
@@ -1066,9 +1278,8 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="netconf_edit_config">netconf_edit_config<a class="headerlink" href="#netconf_edit_config" title="Permanent link">&para;</a></h4>
-<p><code>netconf_edit_config(task: nornir.core.task.Task, config: str, dry_run: Union[bool, NoneType] = None, diff: bool = False, target: str = 'running') ‑&gt; nornir.core.task.Result</code></p>
+<p><code>netconf_edit_config(task: nornir.core.task.Task, config: str, dry_run: Optional[bool] = None, diff: bool = False, target: str = 'running') ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Edit config from the device with scrapli_netconf
 
 Args:
@@ -1090,7 +1301,6 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="netconf_get">netconf_get<a class="headerlink" href="#netconf_get" title="Permanent link">&para;</a></h4>
 <p><code>netconf_get(task: nornir.core.task.Task, filter_: str, filter_type: str = 'subtree') ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Get from the device with scrapli_netconf
@@ -1107,7 +1317,6 @@ Returns:
 Raises:
     N/A
 </code></pre></div>
-
 
 <h4 id="netconf_get_config">netconf_get_config<a class="headerlink" href="#netconf_get_config" title="Permanent link">&para;</a></h4>
 <p><code>netconf_get_config(task: nornir.core.task.Task, source: str = 'running', filters: Union[str, List[str], NoneType] = None, filter_type: str = 'subtree') ‑&gt; nornir.core.task.Result</code></p>
@@ -1127,7 +1336,6 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="netconf_lock">netconf_lock<a class="headerlink" href="#netconf_lock" title="Permanent link">&para;</a></h4>
 <p><code>netconf_lock(task: nornir.core.task.Task, target: str) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Lock the device with scrapli_netconf
@@ -1143,7 +1351,6 @@ Returns:
 Raises:
     N/A
 </code></pre></div>
-
 
 <h4 id="netconf_rpc">netconf_rpc<a class="headerlink" href="#netconf_rpc" title="Permanent link">&para;</a></h4>
 <p><code>netconf_rpc(task: nornir.core.task.Task, filter_: str) ‑&gt; nornir.core.task.Result</code></p>
@@ -1161,7 +1368,6 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="netconf_unlock">netconf_unlock<a class="headerlink" href="#netconf_unlock" title="Permanent link">&para;</a></h4>
 <p><code>netconf_unlock(task: nornir.core.task.Task, target: str) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Unlock the device with scrapli_netconf
@@ -1177,7 +1383,6 @@ Returns:
 Raises:
     N/A
 </code></pre></div>
-
 
 <h4 id="netconf_validate">netconf_validate<a class="headerlink" href="#netconf_validate" title="Permanent link">&para;</a></h4>
 <p><code>netconf_validate(task: nornir.core.task.Task, source: str) ‑&gt; nornir.core.task.Result</code></p>
@@ -1195,9 +1400,8 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="send_command">send_command<a class="headerlink" href="#send_command" title="Permanent link">&para;</a></h4>
-<p><code>send_command(task: nornir.core.task.Task, command: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, timeout_ops: Union[float, NoneType] = None) ‑&gt; nornir.core.task.Result</code></p>
+<p><code>send_command(task: nornir.core.task.Task, command: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, timeout_ops: Optional[float] = None) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Send a single command to device using scrapli
 
 Args:
@@ -1218,9 +1422,8 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="send_commands">send_commands<a class="headerlink" href="#send_commands" title="Permanent link">&para;</a></h4>
-<p><code>send_commands(task: nornir.core.task.Task, commands: List[str], strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑&gt; nornir.core.task.Result</code></p>
+<p><code>send_commands(task: nornir.core.task.Task, commands: List[str], strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Optional[float] = None) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Send a list of commands to device using scrapli
 
 Args:
@@ -1246,9 +1449,8 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="send_commands_from_file">send_commands_from_file<a class="headerlink" href="#send_commands_from_file" title="Permanent link">&para;</a></h4>
-<p><code>send_commands_from_file(task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑&gt; nornir.core.task.Result</code></p>
+<p><code>send_commands_from_file(task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Optional[float] = None) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Send a list of commands from a file to device using scrapli
 
 Args:
@@ -1273,9 +1475,8 @@ Raises:
     N/A
 </code></pre></div>
 
-
 <h4 id="send_config">send_config<a class="headerlink" href="#send_config" title="Permanent link">&para;</a></h4>
-<p><code>send_config(task: nornir.core.task.Task, config: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑&gt; nornir.core.task.Result</code></p>
+<p><code>send_config(task: nornir.core.task.Task, config: str, dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Send a config to device using scrapli
 
 Args:
@@ -1310,9 +1511,8 @@ Raises:
         host that is using the &quot;generic&quot; platform type
 </code></pre></div>
 
-
 <h4 id="send_configs">send_configs<a class="headerlink" href="#send_configs" title="Permanent link">&para;</a></h4>
-<p><code>send_configs(task: nornir.core.task.Task, configs: List[str], dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑&gt; nornir.core.task.Result</code></p>
+<p><code>send_configs(task: nornir.core.task.Task, configs: List[str], dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Send configs to device using scrapli
 
 Args:
@@ -1347,9 +1547,8 @@ Raises:
         host that is using the &quot;generic&quot; platform type
 </code></pre></div>
 
-
 <h4 id="send_configs_from_file">send_configs_from_file<a class="headerlink" href="#send_configs_from_file" title="Permanent link">&para;</a></h4>
-<p><code>send_configs_from_file(task: nornir.core.task.Task, file: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑&gt; nornir.core.task.Result</code></p>
+<p><code>send_configs_from_file(task: nornir.core.task.Task, file: str, dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Send configs from a file to device using scrapli
 
 Args:
@@ -1384,9 +1583,8 @@ Raises:
         host that is using the &quot;generic&quot; platform type
 </code></pre></div>
 
-
 <h4 id="send_interactive">send_interactive<a class="headerlink" href="#send_interactive" title="Permanent link">&para;</a></h4>
-<p><code>send_interactive(task: nornir.core.task.Task, interact_events: List[Tuple[str, str, Union[bool, NoneType]]], failed_when_contains: Union[str, List[str], NoneType] = None, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑&gt; nornir.core.task.Result</code></p>
+<p><code>send_interactive(task: nornir.core.task.Task, interact_events: List[Tuple[str, str, Optional[bool]]], failed_when_contains: Union[str, List[str], NoneType] = None, privilege_level: str = '', timeout_ops: Optional[float] = None) ‑&gt; nornir.core.task.Result</code></p>
 <div class="codehilite"><pre><span></span><code>Send inputs in an interactive fashion using scrapli; usually used to handle prompts
 
 Used to interact with devices where prompts change per input, and where inputs may be hidden
@@ -1399,7 +1597,6 @@ the optional third a bool for whether or not the input is &quot;hidden&quot; (i.
 An example where we need this sort of capability:
 </code></pre></div>
 
-
 <p>3560CX#copy flash: scp:
 Source filename []? test1.txt
 Address or name of remote host []? 172.31.254.100
@@ -1411,9 +1608,8 @@ Password:
 !
 639 bytes copied in 12.066 secs (53 bytes/sec)
 3560CX#</p>
-<div class="codehilite"><pre><span></span><code><span class="err">To accomplish this we can use the following (in &quot;native&quot; scrapli):</span>
+<div class="codehilite"><pre><span></span><code>To accomplish this we can use the following (in &quot;native&quot; scrapli):
 </code></pre></div>
-
 
 <p>interact = conn.channel.send_inputs_interact(
     [
@@ -1463,40 +1659,38 @@ Password:
         
 <footer class="md-footer">
   
-    <div class="md-footer-nav">
-      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
-        
-          <a href="../functions/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../functions/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Functions
             </div>
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                Functions
-              </div>
+          </div>
+        </a>
+      
+      
+        <a href="../connection/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Connection
             </div>
-          </a>
-        
-        
-          <a href="../connection/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Connection
-              </div>
-            </div>
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
-    </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1553,19 +1747,13 @@ Password:
 </footer>
       
     </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fb4a9340.min.js", "version": null}</script>
     
-      <script src="../../assets/javascripts/vendor.18f0862e.min.js"></script>
-      <script src="../../assets/javascripts/bundle.994580cf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
-      
-      <script>
-        app = initialize({
-          base: "../..",
-          features: [],
-          search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.9c0e82ba.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
+    
+      <script src="../../assets/javascripts/bundle.9b151c6a.min.js"></script>
       
     
   </body>
