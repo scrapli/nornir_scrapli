@@ -1,7 +1,7 @@
 nornir>3.0.0,<4.0.0
 nornir_utils>=0.1.0
 ntc_templates>=1.1.0,<3.0.0
-scrapli>=2021.07.30a1
+scrapli>=2021.07.30a2
 scrapli_cfg>=2021.07.30a5
 scrapli_community>=2021.01.30
 scrapli_netconf>=2021.01.30
