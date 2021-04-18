@@ -38,6 +38,7 @@ setuptools.setup(
         "Docs": "https://scrapli.github.io/nornir_scrapli/",
     },
     license="MIT",
+    package_data={"nornir_scrapli": ["py.typed"]},
     packages=setuptools.find_packages(),
     install_requires=INSTALL_REQUIRES,
     dependency_links=[],
