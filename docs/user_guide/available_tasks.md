@@ -8,7 +8,7 @@ All tasks presented here are methods that live in `scrapli` or `scrapli_netconf`
 
 ## Scrapli "core" Tasks
 
-- [get_prompt](https://scrapli.github.iohttps://scrapli.github.io/nornir_scrapli/api_docs/tasks/#get_prompt) - Get the current prompt of the device
+- [get_prompt](https://scrapli.github.io/nornir_scrapli/api_docs/tasks/#get_prompt) - Get the current prompt of the device
 - [send_command](https://scrapli.github.io/nornir_scrapli/api_docs/tasks/#send_command) - Send a single command to the device
 - [send_commands](https://scrapli.github.io/nornir_scrapli/api_docs/tasks/#send_commands) - Send a list of commands to the device
 - [send_commands_from_file](https://scrapli.github.io/nornir_scrapli/api_docs/tasks/#send_commands_from_file) - Send a list of commands from a file to the device
