@@ -28,7 +28,7 @@ setuptools.setup(
     version=__version__,
     author=__author__,
     author_email="carl.r.montanari@gmail.com",
-    description="scrapli plugins for Nornir",
+    description="Scrapli's plugin for Nornir",
     long_description=README,
     long_description_content_type="text/markdown",
     keywords="ssh telnet netconf automation network cisco iosxr iosxe nxos arista eos juniper "

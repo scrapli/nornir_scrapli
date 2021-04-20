@@ -87,9 +87,6 @@ __all__ = (
 </details>
 
 
-## Sub-modules
-* nornir_scrapli.tasks.cfg
-* nornir_scrapli.tasks.netconf
 
 ## Functions
 
