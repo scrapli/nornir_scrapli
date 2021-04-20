@@ -36,7 +36,7 @@ This repo is the nornir plugin for scrapli, however there are other libraries/re
 
 
 - [scrapli](/more_scrapli/scrapli)
-- [scrapli_community](/more_scrapli/scrapli_community)
 - [scrapli_netconf](/more_scrapli/scrapli_netconf)
-- [scrapli_stubs](/more_scrapli/scrapli_stubs)
-
+- [scrapli_community](/more_scrapli/scrapli_community)
+- [scrapli_cfg](/more_scrapli/scrapli_cfg)
+- [scrapli_replay](/more_scrapli/scrapli_replay)
