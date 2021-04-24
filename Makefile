@@ -34,5 +34,10 @@ cov_unit:
 docs:
 	python docs/generate/generate_docs.py
 
+test_docs:
+	mkdocs build --clean --strict
+	htmltest -c docs/htmltest.yml -s
+	rm -rf tmp
+
 deploy_docs:
 	mkdocs gh-deploy
