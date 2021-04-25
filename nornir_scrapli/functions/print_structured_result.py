@@ -69,7 +69,7 @@ def print_structured_result(
         if updated_multi_result:
             updated_agg_result[hostname] = updated_multi_result  # noqa
 
-    LOCK.acquire()
+    LOCK.acquire()  # pylint: disable=R1732
     try:
         _print_result(
             result=updated_agg_result, attrs=None, failed=failed, severity_level=severity_level
