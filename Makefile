@@ -6,7 +6,7 @@ lint:
 	python -m mypy --strict nornir_scrapli/
 
 darglint:
-	find scrapli_cfg -type f \( -iname "*.py"\) | xargs darglint -x
+	find nornir_scrapli -type f \( -iname "*.py"\ ) | xargs darglint -x
 
 test:
 	python -m pytest \
