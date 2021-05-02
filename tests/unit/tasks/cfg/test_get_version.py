@@ -10,7 +10,7 @@ def test_get_version(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_cfg_open(cls):
+    def mock_cfg_prepare(cls):
         pass
 
     def mock_cfg_get_version(cls):
@@ -21,7 +21,7 @@ def test_get_version(nornir, monkeypatch):
         return response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
-    monkeypatch.setattr(ScrapliCfgIOSXE, "open", mock_cfg_open)
+    monkeypatch.setattr(ScrapliCfgIOSXE, "prepare", mock_cfg_prepare)
     monkeypatch.setattr(ScrapliCfgIOSXE, "get_version", mock_cfg_get_version)
 
     result = nornir.run(task=cfg_get_version)

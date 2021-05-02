@@ -10,7 +10,7 @@ def test_abort_config(nornir, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_cfg_open(cls):
+    def mock_cfg_prepare(cls):
         pass
 
     def mock_cfg_abort_config(cls):
@@ -21,7 +21,7 @@ def test_abort_config(nornir, monkeypatch):
         return cfg_response
 
     monkeypatch.setattr(IOSXEDriver, "open", mock_open)
-    monkeypatch.setattr(ScrapliCfgIOSXE, "open", mock_cfg_open)
+    monkeypatch.setattr(ScrapliCfgIOSXE, "prepare", mock_cfg_prepare)
     monkeypatch.setattr(ScrapliCfgIOSXE, "abort_config", mock_cfg_abort_config)
 
     result = nornir.run(task=cfg_abort_config)
