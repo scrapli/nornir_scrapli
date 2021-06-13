@@ -2,6 +2,7 @@
 site_name: Nornir Scrapli
 site_description: Scrapli's plugin for Nornir
 site_author: Carl Montanari
+site_url: https://scrapli.github.io/
 
 repo_name: scrapli/nornir_scrapli
 repo_url: https://github.com/scrapli/nornir_scrapli
