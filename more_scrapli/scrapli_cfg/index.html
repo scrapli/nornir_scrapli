@@ -13,14 +13,14 @@
         <meta name="author" content="Carl Montanari">
       
       
-        <link rel="canonical" href="https://scrapli.github.io/about/contributing/">
+        <link rel="canonical" href="https://scrapli.github.io/more_scrapli/scrapli_cfg/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.1">
     
     
       
-        <title>Contributing - Nornir Scrapli</title>
+        <title>Scrapli Cfg - Nornir Scrapli</title>
       
     
     
@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#contributing" class="md-skip">
+        <a href="#scrapli-cfg" class="md-skip">
           Skip to content
         </a>
       
@@ -101,7 +101,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Contributing
+              Scrapli Cfg
             
           </span>
         </div>
@@ -440,12 +440,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
       <label class="md-nav__link" for="__nav_4">
         More Scrapli
@@ -463,7 +465,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../more_scrapli/scrapli/" class="md-nav__link">
+      <a href="../scrapli/" class="md-nav__link">
         Scrapli
       </a>
     </li>
@@ -475,7 +477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../more_scrapli/scrapli_netconf/" class="md-nav__link">
+      <a href="../scrapli_netconf/" class="md-nav__link">
         Scrapli Netconf
       </a>
     </li>
@@ -487,7 +489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../more_scrapli/scrapli_community/" class="md-nav__link">
+      <a href="../scrapli_community/" class="md-nav__link">
         Scrapli Community
       </a>
     </li>
@@ -497,11 +499,21 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../more_scrapli/scrapli_cfg/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Scrapli Cfg
       </a>
+      
     </li>
   
 
@@ -511,7 +523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../more_scrapli/scrapli_replay/" class="md-nav__link">
+      <a href="../scrapli_replay/" class="md-nav__link">
         Scrapli Replay
       </a>
     </li>
@@ -530,14 +542,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
       <label class="md-nav__link" for="__nav_5">
         Other
@@ -553,21 +563,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
         Contributing
       </a>
-      
     </li>
   
 
@@ -577,7 +577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../code_of_conduct/" class="md-nav__link">
+      <a href="../../about/code_of_conduct/" class="md-nav__link">
         Code of Conduct
       </a>
     </li>
@@ -620,19 +620,11 @@
               
                 
                 
-                <h1 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h1>
-<p>Thanks for thinking about contributing! Contributions are not expected, but are quite welcome.</p>
-<p>Contributions of all kinds are welcomed -- typos, doc updates, adding examples, bug fixes, and feature adds.</p>
-<p>Some notes on contributing:</p>
-<ul>
-<li>Please open a GitHub discussion topic for any potential feature adds/changes to discuss them prior to opening a PR,
-  this way everyone has a chance to chime in and make sure we're all on the same page!</li>
-<li>Please open an issue to discuss any bugs/bug fixes prior to opening a PR.</li>
-<li>Once we all have discussed any adds/changes, pull requests are very much welcome and appreciated!</li>
-<li>All PRs should pass tests/CI linting -- checkout the Makefile for some shortcuts for linting and testing.</li>
-<li>Please include tests! Even simple/basic tests are better than nothing -- it helps make sure changes in the future
-   don't break functionality or make things act in unexpected ways!</li>
-</ul>
+                <h1 id="scrapli-cfg">Scrapli Cfg<a class="headerlink" href="#scrapli-cfg" title="Permanent link">&para;</a></h1>
+<p><a href="https://github.com/scrapli/scrapli_cfg">scrapli_cfg</a> (<a href="https://scrapli.github.io/scrapli_cfg/">docs</a>) 
+is utility that accepts a scrapli Telnet or SSH connection and provides configuration management capabilities. 
+scrapli_cfg allows you to load candidate configurations for merge or replace operations, generate diffs of the 
+current vs candidate, and of course commit or abort the candidate configuration.</p>
                 
               
               
@@ -652,7 +644,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../../more_scrapli/scrapli_replay/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Scrapli Replay" rel="prev">
+        <a href="../scrapli_community/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Scrapli Community" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -661,20 +653,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Scrapli Replay
+              Scrapli Community
             </div>
           </div>
         </a>
       
       
         
-        <a href="../code_of_conduct/" class="md-footer__link md-footer__link--next" aria-label="Next: Code of Conduct" rel="next">
+        <a href="../scrapli_replay/" class="md-footer__link md-footer__link--next" aria-label="Next: Scrapli Replay" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Code of Conduct
+              Scrapli Replay
             </div>
           </div>
           <div class="md-footer__button md-icon">
