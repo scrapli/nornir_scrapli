@@ -116,11 +116,11 @@ TEST_AGG_RESULT[TEST_HOST.name] = TEST_MULTI_RESULT
     [
         (
             True,
-            "\x1b[1m\x1b[36msend_commands*******************************************************************\n\x1b[1m\x1b[34m* sea-ios-1 ** changed : False *************************************************\n\x1b[1m\x1b[32mvvvv send_commands ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\n[ { 'config_register': '0x2102',\n    'hardware': ['CSR1000V'],\n    'hostname': 'csr1000v',\n    'mac': [],\n    'reload_reason': 'reload',\n    'rommon': 'IOS-XE',\n    'running_image': 'packages.conf',\n    'serial': ['9FKLJWM5EB0'],\n    'uptime': '2 hours, 43 minutes',\n    'version': '16.4.1'}]\n\x1b[1m\x1b[32m---- send_commands ** changed : False ------------------------------------------ INFO\n[ { 'distance': '',\n    'mask': '24',\n    'metric': '',\n    'network': '10.0.0.0',\n    'nexthop_if': 'GigabitEthernet1',\n    'nexthop_ip': '',\n    'protocol': 'C',\n    'type': '',\n    'uptime': ''},\n  { 'distance': '',\n    'mask': '32',\n    'metric': '',\n    'network': '10.0.0.15',\n    'nexthop_if': 'GigabitEthernet1',\n    'nexthop_ip': '',\n    'protocol': 'L',\n    'type': '',\n    'uptime': ''}]\n\x1b[1m\x1b[32m^^^^ END send_commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
+            "\x1b[1m\x1b[36msend_commands*******************************************************************\n\x1b[1m\x1b[34m* sea-ios-1 ** changed : False *************************************************\n\x1b[1m\x1b[32mvvvv send_commands ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\n[ { 'config_register': '0x2102',\n    'hardware': ['CSR1000V'],\n    'hostname': 'csr1000v',\n    'mac': [],\n    'reload_reason': 'reload',\n    'restarted': '',\n    'rommon': 'IOS-XE',\n    'running_image': 'packages.conf',\n    'serial': ['9FKLJWM5EB0'],\n    'uptime': '2 hours, 43 minutes',\n    'version': '16.4.1'}]\n\x1b[1m\x1b[32m---- send_commands ** changed : False ------------------------------------------ INFO\n[ { 'distance': '',\n    'mask': '24',\n    'metric': '',\n    'network': '10.0.0.0',\n    'nexthop_if': 'GigabitEthernet1',\n    'nexthop_ip': '',\n    'protocol': 'C',\n    'type': '',\n    'uptime': ''},\n  { 'distance': '',\n    'mask': '32',\n    'metric': '',\n    'network': '10.0.0.15',\n    'nexthop_if': 'GigabitEthernet1',\n    'nexthop_ip': '',\n    'protocol': 'L',\n    'type': '',\n    'uptime': ''}]\n\x1b[1m\x1b[32m^^^^ END send_commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
         ),
         (
             False,
-            "\x1b[1m\x1b[36msend_commands*******************************************************************\n\x1b[1m\x1b[34m* sea-ios-1 ** changed : False *************************************************\n\x1b[1m\x1b[32mvvvv send_commands ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\n[ [ '16.4.1',\n    'IOS-XE',\n    'csr1000v',\n    '2 hours, 43 minutes',\n    'reload',\n    'packages.conf',\n    ['CSR1000V'],\n    ['9FKLJWM5EB0'],\n    '0x2102',\n    []]]\n\x1b[1m\x1b[32m---- send_commands ** changed : False ------------------------------------------ INFO\n[ ['C', '', '10.0.0.0', '24', '', '', '', 'GigabitEthernet1', ''],\n  ['L', '', '10.0.0.15', '32', '', '', '', 'GigabitEthernet1', '']]\n\x1b[1m\x1b[32m^^^^ END send_commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
+            "\x1b[1m\x1b[36msend_commands*******************************************************************\n\x1b[1m\x1b[34m* sea-ios-1 ** changed : False *************************************************\n\x1b[1m\x1b[32mvvvv send_commands ** changed : False vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv INFO\n[ [ '16.4.1',\n    'IOS-XE',\n    'csr1000v',\n    '2 hours, 43 minutes',\n    'reload',\n    'packages.conf',\n    ['CSR1000V'],\n    ['9FKLJWM5EB0'],\n    '0x2102',\n    [],\n    '']]\n\x1b[1m\x1b[32m---- send_commands ** changed : False ------------------------------------------ INFO\n[ ['C', '', '10.0.0.0', '24', '', '', '', 'GigabitEthernet1', ''],\n  ['L', '', '10.0.0.15', '32', '', '', '', 'GigabitEthernet1', '']]\n\x1b[1m\x1b[32m^^^^ END send_commands ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",
         ),
     ],
     ids=["True", "False"],
@@ -132,7 +132,7 @@ def test_print_structured_result(capsys, structured_result):
 
 
 @pytest.mark.skipif(
-    sys.version_info.minor > 8, reason="genie not currently available for python 3.9"
+    sys.version_info.minor > 9, reason="genie not currently available for python 3.10"
 )
 @pytest.mark.parametrize(
     "structured_result",
@@ -155,7 +155,7 @@ def test_print_structured_result_genie(capsys, structured_result):
 
 
 @pytest.mark.skipif(
-    sys.version_info.minor > 8, reason="genie not currently available for python 3.9"
+    sys.version_info.minor > 9, reason="genie not currently available for python 3.10"
 )
 @pytest.mark.parametrize(
     "structured_result",

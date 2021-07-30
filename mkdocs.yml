@@ -1,8 +1,8 @@
 ---
 site_name: Nornir Scrapli
-site_url: https://github.com/scrapli/nornir_scrapli
-site_description: "Scrapli's plugin for Nornir"
+site_description: Scrapli's plugin for Nornir
 site_author: Carl Montanari
+site_url: https://scrapli.github.io/
 
 repo_name: scrapli/nornir_scrapli
 repo_url: https://github.com/scrapli/nornir_scrapli
@@ -17,7 +17,7 @@ theme:
       repo: fontawesome/brands/github-alt
 
 nav:
-  - Scrapli Nornir: index.md
+  - Nornir Scrapli: index.md
   - User Guide:
       - Quick Start Guide: user_guide/quickstart.md
       - Project Details: user_guide/project_details.md
@@ -37,7 +37,8 @@ nav:
     - Scrapli: more_scrapli/scrapli.md
     - Scrapli Netconf: more_scrapli/scrapli_netconf.md
     - Scrapli Community: more_scrapli/scrapli_community.md
-    - Scrapli Stubs: more_scrapli/scrapli_stubs.md
+    - Scrapli Cfg: more_scrapli/scrapli_cfg.md
+    - Scrapli Replay: more_scrapli/scrapli_replay.md
   - Other:
     - Contributing: about/contributing.md
     - Code of Conduct: about/code_of_conduct.md
@@ -51,11 +52,15 @@ markdown_extensions:
     - mdx_gh_links:
         user: mkdocs
         repo: mkdocs
+    - pymdownx.superfences
+    - pymdownx.highlight:
+        use_pygments: True
+        linenums: True
 
 extra:
     social:
         - icon: fontawesome/brands/github-alt
-          link: 'https://github.com/carlmontanari/scrapli'
+          link: 'https://github.com/carlmontanari/'
         - icon: fontawesome/brands/twitter
           link: 'https://twitter.com/carlrmontanari'
         - icon: fontawesome/brands/linkedin

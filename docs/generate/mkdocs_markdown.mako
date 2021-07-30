@@ -151,12 +151,20 @@ ${module.source}
 </details>
 
 
-% if submodules:
-<%text>## Sub-modules</%text>
-    % for m in submodules:
-* ${m.name}
-    % endfor
-% endif
+## % if submodules:
+## <%text>## Sub-modules</%text>
+##     % for m in submodules:
+## * ${m.name}
+##     % endfor
+## % endif
+##
+## % if variables:
+## <%text>## Variables</%text>
+##     % for v in variables:
+## ${variable(v)}
+##
+##     % endfor
+## % endif
 
 % if functions:
 <%text>## Functions</%text>

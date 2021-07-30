@@ -29,27 +29,39 @@ nornir_scrapli.tasks
     <pre>
         <code class="python">
 """nornir_scrapli.tasks"""
-from nornir_scrapli.tasks.get_prompt import get_prompt
-from nornir_scrapli.tasks.netconf_capabilities import netconf_capabilities
-from nornir_scrapli.tasks.netconf_commit import netconf_commit
-from nornir_scrapli.tasks.netconf_delete_config import netconf_delete_config
-from nornir_scrapli.tasks.netconf_discard import netconf_discard
-from nornir_scrapli.tasks.netconf_edit_config import netconf_edit_config
-from nornir_scrapli.tasks.netconf_get import netconf_get
-from nornir_scrapli.tasks.netconf_get_config import netconf_get_config
-from nornir_scrapli.tasks.netconf_lock import netconf_lock
-from nornir_scrapli.tasks.netconf_rpc import netconf_rpc
-from nornir_scrapli.tasks.netconf_unlock import netconf_unlock
-from nornir_scrapli.tasks.netconf_validate import netconf_validate
-from nornir_scrapli.tasks.send_command import send_command
-from nornir_scrapli.tasks.send_commands import send_commands
-from nornir_scrapli.tasks.send_commands_from_file import send_commands_from_file
-from nornir_scrapli.tasks.send_config import send_config
-from nornir_scrapli.tasks.send_configs import send_configs
-from nornir_scrapli.tasks.send_configs_from_file import send_configs_from_file
-from nornir_scrapli.tasks.send_interactive import send_interactive
+from nornir_scrapli.tasks.cfg.abort_config import cfg_abort_config
+from nornir_scrapli.tasks.cfg.commit_config import cfg_commit_config
+from nornir_scrapli.tasks.cfg.diff_config import cfg_diff_config
+from nornir_scrapli.tasks.cfg.get_config import cfg_get_config
+from nornir_scrapli.tasks.cfg.get_version import cfg_get_version
+from nornir_scrapli.tasks.cfg.load_config import cfg_load_config
+from nornir_scrapli.tasks.core.get_prompt import get_prompt
+from nornir_scrapli.tasks.core.send_command import send_command
+from nornir_scrapli.tasks.core.send_commands import send_commands
+from nornir_scrapli.tasks.core.send_commands_from_file import send_commands_from_file
+from nornir_scrapli.tasks.core.send_config import send_config
+from nornir_scrapli.tasks.core.send_configs import send_configs
+from nornir_scrapli.tasks.core.send_configs_from_file import send_configs_from_file
+from nornir_scrapli.tasks.core.send_interactive import send_interactive
+from nornir_scrapli.tasks.netconf.capabilities import netconf_capabilities
+from nornir_scrapli.tasks.netconf.commit import netconf_commit
+from nornir_scrapli.tasks.netconf.delete_config import netconf_delete_config
+from nornir_scrapli.tasks.netconf.discard import netconf_discard
+from nornir_scrapli.tasks.netconf.edit_config import netconf_edit_config
+from nornir_scrapli.tasks.netconf.get import netconf_get
+from nornir_scrapli.tasks.netconf.get_config import netconf_get_config
+from nornir_scrapli.tasks.netconf.lock import netconf_lock
+from nornir_scrapli.tasks.netconf.rpc import netconf_rpc
+from nornir_scrapli.tasks.netconf.unlock import netconf_unlock
+from nornir_scrapli.tasks.netconf.validate import netconf_validate
 
 __all__ = (
+    "cfg_abort_config",
+    "cfg_commit_config",
+    "cfg_diff_config",
+    "cfg_get_config",
+    "cfg_get_version",
+    "cfg_load_config",
     "get_prompt",
     "netconf_capabilities",
     "netconf_commit",
@@ -77,6 +89,149 @@ __all__ = (
 
 
 ## Functions
+
+    
+
+#### cfg_abort_config
+`cfg_abort_config(task: nornir.core.task.Task) ‑> nornir.core.task.Result`
+
+```text
+Abort a device candidate config with scrapli-cfg
+
+Args:
+    task: nornir task object
+
+Returns:
+    Result: nornir result object with Result.result value set the string result of the
+        load_config operation
+
+Raises:
+    N/A
+```
+
+
+
+
+    
+
+#### cfg_commit_config
+`cfg_commit_config(task: nornir.core.task.Task, source: str = 'running') ‑> nornir.core.task.Result`
+
+```text
+Commit a device candidate config with scrapli-cfg
+
+Args:
+    task: nornir task object
+    source: name of the config source to commit against, generally running|startup
+
+Returns:
+    Result: nornir result object with Result.result value set the string result of the
+        load_config operation
+
+Raises:
+    N/A
+```
+
+
+
+
+    
+
+#### cfg_diff_config
+`cfg_diff_config(task: nornir.core.task.Task, source: str = 'running') ‑> nornir.core.task.Result`
+
+```text
+Diff a device candidate config vs a source config with scrapli-cfg
+
+The "device diff" is stored as the result. You can access the side by side or unified scrapli
+cfg diffs via the "scrapli_response" object stored in the result!
+
+Args:
+    task: nornir task object
+    source: name of the config source to commit against, generally running|startup
+
+Returns:
+    Result: nornir result object with Result.result value set the string result of the
+        load_config operation
+
+Raises:
+    N/A
+```
+
+
+
+
+    
+
+#### cfg_get_config
+`cfg_get_config(task: nornir.core.task.Task, source: str = 'running') ‑> nornir.core.task.Result`
+
+```text
+Get device config with scrapli-cfg
+
+Args:
+    task: nornir task object
+    source: config source to get
+
+Returns:
+    Result: nornir result object with Result.result value set to current prompt
+
+Raises:
+    N/A
+```
+
+
+
+
+    
+
+#### cfg_get_version
+`cfg_get_version(task: nornir.core.task.Task) ‑> nornir.core.task.Result`
+
+```text
+Get device version with scrapli-cfg
+
+Args:
+    task: nornir task object
+
+Returns:
+    Result: nornir result object with Result.result value set to current version of device
+
+Raises:
+    N/A
+```
+
+
+
+
+    
+
+#### cfg_load_config
+`cfg_load_config(task: nornir.core.task.Task, config: str, replace: bool = False, **kwargs: Any) ‑> nornir.core.task.Result`
+
+```text
+Load device config with scrapli-cfg
+
+Note that `changed` will still be `False` because this is just loading a candidate config!
+
+Args:
+    task: nornir task object
+    config: string of the configuration to load
+    replace: replace the configuration or not, if false configuration will be loaded as a
+        merge operation
+    kwargs: additional kwargs that the implementing classes may need for their platform,
+        see your specific platform for details
+
+Returns:
+    Result: nornir result object with Result.result value set the string result of the
+        load_config operation
+
+Raises:
+    N/A
+```
+
+
+
 
     
 
@@ -191,7 +346,7 @@ Raises:
     
 
 #### netconf_edit_config
-`netconf_edit_config(task: nornir.core.task.Task, config: str, dry_run: Union[bool, NoneType] = None, diff: bool = False, target: str = 'running') ‑> nornir.core.task.Result`
+`netconf_edit_config(task: nornir.core.task.Task, config: str, dry_run: Optional[bool] = None, diff: bool = False, target: str = 'running') ‑> nornir.core.task.Result`
 
 ```text
 Edit config from the device with scrapli_netconf
@@ -362,7 +517,7 @@ Raises:
     
 
 #### send_command
-`send_command(task: nornir.core.task.Task, command: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result`
+`send_command(task: nornir.core.task.Task, command: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send a single command to device using scrapli
@@ -391,7 +546,7 @@ Raises:
     
 
 #### send_commands
-`send_commands(task: nornir.core.task.Task, commands: List[str], strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result`
+`send_commands(task: nornir.core.task.Task, commands: List[str], strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send a list of commands to device using scrapli
@@ -425,7 +580,7 @@ Raises:
     
 
 #### send_commands_from_file
-`send_commands_from_file(task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result`
+`send_commands_from_file(task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send a list of commands from a file to device using scrapli
@@ -458,7 +613,7 @@ Raises:
     
 
 #### send_config
-`send_config(task: nornir.core.task.Task, config: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result`
+`send_config(task: nornir.core.task.Task, config: str, dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send a config to device using scrapli
@@ -501,7 +656,7 @@ Raises:
     
 
 #### send_configs
-`send_configs(task: nornir.core.task.Task, configs: List[str], dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result`
+`send_configs(task: nornir.core.task.Task, configs: List[str], dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send configs to device using scrapli
@@ -544,7 +699,7 @@ Raises:
     
 
 #### send_configs_from_file
-`send_configs_from_file(task: nornir.core.task.Task, file: str, dry_run: Union[bool, NoneType] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result`
+`send_configs_from_file(task: nornir.core.task.Task, file: str, dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send configs from a file to device using scrapli
@@ -587,7 +742,7 @@ Raises:
     
 
 #### send_interactive
-`send_interactive(task: nornir.core.task.Task, interact_events: List[Tuple[str, str, Union[bool, NoneType]]], failed_when_contains: Union[str, List[str], NoneType] = None, privilege_level: str = '', timeout_ops: Union[float, NoneType] = None) ‑> nornir.core.task.Result`
+`send_interactive(task: nornir.core.task.Task, interact_events: List[Tuple[str, str, Optional[bool]]], failed_when_contains: Union[str, List[str], NoneType] = None, privilege_level: str = '', timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send inputs in an interactive fashion using scrapli; usually used to handle prompts

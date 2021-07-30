@@ -1,3 +1,4 @@
+"""nornir_scrapli.examples.structured_data.demo"""
 from nornir_utils.plugins.functions import print_result
 
 from nornir import InitNornir
@@ -6,6 +7,7 @@ from nornir_scrapli.tasks import send_command
 
 
 def main() -> None:
+    """Simple demo for printing structured data"""
     nr = InitNornir(config_file="nornir_data/config.yaml")
     show_result = nr.run(task=send_command, command="show version")
 

@@ -1,3 +1,4 @@
+"""nornir_scrapli.examples.basic_netconf_usage.demo"""
 from nornir_utils.plugins.functions.print_result import print_result
 
 from nornir import InitNornir
@@ -13,6 +14,7 @@ from nornir_scrapli.tasks import (
 
 
 def main() -> None:
+    """Simple netconf demo!"""
     nr = InitNornir(config_file="nornir_data/config.yaml")
 
     capabilities_result = nr.run(task=netconf_capabilities)
@@ -21,7 +23,8 @@ def main() -> None:
     config_result = nr.run(task=netconf_get_config)
     print_result(config_result)
 
-    filter_ = """<interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+    filter_ = """
+    <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
       <interface>
         <name>
           GigabitEthernet1
@@ -32,7 +35,8 @@ def main() -> None:
     print_result(result)
 
     print("edit-config", "*" * 50)
-    config = """<config>
+    config = """
+    <config>
         <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
             <interface>
                 <name>GigabitEthernet1</name>
@@ -49,7 +53,8 @@ def main() -> None:
     result = nr.run(task=netconf_unlock, target="running")
     print_result(result)
 
-    rpc = """<get><filter type="subtree"><interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+    rpc = """
+    <get><filter type="subtree"><interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
       <interface>
         <name>
           GigabitEthernet1

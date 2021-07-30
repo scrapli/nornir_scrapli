@@ -29,15 +29,21 @@ nornir_scrapli.connection
     <pre>
         <code class="python">
 """nornir_scrapli.connection"""
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from scrapli import Scrapli
 from scrapli.driver import GenericDriver
 from scrapli.exceptions import ScrapliModuleNotFound
+from scrapli_cfg import ScrapliCfg
+from scrapli_cfg.platform.base.sync_platform import ScrapliCfgPlatform
 from scrapli_netconf.driver import NetconfDriver
 
 from nornir.core.configuration import Config
+from nornir.core.task import Task
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
+
+if TYPE_CHECKING:
+    from nornir.core.plugins.connections import ConnectionPlugin  # pylint: disable=C0412
 
 CONNECTION_NAME = "scrapli"
 
@@ -77,7 +83,7 @@ class ScrapliCore:
             configuration: nornir configuration
 
         Returns:
-            N/A  # noqa: DAR202
+            None
 
         Raises:
             NornirScrapliInvalidPlatform: if no platform or an invalid scrapli/napalm platform
@@ -103,21 +109,20 @@ class ScrapliCore:
 
         if not platform:
             raise NornirScrapliInvalidPlatform(
-                f"No `platform` provided in inventory for host `{hostname}`"
+                f"'platform' not provided in inventory for host `{hostname}`"
             )
 
-        if platform in PLATFORM_MAP:
-            platform = PLATFORM_MAP.get(platform)
+        final_platform: str = PLATFORM_MAP.get(platform, platform)
 
-        if platform == "generic":
+        if final_platform == "generic":
             connection = GenericDriver(**parameters)
         else:
             try:
-                connection = Scrapli(**parameters, platform=platform)  # type: ignore
+                connection = Scrapli(**parameters, platform=final_platform)
             except ScrapliModuleNotFound as exc:
                 raise NornirScrapliInvalidPlatform(
-                    f"Provided platform `{platform}` is not a valid scrapli or napalm platform, "
-                    "or is not a valid scrapli-community platform."
+                    f"Provided platform `{final_platform}` is not a valid scrapli or napalm "
+                    "platform, or is not a valid scrapli-community platform."
                 ) from exc
 
         connection.open()
@@ -131,13 +136,121 @@ class ScrapliCore:
             N/A
 
         Returns:
-            N/A  # noqa: DAR202
+            None
 
         Raises:
             N/A
 
         """
         self.connection.close()
+
+
+class ScrapliConfig:
+    """Scrapli connection plugin for nornir"""
+
+    connection: ScrapliCfgPlatform
+
+    @staticmethod
+    def get_connection(task: Task) -> ScrapliCfgPlatform:
+        """
+        Try to fetch scrapli-cfg conn, create it if it doesnt exist
+
+        This is a little different than "normal" in that we dont have a connection and we dont
+        create them in the "normal" nornir way -- we actually just steal the scrapli connection and
+        wrap the scrapli_cfg bits around it.
+
+        Args:
+            task: nornir Task object
+
+        Returns:
+            ScrapliCfg
+
+        Raises:
+            N/A
+
+        """
+        connection: ScrapliCfgPlatform
+
+        try:
+            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
+        except AttributeError:
+            task.host.connections["scrapli_cfg"] = ScrapliConfig.spawn(task=task)
+            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
+
+        return connection
+
+    @staticmethod
+    def spawn(task: Task) -> "ConnectionPlugin":
+        """
+        Spawn a ScrapliConfig object for a nornir host
+
+        This is a little different than "normal" in that we dont have a connection and we dont
+        create them in the "normal" nornir way -- we actually just steal the scrapli connection and
+        wrap the scrapli_cfg bits around it.
+
+        Args:
+            task: nornir Task object
+
+        Returns:
+            ScrapliConfig
+
+        Raises:
+            N/A
+
+        """
+        scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
+        scrapli_cfg_parameters = task.host.get_connection_parameters(connection="scrapli_cfg")
+
+        # should always be a dict afaik, but typing doesnt appreciate the possibility it is None
+        extras = scrapli_cfg_parameters.extras or {}
+        # always overwrite `dedicated_connection` as we are *not* having a dedicated connection
+        # since we are wrapping the "normal" scrapli connection!
+        extras["dedicated_connection"] = False
+
+        final_scrapli_cfg_parameters: Dict[str, Any] = {
+            "conn": scrapli_conn,
+            **extras,
+        }
+        connection = ScrapliCfg(**final_scrapli_cfg_parameters)
+        scrapli_config_connection_obj = ScrapliConfig()
+        scrapli_config_connection_obj.connection = connection
+        scrapli_config_connection_obj.open()
+        return scrapli_config_connection_obj
+
+    def open(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Override open method of normal nornir connection so we can coopt an existing conn
+
+        Args:
+            args: args for not dealing w/ overridden hings
+            kwargs: kwargs for not dealing w/ overridden hings
+
+        Returns:
+            None
+
+        Raises:
+            N/A
+
+        """
+        _, _ = args, kwargs
+        self.connection.prepare()
+
+    def close(self) -> None:
+        """
+        Override close method of normal nornir connection so we never close things
+
+        Never closing allows us to not accidentally step on the underlying "normal" scrapli conn
+
+        Args:
+            N/A
+
+        Returns:
+            None
+
+        Raises:
+            N/A
+
+        """
 
 
 class ScrapliNetconf:
@@ -168,7 +281,7 @@ class ScrapliNetconf:
             configuration: nornir configuration
 
         Returns:
-            N/A  # noqa: DAR202
+            None
 
         Raises:
             N/A
@@ -205,7 +318,7 @@ class ScrapliNetconf:
             N/A
 
         Returns:
-            N/A  # noqa: DAR202
+            None
 
         Raises:
             N/A
@@ -220,6 +333,233 @@ class ScrapliNetconf:
 
 
 ## Classes
+
+### ScrapliConfig
+
+
+```text
+Scrapli connection plugin for nornir
+```
+
+<details class="source">
+    <summary>
+        <span>Expand source code</span>
+    </summary>
+    <pre>
+        <code class="python">
+class ScrapliConfig:
+    """Scrapli connection plugin for nornir"""
+
+    connection: ScrapliCfgPlatform
+
+    @staticmethod
+    def get_connection(task: Task) -> ScrapliCfgPlatform:
+        """
+        Try to fetch scrapli-cfg conn, create it if it doesnt exist
+
+        This is a little different than "normal" in that we dont have a connection and we dont
+        create them in the "normal" nornir way -- we actually just steal the scrapli connection and
+        wrap the scrapli_cfg bits around it.
+
+        Args:
+            task: nornir Task object
+
+        Returns:
+            ScrapliCfg
+
+        Raises:
+            N/A
+
+        """
+        connection: ScrapliCfgPlatform
+
+        try:
+            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
+        except AttributeError:
+            task.host.connections["scrapli_cfg"] = ScrapliConfig.spawn(task=task)
+            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
+
+        return connection
+
+    @staticmethod
+    def spawn(task: Task) -> "ConnectionPlugin":
+        """
+        Spawn a ScrapliConfig object for a nornir host
+
+        This is a little different than "normal" in that we dont have a connection and we dont
+        create them in the "normal" nornir way -- we actually just steal the scrapli connection and
+        wrap the scrapli_cfg bits around it.
+
+        Args:
+            task: nornir Task object
+
+        Returns:
+            ScrapliConfig
+
+        Raises:
+            N/A
+
+        """
+        scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
+        scrapli_cfg_parameters = task.host.get_connection_parameters(connection="scrapli_cfg")
+
+        # should always be a dict afaik, but typing doesnt appreciate the possibility it is None
+        extras = scrapli_cfg_parameters.extras or {}
+        # always overwrite `dedicated_connection` as we are *not* having a dedicated connection
+        # since we are wrapping the "normal" scrapli connection!
+        extras["dedicated_connection"] = False
+
+        final_scrapli_cfg_parameters: Dict[str, Any] = {
+            "conn": scrapli_conn,
+            **extras,
+        }
+        connection = ScrapliCfg(**final_scrapli_cfg_parameters)
+        scrapli_config_connection_obj = ScrapliConfig()
+        scrapli_config_connection_obj.connection = connection
+        scrapli_config_connection_obj.open()
+        return scrapli_config_connection_obj
+
+    def open(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Override open method of normal nornir connection so we can coopt an existing conn
+
+        Args:
+            args: args for not dealing w/ overridden hings
+            kwargs: kwargs for not dealing w/ overridden hings
+
+        Returns:
+            None
+
+        Raises:
+            N/A
+
+        """
+        _, _ = args, kwargs
+        self.connection.prepare()
+
+    def close(self) -> None:
+        """
+        Override close method of normal nornir connection so we never close things
+
+        Never closing allows us to not accidentally step on the underlying "normal" scrapli conn
+
+        Args:
+            N/A
+
+        Returns:
+            None
+
+        Raises:
+            N/A
+
+        """
+        </code>
+    </pre>
+</details>
+
+
+#### Class variables
+
+    
+`connection: scrapli_cfg.platform.base.sync_platform.ScrapliCfgPlatform`
+
+
+
+#### Static methods
+
+    
+
+#### get_connection
+`get_connection(task: nornir.core.task.Task) ‑> scrapli_cfg.platform.base.sync_platform.ScrapliCfgPlatform`
+
+```text
+Try to fetch scrapli-cfg conn, create it if it doesnt exist
+
+This is a little different than "normal" in that we dont have a connection and we dont
+create them in the "normal" nornir way -- we actually just steal the scrapli connection and
+wrap the scrapli_cfg bits around it.
+
+Args:
+    task: nornir Task object
+
+Returns:
+    ScrapliCfg
+
+Raises:
+    N/A
+```
+
+
+
+    
+
+#### spawn
+`spawn(task: nornir.core.task.Task) ‑> ConnectionPlugin`
+
+```text
+Spawn a ScrapliConfig object for a nornir host
+
+This is a little different than "normal" in that we dont have a connection and we dont
+create them in the "normal" nornir way -- we actually just steal the scrapli connection and
+wrap the scrapli_cfg bits around it.
+
+Args:
+    task: nornir Task object
+
+Returns:
+    ScrapliConfig
+
+Raises:
+    N/A
+```
+
+
+#### Methods
+
+    
+
+##### close
+`close(self) ‑> NoneType`
+
+```text
+Override close method of normal nornir connection so we never close things
+
+Never closing allows us to not accidentally step on the underlying "normal" scrapli conn
+
+Args:
+    N/A
+
+Returns:
+    None
+
+Raises:
+    N/A
+```
+
+
+
+    
+
+##### open
+`open(self, *args: Any, **kwargs: Any) ‑> NoneType`
+
+```text
+Override open method of normal nornir connection so we can coopt an existing conn
+
+Args:
+    args: args for not dealing w/ overridden hings
+    kwargs: kwargs for not dealing w/ overridden hings
+
+Returns:
+    None
+
+Raises:
+    N/A
+```
+
+
+
+
 
 ### ScrapliCore
 
@@ -261,7 +601,7 @@ class ScrapliCore:
             configuration: nornir configuration
 
         Returns:
-            N/A  # noqa: DAR202
+            None
 
         Raises:
             NornirScrapliInvalidPlatform: if no platform or an invalid scrapli/napalm platform
@@ -287,21 +627,20 @@ class ScrapliCore:
 
         if not platform:
             raise NornirScrapliInvalidPlatform(
-                f"No `platform` provided in inventory for host `{hostname}`"
+                f"'platform' not provided in inventory for host `{hostname}`"
             )
 
-        if platform in PLATFORM_MAP:
-            platform = PLATFORM_MAP.get(platform)
+        final_platform: str = PLATFORM_MAP.get(platform, platform)
 
-        if platform == "generic":
+        if final_platform == "generic":
             connection = GenericDriver(**parameters)
         else:
             try:
-                connection = Scrapli(**parameters, platform=platform)  # type: ignore
+                connection = Scrapli(**parameters, platform=final_platform)
             except ScrapliModuleNotFound as exc:
                 raise NornirScrapliInvalidPlatform(
-                    f"Provided platform `{platform}` is not a valid scrapli or napalm platform, "
-                    "or is not a valid scrapli-community platform."
+                    f"Provided platform `{final_platform}` is not a valid scrapli or napalm "
+                    "platform, or is not a valid scrapli-community platform."
                 ) from exc
 
         connection.open()
@@ -315,7 +654,7 @@ class ScrapliCore:
             N/A
 
         Returns:
-            N/A  # noqa: DAR202
+            None
 
         Raises:
             N/A
@@ -341,7 +680,7 @@ Args:
     N/A
 
 Returns:
-    N/A  # noqa: DAR202
+    None
 
 Raises:
     N/A
@@ -352,7 +691,7 @@ Raises:
     
 
 ##### open
-`open(self, hostname: Union[str, NoneType], username: Union[str, NoneType], password: Union[str, NoneType], port: Union[int, NoneType], platform: Union[str, NoneType], extras: Union[Dict[str, Any], NoneType] = None, configuration: Union[nornir.core.configuration.Config, NoneType] = None) ‑> NoneType`
+`open(self, hostname: Optional[str], username: Optional[str], password: Optional[str], port: Optional[int], platform: Optional[str], extras: Optional[Dict[str, Any]] = None, configuration: Optional[nornir.core.configuration.Config] = None) ‑> NoneType`
 
 ```text
 Open a scrapli connection to a device
@@ -368,7 +707,7 @@ Args:
     configuration: nornir configuration
 
 Returns:
-    N/A  # noqa: DAR202
+    None
 
 Raises:
     NornirScrapliInvalidPlatform: if no platform or an invalid scrapli/napalm platform
@@ -420,7 +759,7 @@ class ScrapliNetconf:
             configuration: nornir configuration
 
         Returns:
-            N/A  # noqa: DAR202
+            None
 
         Raises:
             N/A
@@ -457,7 +796,7 @@ class ScrapliNetconf:
             N/A
 
         Returns:
-            N/A  # noqa: DAR202
+            None
 
         Raises:
             N/A
@@ -483,7 +822,7 @@ Args:
     N/A
 
 Returns:
-    N/A  # noqa: DAR202
+    None
 
 Raises:
     N/A
@@ -494,7 +833,7 @@ Raises:
     
 
 ##### open
-`open(self, hostname: Union[str, NoneType], username: Union[str, NoneType], password: Union[str, NoneType], port: Union[int, NoneType], platform: Union[str, NoneType], extras: Union[Dict[str, Any], NoneType] = None, configuration: Union[nornir.core.configuration.Config, NoneType] = None) ‑> NoneType`
+`open(self, hostname: Optional[str], username: Optional[str], password: Optional[str], port: Optional[int], platform: Optional[str], extras: Optional[Dict[str, Any]] = None, configuration: Optional[nornir.core.configuration.Config] = None) ‑> NoneType`
 
 ```text
 Open a scrapli connection to a device
@@ -511,7 +850,7 @@ Args:
     configuration: nornir configuration
 
 Returns:
-    N/A  # noqa: DAR202
+    None
 
 Raises:
     N/A

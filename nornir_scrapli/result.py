@@ -2,6 +2,7 @@
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 from scrapli.response import MultiResponse, Response
+from scrapli_cfg.response import ScrapliCfgResponse
 
 from nornir.core.task import Result
 
@@ -58,12 +59,12 @@ def process_config_result(scrapli_response: Union[Response, MultiResponse]) -> s
     return full_results
 
 
-class ScrapliResult(Result):  # type: ignore
+class ScrapliResult(Result):
     def __init__(
         self,
         host: "Host",
         result: Optional[str],
-        scrapli_response: Optional[Union[Response, MultiResponse]] = None,
+        scrapli_response: Optional[Union[Response, MultiResponse, ScrapliCfgResponse]] = None,
         changed: bool = False,
         **kwargs: Any,
     ):
@@ -94,7 +95,9 @@ class ScrapliResult(Result):  # type: ignore
         self.scrapli_response = scrapli_response
 
     @staticmethod
-    def _process_failed(scrapli_response: Optional[Union[Response, MultiResponse]]) -> bool:
+    def _process_failed(
+        scrapli_response: Optional[Union[Response, MultiResponse, ScrapliCfgResponse]]
+    ) -> bool:
         """
         Process and return string of scrapli response(s)
 
@@ -110,7 +113,7 @@ class ScrapliResult(Result):  # type: ignore
         """
         if scrapli_response is None:
             return False
-        if isinstance(scrapli_response, Response):
+        if isinstance(scrapli_response, (Response, ScrapliCfgResponse)):
             failed: bool = scrapli_response.failed
             return failed
         if any(response.failed for response in scrapli_response):
