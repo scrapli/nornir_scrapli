@@ -35,7 +35,14 @@ from nornir_scrapli.tasks.cfg.diff_config import cfg_diff_config
 from nornir_scrapli.tasks.cfg.get_config import cfg_get_config
 from nornir_scrapli.tasks.cfg.get_version import cfg_get_version
 from nornir_scrapli.tasks.cfg.load_config import cfg_load_config
-from nornir_scrapli.tasks.get_prompt import get_prompt
+from nornir_scrapli.tasks.core.get_prompt import get_prompt
+from nornir_scrapli.tasks.core.send_command import send_command
+from nornir_scrapli.tasks.core.send_commands import send_commands
+from nornir_scrapli.tasks.core.send_commands_from_file import send_commands_from_file
+from nornir_scrapli.tasks.core.send_config import send_config
+from nornir_scrapli.tasks.core.send_configs import send_configs
+from nornir_scrapli.tasks.core.send_configs_from_file import send_configs_from_file
+from nornir_scrapli.tasks.core.send_interactive import send_interactive
 from nornir_scrapli.tasks.netconf.capabilities import netconf_capabilities
 from nornir_scrapli.tasks.netconf.commit import netconf_commit
 from nornir_scrapli.tasks.netconf.delete_config import netconf_delete_config
@@ -47,13 +54,6 @@ from nornir_scrapli.tasks.netconf.lock import netconf_lock
 from nornir_scrapli.tasks.netconf.rpc import netconf_rpc
 from nornir_scrapli.tasks.netconf.unlock import netconf_unlock
 from nornir_scrapli.tasks.netconf.validate import netconf_validate
-from nornir_scrapli.tasks.send_command import send_command
-from nornir_scrapli.tasks.send_commands import send_commands
-from nornir_scrapli.tasks.send_commands_from_file import send_commands_from_file
-from nornir_scrapli.tasks.send_config import send_config
-from nornir_scrapli.tasks.send_configs import send_configs
-from nornir_scrapli.tasks.send_configs_from_file import send_configs_from_file
-from nornir_scrapli.tasks.send_interactive import send_interactive
 
 __all__ = (
     "cfg_abort_config",

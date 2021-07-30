@@ -169,15 +169,15 @@ class ScrapliConfig:
             N/A
 
         """
-        scrapli_cfg_conn: ScrapliCfgPlatform
+        connection: ScrapliCfgPlatform
 
         try:
-            scrapli_cfg_conn = task.host.get_connection("scrapli_cfg", task.nornir.config)
+            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
         except AttributeError:
             task.host.connections["scrapli_cfg"] = ScrapliConfig.spawn(task=task)
-            scrapli_cfg_conn = task.host.get_connection("scrapli_cfg", task.nornir.config)
+            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
 
-        return scrapli_cfg_conn
+        return connection
 
     @staticmethod
     def spawn(task: Task) -> "ConnectionPlugin":
@@ -201,16 +201,20 @@ class ScrapliConfig:
         scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
         scrapli_cfg_parameters = task.host.get_connection_parameters(connection="scrapli_cfg")
 
+        # should always be a dict afaik, but typing doesnt appreciate the possibility it is None
+        extras = scrapli_cfg_parameters.extras or {}
+        # always overwrite `dedicated_connection` as we are *not* having a dedicated connection
+        # since we are wrapping the "normal" scrapli connection!
+        extras["dedicated_connection"] = False
+
         final_scrapli_cfg_parameters: Dict[str, Any] = {
             "conn": scrapli_conn,
-            **scrapli_cfg_parameters.extras,  # type:ignore
+            **extras,
         }
-
-        final_scrapli_cfg_parameters["preserve_connection"] = True
         connection = ScrapliCfg(**final_scrapli_cfg_parameters)
-
         scrapli_config_connection_obj = ScrapliConfig()
-        scrapli_config_connection_obj.connection = connection  # pylint: disable=W0201
+        scrapli_config_connection_obj.connection = connection
+        scrapli_config_connection_obj.open()
         return scrapli_config_connection_obj
 
     def open(self, *args: Any, **kwargs: Any) -> None:
@@ -229,7 +233,7 @@ class ScrapliConfig:
 
         """
         _, _ = args, kwargs
-        self.connection.open()
+        self.connection.prepare()
 
     def close(self) -> None:
         """
@@ -367,15 +371,15 @@ class ScrapliConfig:
             N/A
 
         """
-        scrapli_cfg_conn: ScrapliCfgPlatform
+        connection: ScrapliCfgPlatform
 
         try:
-            scrapli_cfg_conn = task.host.get_connection("scrapli_cfg", task.nornir.config)
+            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
         except AttributeError:
             task.host.connections["scrapli_cfg"] = ScrapliConfig.spawn(task=task)
-            scrapli_cfg_conn = task.host.get_connection("scrapli_cfg", task.nornir.config)
+            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
 
-        return scrapli_cfg_conn
+        return connection
 
     @staticmethod
     def spawn(task: Task) -> "ConnectionPlugin":
@@ -399,16 +403,20 @@ class ScrapliConfig:
         scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
         scrapli_cfg_parameters = task.host.get_connection_parameters(connection="scrapli_cfg")
 
+        # should always be a dict afaik, but typing doesnt appreciate the possibility it is None
+        extras = scrapli_cfg_parameters.extras or {}
+        # always overwrite `dedicated_connection` as we are *not* having a dedicated connection
+        # since we are wrapping the "normal" scrapli connection!
+        extras["dedicated_connection"] = False
+
         final_scrapli_cfg_parameters: Dict[str, Any] = {
             "conn": scrapli_conn,
-            **scrapli_cfg_parameters.extras,  # type:ignore
+            **extras,
         }
-
-        final_scrapli_cfg_parameters["preserve_connection"] = True
         connection = ScrapliCfg(**final_scrapli_cfg_parameters)
-
         scrapli_config_connection_obj = ScrapliConfig()
-        scrapli_config_connection_obj.connection = connection  # pylint: disable=W0201
+        scrapli_config_connection_obj.connection = connection
+        scrapli_config_connection_obj.open()
         return scrapli_config_connection_obj
 
     def open(self, *args: Any, **kwargs: Any) -> None:
@@ -427,7 +435,7 @@ class ScrapliConfig:
 
         """
         _, _ = args, kwargs
-        self.connection.open()
+        self.connection.prepare()
 
     def close(self) -> None:
         """

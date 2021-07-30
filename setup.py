@@ -2,7 +2,7 @@
 """nornir_scrapli"""
 import setuptools
 
-__version__ = "2021.01.30"
+__version__ = "2021.07.30"
 __author__ = "Carl Montanari"
 
 with open("README.md", "r", encoding="utf-8") as f:
