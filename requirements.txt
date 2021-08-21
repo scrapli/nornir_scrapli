@@ -4,5 +4,5 @@ ntc_templates>=1.1.0,<3.0.0
 scrapli>=2021.07.30
 scrapli_cfg>=2021.07.30
 scrapli_community>=2021.01.30
-scrapli_netconf>=2022.01.30a1
+scrapli_netconf>=2021.01.30
 textfsm>=1.1.0,<2.0.0
