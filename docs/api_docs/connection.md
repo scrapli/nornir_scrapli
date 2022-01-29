@@ -519,7 +519,7 @@ Raises:
     
 
 ##### close
-`close(self) ‑> NoneType`
+`close(self) ‑> None`
 
 ```text
 Override close method of normal nornir connection so we never close things
@@ -541,7 +541,7 @@ Raises:
     
 
 ##### open
-`open(self, *args: Any, **kwargs: Any) ‑> NoneType`
+`open(self, *args: Any, **kwargs: Any) ‑> None`
 
 ```text
 Override open method of normal nornir connection so we can coopt an existing conn
@@ -671,7 +671,7 @@ class ScrapliCore:
     
 
 ##### close
-`close(self) ‑> NoneType`
+`close(self) ‑> None`
 
 ```text
 Close a scrapli connection to a device
@@ -691,7 +691,7 @@ Raises:
     
 
 ##### open
-`open(self, hostname: Optional[str], username: Optional[str], password: Optional[str], port: Optional[int], platform: Optional[str], extras: Optional[Dict[str, Any]] = None, configuration: Optional[nornir.core.configuration.Config] = None) ‑> NoneType`
+`open(self, hostname: Optional[str], username: Optional[str], password: Optional[str], port: Optional[int], platform: Optional[str], extras: Optional[Dict[str, Any]] = None, configuration: Optional[nornir.core.configuration.Config] = None) ‑> None`
 
 ```text
 Open a scrapli connection to a device
@@ -813,7 +813,7 @@ class ScrapliNetconf:
     
 
 ##### close
-`close(self) ‑> NoneType`
+`close(self) ‑> None`
 
 ```text
 Close a scrapli netconf connection to a device
@@ -833,7 +833,7 @@ Raises:
     
 
 ##### open
-`open(self, hostname: Optional[str], username: Optional[str], password: Optional[str], port: Optional[int], platform: Optional[str], extras: Optional[Dict[str, Any]] = None, configuration: Optional[nornir.core.configuration.Config] = None) ‑> NoneType`
+`open(self, hostname: Optional[str], username: Optional[str], password: Optional[str], port: Optional[int], platform: Optional[str], extras: Optional[Dict[str, Any]] = None, configuration: Optional[nornir.core.configuration.Config] = None) ‑> None`
 
 ```text
 Open a scrapli connection to a device
