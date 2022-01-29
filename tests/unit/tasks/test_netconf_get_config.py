@@ -8,7 +8,7 @@ def test_netconf_get_config(nornir_netconf, monkeypatch):
     def mock_open(cls):
         pass
 
-    def mock_get_config(cls, source, filters, filter_type):
+    def mock_get_config(cls, source, filter_, filter_type):
         response = Response(host="fake_as_heck", channel_input="blah")
         response.record_response(b"some stuff about whatever")
         return response

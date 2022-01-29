@@ -8,7 +8,7 @@ from nornir_scrapli.result import ScrapliResult, process_command_result
 def netconf_get_config(
     task: Task,
     source: str = "running",
-    filters: Optional[Union[str, List[str]]] = None,
+    filter_: Optional[Union[str, List[str]]] = None,
     filter_type: str = "subtree",
 ) -> Result:
     """
@@ -17,7 +17,7 @@ def netconf_get_config(
     Args:
         task: nornir task object
         source: configuration source to get; typically one of running|startup|candidate
-        filters: string or list of strings of filters to apply to configuration
+        filter_: string of filter(s) to apply to configuration
         filter_type: type of filter; subtree|xpath
 
     Returns:
@@ -30,7 +30,7 @@ def netconf_get_config(
     """
     scrapli_conn = task.host.get_connection("scrapli_netconf", task.nornir.config)
     scrapli_response = scrapli_conn.get_config(
-        source=source, filters=filters, filter_type=filter_type
+        source=source, filter_=filter_, filter_type=filter_type
     )
 
     result = ScrapliResult(

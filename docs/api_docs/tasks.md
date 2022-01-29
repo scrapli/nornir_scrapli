@@ -400,7 +400,7 @@ Raises:
     
 
 #### netconf_get_config
-`netconf_get_config(task: nornir.core.task.Task, source: str = 'running', filters: Union[str, List[str], NoneType] = None, filter_type: str = 'subtree') ‑> nornir.core.task.Result`
+`netconf_get_config(task: nornir.core.task.Task, source: str = 'running', filter_: Union[str, List[str], ForwardRef(None)] = None, filter_type: str = 'subtree') ‑> nornir.core.task.Result`
 
 ```text
 Get config from the device with scrapli_netconf
@@ -408,7 +408,7 @@ Get config from the device with scrapli_netconf
 Args:
     task: nornir task object
     source: configuration source to get; typically one of running|startup|candidate
-    filters: string or list of strings of filters to apply to configuration
+    filter_: string of filter(s) to apply to configuration
     filter_type: type of filter; subtree|xpath
 
 Returns:
@@ -517,7 +517,7 @@ Raises:
     
 
 #### send_command
-`send_command(task: nornir.core.task.Task, command: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
+`send_command(task: nornir.core.task.Task, command: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], ForwardRef(None)] = None, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send a single command to device using scrapli
@@ -546,7 +546,7 @@ Raises:
     
 
 #### send_commands
-`send_commands(task: nornir.core.task.Task, commands: List[str], strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
+`send_commands(task: nornir.core.task.Task, commands: List[str], strip_prompt: bool = True, failed_when_contains: Union[str, List[str], ForwardRef(None)] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send a list of commands to device using scrapli
@@ -580,7 +580,7 @@ Raises:
     
 
 #### send_commands_from_file
-`send_commands_from_file(task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
+`send_commands_from_file(task: nornir.core.task.Task, file: str, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], ForwardRef(None)] = None, stop_on_failed: bool = False, eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send a list of commands from a file to device using scrapli
@@ -613,7 +613,7 @@ Raises:
     
 
 #### send_config
-`send_config(task: nornir.core.task.Task, config: str, dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
+`send_config(task: nornir.core.task.Task, config: str, dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], ForwardRef(None)] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send a config to device using scrapli
@@ -656,7 +656,7 @@ Raises:
     
 
 #### send_configs
-`send_configs(task: nornir.core.task.Task, configs: List[str], dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
+`send_configs(task: nornir.core.task.Task, configs: List[str], dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], ForwardRef(None)] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send configs to device using scrapli
@@ -699,7 +699,7 @@ Raises:
     
 
 #### send_configs_from_file
-`send_configs_from_file(task: nornir.core.task.Task, file: str, dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], NoneType] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
+`send_configs_from_file(task: nornir.core.task.Task, file: str, dry_run: Optional[bool] = None, strip_prompt: bool = True, failed_when_contains: Union[str, List[str], ForwardRef(None)] = None, stop_on_failed: bool = False, privilege_level: str = '', eager: bool = False, timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send configs from a file to device using scrapli
@@ -742,7 +742,7 @@ Raises:
     
 
 #### send_interactive
-`send_interactive(task: nornir.core.task.Task, interact_events: List[Tuple[str, str, Optional[bool]]], failed_when_contains: Union[str, List[str], NoneType] = None, privilege_level: str = '', timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
+`send_interactive(task: nornir.core.task.Task, interact_events: List[Tuple[str, str, Optional[bool]]], failed_when_contains: Union[str, List[str], ForwardRef(None)] = None, privilege_level: str = '', timeout_ops: Optional[float] = None) ‑> nornir.core.task.Result`
 
 ```text
 Send inputs in an interactive fashion using scrapli; usually used to handle prompts

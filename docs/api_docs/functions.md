@@ -43,7 +43,7 @@ __all__ = ("print_structured_result",)
     
 
 #### print_structured_result
-`print_structured_result(result: nornir.core.task.AggregatedResult, failed: bool = False, severity_level: int = 20, parser: str = 'textfsm', to_dict: bool = True, fail_to_string: bool = False) ‑> NoneType`
+`print_structured_result(result: nornir.core.task.AggregatedResult, failed: bool = False, severity_level: int = 20, parser: str = 'textfsm', to_dict: bool = True, fail_to_string: bool = False) ‑> None`
 
 ```text
 Prints the :obj:`nornir.core.task.Result` from a previous task to screen
