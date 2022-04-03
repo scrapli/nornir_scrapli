@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """nornir_scrapli"""
 from copy import copy
-
 import setuptools
 
 __version__ = "2022.01.30"
