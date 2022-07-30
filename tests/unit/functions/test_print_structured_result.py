@@ -132,7 +132,7 @@ def test_print_structured_result(capsys, structured_result):
 
 
 @pytest.mark.skipif(
-    sys.version_info.minor > 9, reason="genie not currently available for python 3.10"
+    sys.version_info.minor > 10, reason="genie not currently available for python 3.11"
 )
 @pytest.mark.parametrize(
     "structured_result",
@@ -155,7 +155,7 @@ def test_print_structured_result_genie(capsys, structured_result):
 
 
 @pytest.mark.skipif(
-    sys.version_info.minor > 9, reason="genie not currently available for python 3.10"
+    sys.version_info.minor > 10, reason="genie not currently available for python 3.11"
 )
 @pytest.mark.parametrize(
     "structured_result",

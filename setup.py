@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 """nornir_scrapli"""
+from copy import copy
+
 import setuptools
 
-__version__ = "2022.01.30"
+__version__ = "2022.07.30"
 __author__ = "Carl Montanari"
 
 with open("README.md", "r", encoding="utf-8") as f:
@@ -15,7 +17,7 @@ EXTRAS_REQUIRE = {
     "genie": [],
 }
 
-for extra in EXTRAS_REQUIRE:
+for extra in copy(EXTRAS_REQUIRE):
     with open(f"requirements-{extra}.txt", "r", encoding="utf-8") as f:
         EXTRAS_REQUIRE[extra] = f.read().splitlines()
 

@@ -107,6 +107,13 @@ class ScrapliCore:
         # options from "extras" (connection options)
         parameters.update(extras)
 
+        if extras.get("channel_log", False) is True:
+            # if channel_log value is just "True" we append the hostname so that we don't have a
+            # single file for potentially hundreds (or more!) of devices which obviously won't
+            # work very well. don't update the extras dict directly as that is probably coming from
+            # group/default vars, so just push this right onto the new parameters' dict.
+            parameters.update({"channel_log": f"scrapli_channel_{hostname}.log"})
+
         if not platform:
             raise NornirScrapliInvalidPlatform(
                 f"'platform' not provided in inventory for host `{hostname}`"
@@ -624,6 +631,13 @@ class ScrapliCore:
         # will override any of the configs from global nornir config (such as ssh config file) with
         # options from "extras" (connection options)
         parameters.update(extras)
+
+        if extras.get("channel_log", False) is True:
+            # if channel_log value is just "True" we append the hostname so that we don't have a
+            # single file for potentially hundreds (or more!) of devices which obviously won't
+            # work very well. don't update the extras dict directly as that is probably coming from
+            # group/default vars, so just push this right onto the new parameters' dict.
+            parameters.update({"channel_log": f"scrapli_channel_{hostname}.log"})
 
         if not platform:
             raise NornirScrapliInvalidPlatform(
