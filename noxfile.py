@@ -42,7 +42,7 @@ def parse_requirements(dev: bool = True) -> Dict[str, str]:
 
     for requirement in requirements_lines:
         parsed_requirement = re.match(
-            pattern=r"^([a-z0-9\-\_\.]+)([><=]{1,2}\S*)(?:.*)$",
+            pattern=r"^([a-z0-9\-\_\.\[\]]+)([><=]{1,2}\S*)(?:.*)$",
             string=requirement,
             flags=re.I | re.M,
         )
