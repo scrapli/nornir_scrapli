@@ -2,107 +2,257 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://scrapli.github.io/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/about/code_of_conduct/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/about/contributing/</loc>
-         <lastmod>2022-07-26</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://scrapli.github.io/api_docs/connection/</loc>
-         <lastmod>2022-07-26</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://scrapli.github.io/api_docs/exceptions/</loc>
-         <lastmod>2022-07-26</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://scrapli.github.io/api_docs/functions/</loc>
-         <lastmod>2022-07-26</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://scrapli.github.io/api_docs/helper/</loc>
-         <lastmod>2022-07-26</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://scrapli.github.io/api_docs/result/</loc>
-         <lastmod>2022-07-26</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://scrapli.github.io/api_docs/tasks/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/more_scrapli/scrapli/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/more_scrapli/scrapli_cfg/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/more_scrapli/scrapli_community/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/more_scrapli/scrapli_netconf/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/more_scrapli/scrapli_replay/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>None</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/connection/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/exceptions/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/helper/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/result/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/functions/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/functions/print_structured_result/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/cfg/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/cfg/abort_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/cfg/commit_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/cfg/diff_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/cfg/get_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/cfg/get_version/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/cfg/load_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/get_prompt/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/send_command/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/send_commands/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/send_commands_from_file/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/send_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/send_configs/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/send_configs_from_file/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/core/send_interactive/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/capabilities/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/commit/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/delete_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/discard/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/edit_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/get/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/get_config/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/lock/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/rpc/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/unlock/</loc>
+         <lastmod>2022-10-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://scrapli.github.io/reference/tasks/netconf/validate/</loc>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/user_guide/available_functions/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/user_guide/available_tasks/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/user_guide/basic_usage/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/user_guide/installation/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/user_guide/project_details/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/user_guide/quickstart/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://scrapli.github.io/user_guide/versioning/</loc>
-         <lastmod>2022-07-26</lastmod>
+         <lastmod>2022-10-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
