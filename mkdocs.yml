@@ -26,13 +26,7 @@ nav:
       - Basic Usage: user_guide/basic_usage.md
       - Available Tasks: user_guide/available_tasks.md
       - Available Functions: user_guide/available_functions.md
-  - API Docs:
-    - Functions: api_docs/functions.md
-    - Tasks: api_docs/tasks.md
-    - Connection: api_docs/connection.md
-    - Exceptions: api_docs/exceptions.md
-    - Helper: api_docs/helper.md
-    - Result: api_docs/result.md
+  - API Reference: reference/
   - More Scrapli:
     - Scrapli: more_scrapli/scrapli.md
     - Scrapli Netconf: more_scrapli/scrapli_netconf.md
@@ -70,3 +64,17 @@ extra:
 
 plugins:
     - search
+    - gen-files:
+        scripts:
+        - docs/generate.py
+    - mkdocstrings:
+        handlers:
+          python:
+            paths: [ nornir_scrapli ]
+            options:
+              show_signature_annotations: true
+        watch:
+        - nornir_scrapli
+    - section-index
+    - literate-nav:
+        nav_file: SUMMARY.md

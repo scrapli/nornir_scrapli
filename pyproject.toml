@@ -1,13 +1,91 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nornir_scrapli"
+dynamic = [
+    "version",
+    "dependencies",
+    "optional-dependencies",
+]
+description = "Scrapli's plugin for Nornir"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.7"
+authors = [
+    { name = "Carl Montanari", email = "carl.r.montanari@gmail.com" },
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = [
+    "ssh",
+    "telnet",
+    "netconf",
+    "automation",
+    "network",
+    "cisco",
+    "iosxr",
+    "iosxe",
+    "nxos",
+    "arista",
+    "eos",
+    "juniper",
+    "junos",
+]
+
+[project.urls]
+Homepage = "https://github.com/scrapli/nornir_scrapli"
+Docs = "https://scrapli.github.io/nornir_scrapli/"
+
+[project.entry-points."nornir.plugins.connections"]
+scrapli = "nornir_scrapli.connection:ScrapliCore"
+scrapli_cfg= "nornir_scrapli.connection:ScrapliConfig"
+scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
+
+[tool.setuptools]
+packages = [
+    "nornir_scrapli"
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "nornir_scrapli.__version__" }
+dependencies = { file = "requirements.txt" }
+optional-dependencies.dev = { file = [
+    "requirements-dev.txt",
+    "requirements-genie.txt",
+] }
+optional-dependencies.docs = { file = "requirements-docs.txt" }
+optional-dependencies.genie = { file = "requirements-genie.txt" }
+
+[tool.setuptools.package-data]
+nornir_scrapli = [
+    "py.typed"
+]
+
 [tool.coverage.run]
-source = ["nornir_scrapli/"]
+source = [
+    "nornir_scrapli/"
+]
 
 [tool.coverage.report]
 sort = "cover"
 
 [tool.black]
 line-length = 100
-target-version = ["py311"]
-
+target-version = [
+    "py311",
+]
 
 [tool.pylama]
 linters = "mccabe,pycodestyle,pylint"

@@ -32,7 +32,7 @@ cov_unit:
 
 .PHONY: docs
 docs:
-	python docs/generate/generate_docs.py
+	python docs/generate.py
 
 test_docs:
 	mkdocs build --clean --strict
