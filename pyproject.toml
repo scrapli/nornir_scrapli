@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -53,11 +53,6 @@ Docs = "https://scrapli.github.io/nornir_scrapli/"
 scrapli = "nornir_scrapli.connection:ScrapliCore"
 scrapli_cfg= "nornir_scrapli.connection:ScrapliConfig"
 scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
-
-[tool.setuptools]
-packages = [
-    "nornir_scrapli"
-]
 
 [tool.setuptools.dynamic]
 version = { attr = "nornir_scrapli.__version__" }
