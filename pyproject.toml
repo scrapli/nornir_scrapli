@@ -30,19 +30,19 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 keywords = [
-    "ssh",
-    "telnet",
-    "netconf",
-    "automation",
-    "network",
-    "cisco",
-    "iosxr",
-    "iosxe",
-    "nxos",
     "arista",
+    "automation",
+    "cisco",
     "eos",
+    "iosxe",
+    "iosxr",
     "juniper",
     "junos",
+    "netconf",
+    "network",
+    "nxos",
+    "ssh",
+    "telnet",
 ]
 
 [project.urls]
