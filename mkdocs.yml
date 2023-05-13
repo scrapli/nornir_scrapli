@@ -33,6 +33,7 @@ nav:
     - Scrapli Community: more_scrapli/scrapli_community.md
     - Scrapli Cfg: more_scrapli/scrapli_cfg.md
     - Scrapli Replay: more_scrapli/scrapli_replay.md
+    - Scrapli SCP: more_scrapli/scrapli_scp.md
   - Other:
     - Contributing: about/contributing.md
     - Code of Conduct: about/code_of_conduct.md
@@ -44,8 +45,8 @@ markdown_extensions:
     - codehilite
     - extra
     - mdx_gh_links:
-        user: mkdocs
-        repo: mkdocs
+        user: scrapli
+        repo: nornir_scrapli
     - pymdownx.superfences
     - pymdownx.highlight:
         use_pygments: True
@@ -73,8 +74,8 @@ plugins:
             paths: [ nornir_scrapli ]
             options:
               show_signature_annotations: true
-        watch:
-        - nornir_scrapli
     - section-index
-    - literate-nav:
-        nav_file: SUMMARY.md
+    - literate-nav
+
+watch:
+    - nornir_scrapli
