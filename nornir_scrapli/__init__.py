@@ -1,3 +1,3 @@
 """nornir_scrapli"""
 
-__version__ = "2023.01.30.post1"
+__version__ = "2023.07.30"
