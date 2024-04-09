@@ -1,4 +1,5 @@
 """nornir_scrapli.connection"""
+
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from scrapli import Scrapli

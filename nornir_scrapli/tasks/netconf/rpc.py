@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.netconf_rpc"""
+
 from nornir.core.task import Result, Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 

@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.send_configs"""
+
 from typing import List, Optional, Union
 
 from nornir.core.task import Result, Task

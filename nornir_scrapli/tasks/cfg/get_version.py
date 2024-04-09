@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.cfg.get_version"""
+
 from nornir.core.task import Result, Task
 from nornir_scrapli.connection import ScrapliConfig
 

@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.cfg_commit_config"""
+
 from nornir.core.task import Result, Task
 from nornir_scrapli.connection import ScrapliConfig
 from nornir_scrapli.result import ScrapliResult

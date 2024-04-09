@@ -1,4 +1,5 @@
 """nornir_scrapli.noxfile"""
+
 import re
 import sys
 from pathlib import Path

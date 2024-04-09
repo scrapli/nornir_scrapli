@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.cfg_load_config"""
+
 from typing import Any
 
 from nornir.core.task import Result, Task

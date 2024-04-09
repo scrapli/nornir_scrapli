@@ -1,4 +1,5 @@
 """nornir_scrapli.examples.basic_netconf_usage.demo"""
+
 from nornir_utils.plugins.functions.print_result import print_result
 
 from nornir import InitNornir

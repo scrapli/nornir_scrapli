@@ -1,4 +1,5 @@
 """nornir_scrapli.examples.structured_data.demo"""
+
 from nornir_utils.plugins.functions import print_result
 
 from nornir import InitNornir

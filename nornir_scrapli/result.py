@@ -1,4 +1,5 @@
 """nornir_scrapli.result"""
+
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 from scrapli.response import MultiResponse, Response

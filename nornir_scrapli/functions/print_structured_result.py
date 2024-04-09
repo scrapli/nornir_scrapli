@@ -1,4 +1,5 @@
 """nornir_scrapli.functions.print_structured_result"""
+
 import logging
 import threading
 

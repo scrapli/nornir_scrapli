@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.netconf_capabilities"""
+
 from nornir.core.task import Result, Task
 
 

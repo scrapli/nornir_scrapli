@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.netconf_edit_config"""
+
 from typing import Optional
 
 from nornir.core.task import Result, Task

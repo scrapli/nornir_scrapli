@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.get_prompt"""
+
 from nornir.core.task import Result, Task
 
 

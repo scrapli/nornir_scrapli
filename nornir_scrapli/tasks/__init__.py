@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks"""
+
 from nornir_scrapli.tasks.cfg.abort_config import cfg_abort_config
 from nornir_scrapli.tasks.cfg.commit_config import cfg_commit_config
 from nornir_scrapli.tasks.cfg.diff_config import cfg_diff_config

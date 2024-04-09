@@ -1,4 +1,5 @@
 """nornir_scrapli.helper"""
+
 import difflib
 
 ANSI_GREEN = "\033[92m"

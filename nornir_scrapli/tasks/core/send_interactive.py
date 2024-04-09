@@ -1,4 +1,5 @@
 """nornir_scrapli.tasks.send_interactive"""
+
 from typing import List, Optional, Tuple, Union
 
 from nornir.core.task import Result, Task
