@@ -122,7 +122,7 @@ def test_connection_global_ssh_config_setting_overridden(nornir_global_ssh, monk
         "scrapli_netconf", nornir_global_ssh.config
     )
     assert nornir_global_ssh.config.ssh.config_file == "notarealfile!"
-    assert scrapli_conn.ssh_config_file == resolve_ssh_config("")
+    assert scrapli_conn.ssh_config_file == "SYSTEM_TRANSPORT_SSH_CONFIG_TRUE"
 
 
 def test_connection_global_ssh_config_setting_no_connection_option_ssh(
