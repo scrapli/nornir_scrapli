@@ -85,7 +85,7 @@ target-version = [
 
 [tool.pylama]
 linters = "mccabe,pycodestyle,pylint"
-skip = ".nox/*,.private/*,build/*,docs/*,private/*,site/*,tests/*,venv/*"
+skip = ".nox/*,build/*,tests/*,venv/*"
 
 [tool.pylama.pycodestyle]
 max_line_length = 100

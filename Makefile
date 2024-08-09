@@ -1,7 +1,7 @@
 lint:
 	python -m isort .
 	python -m black .
-	python -m pylama .
+	python -m pylint nornir_scrapli/
 	python -m pydocstyle .
 	python -m mypy --strict nornir_scrapli/
 
