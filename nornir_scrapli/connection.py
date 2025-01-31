@@ -30,7 +30,7 @@ PLATFORM_MAP = {
 class ScrapliCore:
     """Scrapli connection plugin for nornir"""
 
-    def open(
+    def open(  # pylint: disable=R0917
         self,
         hostname: Optional[str],
         username: Optional[str],
@@ -234,7 +234,7 @@ class ScrapliConfig:
 class ScrapliNetconf:
     """Scrapli NETCONF connection plugin for nornir"""
 
-    def open(
+    def open(  # pylint: disable=R0917
         self,
         hostname: Optional[str],
         username: Optional[str],

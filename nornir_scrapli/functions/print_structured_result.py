@@ -11,7 +11,7 @@ from nornir.core.task import AggregatedResult, MultiResult, Result
 LOCK = threading.Lock()
 
 
-def print_structured_result(
+def print_structured_result(  # pylint: disable=R0917
     result: AggregatedResult,
     failed: bool = False,
     severity_level: int = logging.INFO,

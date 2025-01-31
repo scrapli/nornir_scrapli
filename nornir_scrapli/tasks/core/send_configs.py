@@ -7,7 +7,7 @@ from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 from nornir_scrapli.result import ScrapliResult, process_config_result
 
 
-def send_configs(
+def send_configs(  # pylint: disable=R0917
     task: Task,
     configs: List[str],
     dry_run: Optional[bool] = None,

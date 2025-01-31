@@ -137,5 +137,5 @@ def test_connection_global_ssh_config_setting_no_connection_option_ssh(
     scrapli_conn = nornir_global_ssh_no_connection_option_ssh.inventory.hosts[
         "sea-ios-1"
     ].get_connection("scrapli", nornir_global_ssh_no_connection_option_ssh.config)
-    assert nornir_global_ssh_no_connection_option_ssh.config.ssh.config_file is False
-    assert scrapli_conn.ssh_config_file == ""
+    assert not nornir_global_ssh_no_connection_option_ssh.config.ssh.config_file
+    assert scrapli_conn.ssh_config_file == "SYSTEM_TRANSPORT_SSH_CONFIG_TRUE"

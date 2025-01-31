@@ -163,6 +163,6 @@ def nornir_global_ssh_no_connection_option_ssh():
         },
         dry_run=False,
         logging={"enabled": False},
-        ssh={"config_file": False},
+        ssh={"config_file": ""},
     )
     return nornir_global_ssh_no_connection_option_ssh
