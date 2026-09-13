@@ -16,9 +16,6 @@ def netconf_capabilities(
         Result: nornir result object with Result.result value set to a list of strings representing
             the device capabilities
 
-    Raises:
-        N/A
-
     """
     scrapli_conn = task.host.get_connection("scrapli_netconf", task.nornir.config)
 

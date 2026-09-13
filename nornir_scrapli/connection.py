@@ -110,14 +110,8 @@ class ScrapliCore:
         """
         Close a scrapli connection to a device
 
-        Args:
-            N/A
-
         Returns:
             None
-
-        Raises:
-            N/A
 
         """
         self.connection.close()
@@ -142,9 +136,6 @@ class ScrapliConfig:
 
         Returns:
             ScrapliCfg
-
-        Raises:
-            N/A
 
         """
         connection: ScrapliCfgPlatform
@@ -171,9 +162,6 @@ class ScrapliConfig:
 
         Returns:
             ScrapliConfig
-
-        Raises:
-            N/A
 
         """
         scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
@@ -206,9 +194,6 @@ class ScrapliConfig:
         Returns:
             None
 
-        Raises:
-            N/A
-
         """
         _, _ = args, kwargs
         self.connection.prepare()
@@ -219,14 +204,8 @@ class ScrapliConfig:
 
         Never closing allows us to not accidentally step on the underlying "normal" scrapli conn
 
-        Args:
-            N/A
-
         Returns:
             None
-
-        Raises:
-            N/A
 
         """
 
@@ -261,9 +240,6 @@ class ScrapliNetconf:
         Returns:
             None
 
-        Raises:
-            N/A
-
         """
         # platform is irrelevant for scrapli netconf for now
         _ = platform
@@ -292,14 +268,8 @@ class ScrapliNetconf:
         """
         Close a scrapli netconf connection to a device
 
-        Args:
-            N/A
-
         Returns:
             None
-
-        Raises:
-            N/A
 
         """
         self.connection.close()

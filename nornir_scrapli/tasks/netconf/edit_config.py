@@ -32,9 +32,6 @@ def netconf_edit_config(
         Result: nornir result object with Result.result value set the string result of the
             get_config operation
 
-    Raises:
-        N/A
-
     """
     scrapli_conn = task.host.get_connection("scrapli_netconf", task.nornir.config)
 

@@ -1,230 +1,128 @@
-"""nornir_scrapli.noxfile"""
+"""Run project checks in locked uv environments."""
 
-import os
-import re
-import sys
 from pathlib import Path
-from typing import Dict, List
 
 import nox
 
-nox.options.error_on_missing_interpreters = False
-nox.options.stop_on_first_error = False
-nox.options.default_venv_backend = "venv"
-
-PRE = bool(os.environ.get("PRE_RELEASE"))
-
-
-def parse_requirements(dev: bool = True) -> Dict[str, str]:
-    """
-    Parse requirements file
-
-    Args:
-        dev: parse dev requirements (or not)
-
-    Returns:
-        dict: dict of parsed requirements
-
-    Raises:
-        N/A
-
-    """
-    requirements = {}
-    requirements_file = "requirements.txt" if not dev else "requirements-dev.txt"
-
-    with open(requirements_file, "r", encoding="utf-8") as f:
-        requirements_file_lines = f.readlines()
-
-    requirements_lines: List[str] = [
-        line
-        for line in requirements_file_lines
-        if not line.startswith("-r") and not line.startswith("#") and not line.startswith("-e")
-    ]
-    editable_requirements_lines: List[str] = [
-        line for line in requirements_file_lines if line.startswith("-e")
-    ]
-
-    for requirement in requirements_lines:
-        parsed_requirement = re.match(
-            pattern=r"^([a-z0-9\-\_\.\[\]]+)([><=]{1,2}\S*)(?:.*)$",
-            string=requirement,
-            flags=re.I | re.M,
-        )
-        requirements[parsed_requirement.groups()[0]] = parsed_requirement.groups()[1]
-
-    for requirement in editable_requirements_lines:
-        parsed_requirement = re.match(
-            pattern=r"^-e\s.*(?:#egg=)(\w+)$", string=requirement, flags=re.I | re.M
-        )
-        requirements[parsed_requirement.groups()[0]] = requirement
-
-    return requirements
+nox.options.default_venv_backend = "uv"
+nox.options.error_on_missing_interpreters = True
+nox.options.sessions = [
+    "unit_tests-3.13",
+    "isort",
+    "black",
+    "pylint",
+    "pydocstyle",
+    "mypy",
+    "darglint",
+]
 
 
-REQUIREMENTS: Dict[str, str] = parse_requirements(dev=False)
-DEV_REQUIREMENTS: Dict[str, str] = parse_requirements(dev=True)
-PLATFORM: str = sys.platform
-SKIP_LIST: List[str] = []
-
-
-def _get_install_test_args() -> List[str]:
-    args = [".[dev]"]
-
-    if PRE:
-        args.append("--pre")
-
-    return args
-
-
-@nox.session(python=["3.9", "3.10", "3.11", "3.12", "3.13"])
-def unit_tests(session):
-    """
-    Nox run unit tests
-
-    Args:
-        session: nox session
-
-    Returns:
-        None
-
-    Raises:
-        N/A
-
-    """
-    if f"unit_tests-{PLATFORM}-{session.python}" in SKIP_LIST:
-        return
-
-    session.install("-U", "setuptools", "wheel", "pip")
-    session.install(*_get_install_test_args())
+def sync(session, group, *args):
+    """Install locked dependencies into the session environment."""
     session.run(
-        "python",
-        "-m",
-        "pytest",
-        "--cov=nornir_scrapli",
-        "--cov-report",
-        "xml",
-        "--cov-report",
-        "term",
-        "tests/unit",
-        "-v",
+        "uv",
+        "sync",
+        "--locked",
+        "--python",
+        str(session.python),
+        "--no-default-groups",
+        "--group",
+        group,
+        "--no-editable",
+        *args,
+        env={"UV_PROJECT_ENVIRONMENT": session.virtualenv.location},
+        external=True,
     )
 
 
-@nox.session(python=["3.13"])
+@nox.session(python=["3.10", "3.11", "3.12", "3.13", "3.14"])
+def unit_tests(session):
+    """Run unit tests on supported Python versions."""
+    sync(session, "test")
+    package_path = session.run(
+        "python",
+        "-I",
+        "-c",
+        "import pathlib, nornir_scrapli; print(pathlib.Path(nornir_scrapli.__file__).parent)",
+        silent=True,
+    ).strip()
+    session.run(
+        "pytest",
+        f"--cov={package_path}",
+        "--cov-report=xml",
+        "--cov-report=term",
+        "tests/unit",
+        *session.posargs,
+    )
+
+
+@nox.session(python="3.13")
+def genie(session):
+    """Exercise optional parsers on a compatible interpreter."""
+    sync(session, "test", "--extra", "genie")
+    session.run("python", "-c", "import genie.conf; import genie.libs.parser; import pyats")
+    session.run("pytest", "tests/unit", *session.posargs)
+
+
+@nox.session(python="3.13")
 def isort(session):
-    """
-    Nox run isort
-
-    Args:
-        session: nox session
-
-    Returns:
-        None
-
-    Raises:
-        N/A
-
-    """
-    session.install(f"toml{DEV_REQUIREMENTS['toml']}")
-    session.install(f"isort{DEV_REQUIREMENTS['isort']}")
-    session.run("python", "-m", "isort", "-c", ".")
+    """Check import ordering."""
+    sync(session, "lint")
+    session.run("isort", "--check-only", ".")
 
 
-@nox.session(python=["3.13"])
+@nox.session(python="3.13")
 def black(session):
-    """
-    Nox run black
-
-    Args:
-        session: nox session
-
-    Returns:
-        None
-
-    Raises:
-        N/A
-
-    """
-    session.install(f"toml{DEV_REQUIREMENTS['toml']}")
-    session.install(f"black{DEV_REQUIREMENTS['black']}")
-    session.run("python", "-m", "black", "--check", ".")
+    """Check formatting."""
+    sync(session, "lint")
+    session.run("black", "--check", ".")
 
 
-@nox.session(python=["3.13"])
+@nox.session(python="3.13")
 def pylint(session):
-    """
-    Nox run pylint
-
-    Args:
-        session: nox session
-
-    Returns:
-        None
-
-    Raises:
-        N/A
-
-    """
-    session.install(*_get_install_test_args())
-    session.run("python", "-m", "pylint", "nornir_scrapli/")
+    """Run pylint."""
+    sync(session, "lint")
+    session.run("pylint", "nornir_scrapli/")
 
 
-@nox.session(python=["3.13"])
+@nox.session(python="3.13")
 def pydocstyle(session):
-    """
-    Nox run pydocstyle
-
-    Args:
-        session: nox session
-
-    Returns:
-        None
-
-    Raises:
-        N/A
-
-    """
-    session.install(f"toml{DEV_REQUIREMENTS['toml']}")
-    session.install(f"pydocstyle{DEV_REQUIREMENTS['pydocstyle']}")
-    session.run("python", "-m", "pydocstyle", ".")
+    """Check docstrings."""
+    sync(session, "lint")
+    session.run("pydocstyle", "nornir_scrapli/")
 
 
-@nox.session(python=["3.13"])
+@nox.session(python="3.13")
 def mypy(session):
-    """
-    Nox run mypy
-
-    Args:
-        session: nox session
-
-    Returns:
-        None
-
-    Raises:
-        N/A
-
-    """
-    session.install(".")
-    session.install(f"toml{DEV_REQUIREMENTS['toml']}")
-    session.install(f"mypy{DEV_REQUIREMENTS['mypy']}")
-    session.run("python", "-m", "mypy", "--strict", "nornir_scrapli/")
+    """Check types against the minimum supported Python version."""
+    sync(session, "lint")
+    session.run("mypy", "--strict", "nornir_scrapli/")
 
 
-@nox.session(python=["3.13"])
+@nox.session(python="3.13")
 def darglint(session):
-    """
-    Nox run darglint
-
-    Args:
-        session: nox session
-
-    Returns:
-        None
-
-    Raises:
-        N/A
-
-    """
-    session.install(f"darglint{DEV_REQUIREMENTS['darglint']}")
+    """Check docstring signatures."""
+    sync(session, "lint")
     for file in Path("nornir_scrapli").rglob("*.py"):
-        session.run("darglint", f"{file.absolute()}")
+        session.run("darglint", str(file))
+
+
+@nox.session(python="3.13")
+def docs(session):
+    """Build documentation in strict mode."""
+    sync(session, "docs")
+    session.run("mkdocs", "build", "--clean", "--strict")
+
+
+@nox.session(python="3.13")
+def build(session):
+    """Build distributions with locked build tools."""
+    sync(session, "build")
+    session.run(
+        "uv",
+        "build",
+        "--no-build-isolation",
+        "--python",
+        session.virtualenv.location,
+        external=True,
+    )

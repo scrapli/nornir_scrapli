@@ -39,7 +39,7 @@ nornir_scrapli -- scrapli's plugin for nornir
 
 ## Requirements
 
-MacOS or \*nix<sup>1</sup>, Python 3.7+
+MacOS or \*nix<sup>1</sup>, Python 3.10–3.14 (development defaults to Python 3.13)
 
 <sup>1</sup> Although many parts of scrapli *do* run on Windows, Windows is not officially supported
 

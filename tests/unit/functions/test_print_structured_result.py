@@ -1,4 +1,4 @@
-import sys
+from importlib.util import find_spec
 
 import pytest
 from scrapli.response import Response
@@ -112,7 +112,7 @@ TEST_AGG_RESULT[TEST_HOST.name] = TEST_MULTI_RESULT
 
 
 @pytest.mark.skipif(
-    sys.version_info.minor > 10, reason="genie not currently available for python 3.11"
+    find_spec("genie") is None, reason="optional Genie dependencies are not installed"
 )
 @pytest.mark.parametrize(
     "structured_result",
@@ -155,7 +155,7 @@ def test_print_structured_result(capsys, structured_result):
 
 
 @pytest.mark.skipif(
-    sys.version_info.minor > 10, reason="genie not currently available for python 3.11"
+    find_spec("genie") is None, reason="optional Genie dependencies are not installed"
 )
 @pytest.mark.parametrize(
     "structured_result",

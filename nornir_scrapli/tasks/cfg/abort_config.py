@@ -16,9 +16,6 @@ def cfg_abort_config(task: Task) -> Result:
         Result: nornir result object with Result.result value set the string result of the
             load_config operation
 
-    Raises:
-        N/A
-
     """
     scrapli_cfg_conn = ScrapliConfig.get_connection(task=task)
 
