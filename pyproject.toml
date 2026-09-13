@@ -117,7 +117,7 @@ source = [
 line-length = 100
 target-version = "py310"
 include = [
-    "noxfile.py",
+    "*.py",
     "docs/generate.py",
     "nornir_scrapli/**/*.py",
     "tests/**/*.py",
@@ -130,12 +130,13 @@ include = [
 preview = true
 explicit-preview-rules = true
 select = [
+    # UP is deliberately left out: pep585/604 annotations are a separate change
     "E", "W", "F", "I", "D", "N", "PL", "C90",
     "PERF", "FURB", "RUF", "ERA", "FIX",
-    "DOC102", "DOC201", "DOC202", "DOC402", "DOC403", "DOC501", "DOC502",
+    # DOC202 is deliberately not selected; darglint ignored its DAR202 equivalent
+    "DOC102", "DOC201", "DOC402", "DOC403", "DOC501", "DOC502",
 ]
 ignore = [
-    "UP",       # pep585/604 annotations, handled separately
     "D101",     # missing docstring in public class (init docstrings cover this)
     "D202",     # no blank lines allowed after function docstring
     "D212",     # multi-line docstring summary should start at the first line
@@ -143,7 +144,6 @@ ignore = [
     "N818",     # exception name should be named with an Error suffix
     "PLR0913",  # too many arguments
     "PLR0917",  # too many positional arguments
-    "DOC202",   # docstring should not have a returns section because the function doesn't return
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -153,7 +153,7 @@ convention = "google"
 known-first-party = ["nornir"]
 
 [tool.ruff.lint.per-file-ignores]
-# test_helper.py holds xml fixtures whose trailing whitespace is part of the fixture
+# W291/W293: test_helper.py holds xml fixtures whose trailing whitespace is part of the fixture
 "tests/**/*.py" = ["D", "DOC", "E501", "PLR2004", "PLC0415", "W291", "W293"]
 "examples/**/*.py" = ["D"]
 "docs/generate.py" = ["D"]
