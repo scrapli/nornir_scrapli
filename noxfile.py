@@ -1,19 +1,13 @@
 """Run project checks in locked uv environments."""
 
-from pathlib import Path
-
 import nox
 
 nox.options.default_venv_backend = "uv"
 nox.options.error_on_missing_interpreters = True
 nox.options.sessions = [
     "unit_tests-3.13",
-    "isort",
-    "black",
-    "pylint",
-    "pydocstyle",
+    "ruff",
     "mypy",
-    "darglint",
 ]
 
 
@@ -65,31 +59,11 @@ def genie(session):
 
 
 @nox.session(python="3.13")
-def isort(session):
-    """Check import ordering."""
+def ruff(session):
+    """Check formatting, imports, and lint rules."""
     sync(session, "lint")
-    session.run("isort", "--check-only", ".")
-
-
-@nox.session(python="3.13")
-def black(session):
-    """Check formatting."""
-    sync(session, "lint")
-    session.run("black", "--check", ".")
-
-
-@nox.session(python="3.13")
-def pylint(session):
-    """Run pylint."""
-    sync(session, "lint")
-    session.run("pylint", "nornir_scrapli/")
-
-
-@nox.session(python="3.13")
-def pydocstyle(session):
-    """Check docstrings."""
-    sync(session, "lint")
-    session.run("pydocstyle", "nornir_scrapli/")
+    session.run("ruff", "format", "--check", ".")
+    session.run("ruff", "check", ".")
 
 
 @nox.session(python="3.13")
@@ -97,14 +71,6 @@ def mypy(session):
     """Check types against the minimum supported Python version."""
     sync(session, "lint")
     session.run("mypy", "--strict", "nornir_scrapli/")
-
-
-@nox.session(python="3.13")
-def darglint(session):
-    """Check docstring signatures."""
-    sync(session, "lint")
-    for file in Path("nornir_scrapli").rglob("*.py"):
-        session.run("darglint", str(file))
 
 
 @nox.session(python="3.13")
