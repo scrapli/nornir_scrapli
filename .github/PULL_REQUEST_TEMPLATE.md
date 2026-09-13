@@ -23,7 +23,7 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 
 - [ ] My code follows the style guidelines of this project (no GitHub actions compalints! run `make lint` before
  committing!)
-- [ ] I have commented my code, pydocstyle and darglint are happy, docstrings are in google docstring format, and all
+- [ ] I have commented my code, ruff is happy, docstrings are in google docstring format, and all
  docstrings include a summary, args, returns and raises fields (even if N/A)
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes

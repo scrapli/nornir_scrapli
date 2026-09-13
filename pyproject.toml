@@ -65,11 +65,9 @@ scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 [project.optional-dependencies]
 dev = [
     "nornir_scrapli[genie]",
-    "black>=23.3.0,<25.0.0", "darglint>=1.8.1,<2.0.0",
-    "isort>=5.10.1,<6.0.0", "mypy>1.0.0,<2.0.0",
-    "nox>=2025.2.9", "pydocstyle>=6.1.1,<7.0.0",
-    "pylint>=3.0.0,<4.0.0", "pytest-cov>=3.0.0,<5.0.0",
-    "pytest>=7.0.0,<8.0.0", "toml>=0.10.2,<1.0.0",
+    "mypy>1.0.0,<2.0.0", "nox>=2025.2.9",
+    "pytest-cov>=3.0.0,<5.0.0", "pytest>=7.0.0,<8.0.0",
+    "ruff>=0.16.7,<0.17.0",
 ]
 docs = [
     "mdx-gh-links>=0.2,<1.0", "mkdocs>=1.2.3,<2.0.0",
@@ -86,12 +84,7 @@ genie = [
 dev = [{include-group = "nox"}, {include-group = "test"}, {include-group = "lint"}]
 nox = ["nox>=2025.2.9"]
 test = ["pytest>=7.0.0,<8.0.0", "pytest-cov>=3.0.0,<5.0.0"]
-lint = [
-    "black>=23.3.0,<25.0.0", "darglint>=1.8.1,<2.0.0",
-    "isort>=5.10.1,<6.0.0", "mypy>1.0.0,<2.0.0",
-    "pydocstyle>=6.1.1,<7.0.0", "pylint>=3.0.0,<4.0.0",
-    "toml>=0.10.2,<1.0.0",
-]
+lint = ["mypy>1.0.0,<2.0.0", "ruff>=0.16.7,<0.17.0"]
 docs = ["nornir_scrapli[docs]"]
 build = ["setuptools", "wheel"]
 
@@ -120,34 +113,51 @@ source = [
     "*/site-packages/nornir_scrapli",
 ]
 
-[tool.black]
+[tool.ruff]
 line-length = 100
-target-version = [
-    "py310",
+target-version = "py310"
+include = [
+    "noxfile.py",
+    "docs/generate.py",
+    "nornir_scrapli/**/*.py",
+    "tests/**/*.py",
+    "examples/**/*.py",
 ]
 
-[tool.pydocstyle]
-match-dir = "^nornir_scrapli/*"
-ignore = "D101,D202,D203,D212,D400,D406,D407,D408,D409,D415"
-# D101: missing docstring in public class
-# D202: No blank lines allowed after function docstring
-# D203: 1 blank line required before class docstring
-# D212: Multi-line docstring summary should start at the first line
-# D400: First line should end with a period
-# D406: Section name should end with a newline
-# D407: Missing dashed underline after section
-# D408: Section underline should be in the line following the sections name
-# D409: Section underline should match the length of its name
-# D415: first line should end with a period, question mark, or exclamation point
+[tool.ruff.lint]
+# DOC (pydoclint) rules are still in preview; explicit-preview-rules keeps every other
+# preview rule out, so selecting a prefix like PL or RUF stays stable across upgrades.
+preview = true
+explicit-preview-rules = true
+select = [
+    "E", "W", "F", "I", "D", "N", "PL", "C90",
+    "PERF", "FURB", "RUF", "ERA", "FIX",
+    "DOC102", "DOC201", "DOC202", "DOC402", "DOC403", "DOC501", "DOC502",
+]
+ignore = [
+    "UP",       # pep585/604 annotations, handled separately
+    "D101",     # missing docstring in public class (init docstrings cover this)
+    "D202",     # no blank lines allowed after function docstring
+    "D212",     # multi-line docstring summary should start at the first line
+    "D415",     # first line should end with a period, question mark, or exclamation point
+    "N818",     # exception name should be named with an Error suffix
+    "PLR0913",  # too many arguments
+    "PLR0917",  # too many positional arguments
+    "DOC202",   # docstring should not have a returns section because the function doesn't return
+]
 
-[tool.isort]
-skip_gitignore = true
-profile = "black"
-line_length = 100
-multi_line_output = 3
-include_trailing_comma = true
-known_first_party = "nornir"
-known_third_party = "nornir_utils,pytest,scrapli,scrapli_netconf"
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["nornir"]
+
+[tool.ruff.lint.per-file-ignores]
+# test_helper.py holds xml fixtures whose trailing whitespace is part of the fixture
+"tests/**/*.py" = ["D", "DOC", "E501", "PLR2004", "PLC0415", "W291", "W293"]
+"examples/**/*.py" = ["D"]
+"docs/generate.py" = ["D"]
+"noxfile.py" = ["D103"]
 
 [tool.mypy]
 python_version = "3.10"
