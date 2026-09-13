@@ -114,21 +114,17 @@ source = [
 [tool.coverage.report]
 sort = "cover"
 
+[tool.coverage.paths]
+source = [
+    "nornir_scrapli",
+    "*/site-packages/nornir_scrapli",
+]
+
 [tool.black]
 line-length = 100
 target-version = [
     "py310",
 ]
-
-[tool.pylama]
-linters = "mccabe,pycodestyle,pylint"
-skip = ".nox/*,.venv/*,build/*,tests/*,venv/*"
-
-[tool.pylama.pycodestyle]
-max_line_length = 100
-
-[tool.pylama.pylint]
-rcfile = ".pylintrc"
 
 [tool.pydocstyle]
 match-dir = "^nornir_scrapli/*"
