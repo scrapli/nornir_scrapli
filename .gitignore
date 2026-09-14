@@ -59,6 +59,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# Direnv files (https://direnv.net/)
+.direnv/
+.envrc
+
 # pycharm
 .idea
 
