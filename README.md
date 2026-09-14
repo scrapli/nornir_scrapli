@@ -1,6 +1,6 @@
 [![Supported Versions](https://img.shields.io/pypi/pyversions/scrapli.svg)](https://pypi.org/project/nornir_scrapli)
 [![PyPI version](https://badge.fury.io/py/scrapli.svg)](https://badge.fury.io/py/nornir_scrapli)
-[![Weekly Build](https://github.com/scrapli/nornir_scrapli/workflows/Weekly%20Build/badge.svg)](https://github.com/scrapli/nornir_scrapli/actions?query=workflow%3A%22Weekly+Build%22)
+[![Weekly Build](https://github.com/scrapli/nornir_scrapli/workflows/Weekly%20dependency%20compatibility/badge.svg)](https://github.com/scrapli/nornir_scrapli/actions?query=workflow%3A%22Weekly+dependency+compatibility%22)
 [![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blueviolet.svg)](https://opensource.org/licenses/MIT)
 
@@ -39,7 +39,7 @@ nornir_scrapli -- scrapli's plugin for nornir
 
 ## Requirements
 
-MacOS or \*nix<sup>1</sup>, Python 3.7+
+MacOS or \*nix<sup>1</sup>, Python 3.10–3.14 (development defaults to Python 3.13)
 
 <sup>1</sup> Although many parts of scrapli *do* run on Windows, Windows is not officially supported
 

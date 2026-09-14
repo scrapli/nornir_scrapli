@@ -30,9 +30,6 @@ def send_command(
             but contains an additional attribute "scrapli_response" that contains the original
             response from scrapli
 
-    Raises:
-        N/A
-
     """
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
     scrapli_response = scrapli_conn.send_command(

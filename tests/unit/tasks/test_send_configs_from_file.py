@@ -4,10 +4,9 @@ from scrapli.driver import GenericDriver
 from scrapli.driver.core import IOSXEDriver
 from scrapli.response import Response
 
-import nornir_scrapli
 from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 
-CONFIG_FILE = f"{Path(nornir_scrapli.__file__).parents[1]}/tests/files/send_configs_from_file"
+CONFIG_FILE = str(Path(__file__).parents[2] / "files" / "send_configs_from_file")
 
 
 def test_send_configs_from_file(nornir, monkeypatch):

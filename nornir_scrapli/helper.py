@@ -21,9 +21,6 @@ def diff_xml_text(document_one: str, document_two: str) -> str:
     Returns:
         str: unified diff of the two input documents
 
-    Raises:
-        N/A
-
     """
     # ignore message-id stuff -- maybe more in the future?
     document_one_lines = [line for line in document_one.splitlines() if "message-id" not in line]

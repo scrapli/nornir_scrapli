@@ -6,13 +6,21 @@ build-backend = "setuptools.build_meta"
 name = "nornir_scrapli"
 dynamic = [
     "version",
-    "dependencies",
-    "optional-dependencies",
 ]
 description = "Scrapli's plugin for Nornir"
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
+dependencies = [
+    "nornir>=3.0.0",
+    "nornir_utils>=0.1.0",
+    "ntc_templates>=1.1.0",
+    "scrapli>=2022.01.30",
+    "scrapli_cfg>=2022.01.30",
+    "scrapli_community>=2021.01.30",
+    "scrapli_netconf>=2022.01.30",
+    "textfsm>=1.1.0",
+]
 authors = [
     { name = "Carl Montanari", email = "carl.r.montanari@gmail.com" },
 ]
@@ -21,11 +29,11 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
@@ -54,45 +62,69 @@ scrapli = "nornir_scrapli.connection:ScrapliCore"
 scrapli_cfg= "nornir_scrapli.connection:ScrapliConfig"
 scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 
+[project.optional-dependencies]
+dev = [
+    "nornir_scrapli[genie]",
+    "black>=23.3.0,<25.0.0", "darglint>=1.8.1,<2.0.0",
+    "isort>=5.10.1,<6.0.0", "mypy>1.0.0,<2.0.0",
+    "nox>=2025.2.9", "pydocstyle>=6.1.1,<7.0.0",
+    "pylint>=3.0.0,<4.0.0", "pytest-cov>=3.0.0,<5.0.0",
+    "pytest>=7.0.0,<8.0.0", "toml>=0.10.2,<1.0.0",
+]
+docs = [
+    "mdx-gh-links>=0.2,<1.0", "mkdocs>=1.2.3,<2.0.0",
+    "mkdocs-gen-files>=0.4.0,<1.0.0", "mkdocs-literate-nav>=0.5.0,<1.0.0",
+    "mkdocs-material>=8.1.6,<10.0.0", "mkdocs-material-extensions>=1.0.3,<2.0.0",
+    "mkdocs-section-index>=0.3.4,<1.0.0", "mkdocstrings[python]>=0.19.0,<1.0.0",
+]
+genie = [
+    "genie>=20.2; sys_platform != 'win32' and python_version < '3.14'",
+    "pyats>=20.2; sys_platform != 'win32' and python_version < '3.14'",
+]
+
+[dependency-groups]
+dev = [{include-group = "nox"}, {include-group = "test"}, {include-group = "lint"}]
+nox = ["nox>=2025.2.9"]
+test = ["pytest>=7.0.0,<8.0.0", "pytest-cov>=3.0.0,<5.0.0"]
+lint = [
+    "black>=23.3.0,<25.0.0", "darglint>=1.8.1,<2.0.0",
+    "isort>=5.10.1,<6.0.0", "mypy>1.0.0,<2.0.0",
+    "pydocstyle>=6.1.1,<7.0.0", "pylint>=3.0.0,<4.0.0",
+    "toml>=0.10.2,<1.0.0",
+]
+docs = ["nornir_scrapli[docs]"]
+build = ["setuptools", "wheel"]
+
 [tool.setuptools.dynamic]
 version = { attr = "nornir_scrapli.__version__" }
-dependencies = { file = "requirements.txt" }
-optional-dependencies.dev = { file = [
-    "requirements-dev.txt",
-    "requirements-genie.txt",
-] }
-optional-dependencies.docs = { file = "requirements-docs.txt" }
-optional-dependencies.genie = { file = "requirements-genie.txt" }
 
 [tool.setuptools.package-data]
 nornir_scrapli = [
     "py.typed"
 ]
 
+[tool.setuptools.packages.find]
+include = ["nornir_scrapli*"]
+
 [tool.coverage.run]
 source = [
-    "nornir_scrapli/"
+    "nornir_scrapli"
 ]
 
 [tool.coverage.report]
 sort = "cover"
 
+[tool.coverage.paths]
+source = [
+    "nornir_scrapli",
+    "*/site-packages/nornir_scrapli",
+]
+
 [tool.black]
 line-length = 100
 target-version = [
-    "py311",
-    "py313",
+    "py310",
 ]
-
-[tool.pylama]
-linters = "mccabe,pycodestyle,pylint"
-skip = ".nox/*,build/*,tests/*,venv/*"
-
-[tool.pylama.pycodestyle]
-max_line_length = 100
-
-[tool.pylama.pylint]
-rcfile = ".pylintrc"
 
 [tool.pydocstyle]
 match-dir = "^nornir_scrapli/*"
@@ -109,6 +141,7 @@ ignore = "D101,D202,D203,D212,D400,D406,D407,D408,D409,D415"
 # D415: first line should end with a period, question mark, or exclamation point
 
 [tool.isort]
+skip_gitignore = true
 profile = "black"
 line_length = 100
 multi_line_output = 3
@@ -123,4 +156,3 @@ ignore_missing_imports = true
 warn_redundant_casts = true
 warn_unused_configs = true
 strict_optional = true
-

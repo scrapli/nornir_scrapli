@@ -17,9 +17,6 @@ def netconf_commit(
         Result: nornir result object with Result.result value set the string result of the
             get operation
 
-    Raises:
-        N/A
-
     """
     scrapli_conn = task.host.get_connection("scrapli_netconf", task.nornir.config)
     scrapli_response = scrapli_conn.commit()

@@ -3,9 +3,7 @@ from pathlib import Path
 from scrapli.driver.core import IOSXEDriver
 from scrapli.response import Response
 
-import nornir_scrapli
-
-COMMANDS_FILE = f"{Path(nornir_scrapli.__file__).parents[1]}/tests/files/send_commands_from_file"
+COMMANDS_FILE = str(Path(__file__).parents[2] / "files" / "send_commands_from_file")
 
 
 def test_send_commands_from_file(nornir, monkeypatch):
