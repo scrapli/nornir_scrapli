@@ -6,7 +6,7 @@ from nornir.core.task import Result, Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
-def send_commands(  # pylint: disable=R0917
+def send_commands(
     task: Task,
     commands: List[str],
     strip_prompt: bool = True,

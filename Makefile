@@ -1,19 +1,16 @@
 NOX = uv run --locked --only-group nox nox
 
-.PHONY: setup lint format darglint test cov test_unit cov_unit docs test_docs deploy_docs build
+.PHONY: setup lint format test cov test_unit cov_unit docs test_docs deploy_docs build
 
 setup:
 	uv sync --locked
 
 lint:
-	$(NOX) -s isort black pylint pydocstyle mypy
+	$(NOX) -s ruff mypy
 
 format:
-	uv run --locked isort .
-	uv run --locked black .
-
-darglint:
-	$(NOX) -s darglint
+	uv run --locked ruff format .
+	uv run --locked ruff check --fix .
 
 test test_unit:
 	$(NOX) -s unit_tests-3.13
