@@ -96,9 +96,6 @@ class ScrapliResult(Result):
         Returns:
             bool: bool indicating if the nornir task failed
 
-        Raises:
-            N/A
-
         """
         if scrapli_response is None:
             return False

@@ -65,17 +65,26 @@ scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 [project.optional-dependencies]
 dev = [
     "nornir_scrapli[genie]",
-    "black>=23.3.0,<25.0.0", "darglint>=1.8.1,<2.0.0",
-    "isort>=5.10.1,<6.0.0", "mypy>1.0.0,<2.0.0",
-    "nox>=2025.2.9", "pydocstyle>=6.1.1,<7.0.0",
-    "pylint>=3.0.0,<4.0.0", "pytest-cov>=3.0.0,<5.0.0",
-    "pytest>=7.0.0,<8.0.0", "toml>=0.10.2,<1.0.0",
+    "black>=23.3.0,<25.0.0",
+    "darglint>=1.8.1,<2.0.0",
+    "isort>=5.10.1,<6.0.0",
+    "mypy>1.0.0,<2.0.0",
+    "nox>=2025.2.9",
+    "pydocstyle>=6.1.1,<7.0.0",
+    "pylint>=3.0.0,<4.0.0",
+    "pytest-cov>=3.0.0,<5.0.0",
+    "pytest>=7.0.0,<8.0.0",
+    "toml>=0.10.2,<1.0.0",
 ]
 docs = [
-    "mdx-gh-links>=0.2,<1.0", "mkdocs>=1.2.3,<2.0.0",
-    "mkdocs-gen-files>=0.4.0,<1.0.0", "mkdocs-literate-nav>=0.5.0,<1.0.0",
-    "mkdocs-material>=8.1.6,<10.0.0", "mkdocs-material-extensions>=1.0.3,<2.0.0",
-    "mkdocs-section-index>=0.3.4,<1.0.0", "mkdocstrings[python]>=0.19.0,<1.0.0",
+    "mdx-gh-links>=0.2,<1.0",
+    "mkdocs>=1.2.3,<2.0.0",
+    "mkdocs-gen-files>=0.4.0,<1.0.0",
+    "mkdocs-literate-nav>=0.5.0,<1.0.0",
+    "mkdocs-material>=8.1.6,<10.0.0",
+    "mkdocs-material-extensions>=1.0.3,<2.0.0",
+    "mkdocs-section-index>=0.3.4,<1.0.0",
+    "mkdocstrings[python]>=0.19.0,<1.0.0",
 ]
 genie = [
     "genie>=20.2; sys_platform != 'win32' and python_version < '3.15'",
@@ -83,17 +92,34 @@ genie = [
 ]
 
 [dependency-groups]
-dev = [{include-group = "nox"}, {include-group = "test"}, {include-group = "lint"}]
-nox = ["nox>=2025.2.9"]
-test = ["pytest>=7.0.0,<8.0.0", "pytest-cov>=3.0.0,<5.0.0"]
+dev = [
+    {include-group = "nox"},
+    {include-group = "test"},
+    {include-group = "lint"},
+]
+nox = [
+    "nox>=2025.2.9",
+]
+test = [
+    "pytest>=7.0.0,<8.0.0",
+    "pytest-cov>=3.0.0,<5.0.0",
+]
 lint = [
-    "black>=23.3.0,<25.0.0", "darglint>=1.8.1,<2.0.0",
-    "isort>=5.10.1,<6.0.0", "mypy>1.0.0,<2.0.0",
-    "pydocstyle>=6.1.1,<7.0.0", "pylint>=3.0.0,<4.0.0",
+    "black>=23.3.0,<25.0.0",
+    "darglint>=1.8.1,<2.0.0",
+    "isort>=5.10.1,<6.0.0",
+    "mypy>1.0.0,<2.0.0",
+    "pydocstyle>=6.1.1,<7.0.0",
+    "pylint>=3.0.0,<4.0.0",
     "toml>=0.10.2,<1.0.0",
 ]
-docs = ["nornir_scrapli[docs]"]
-build = ["setuptools", "wheel"]
+docs = [
+    "nornir_scrapli[docs]",
+]
+build = [
+    "setuptools",
+    "wheel",
+]
 
 [tool.setuptools.dynamic]
 version = { attr = "nornir_scrapli.__version__" }
