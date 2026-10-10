@@ -1,9 +1,6 @@
-from pathlib import Path
-
+from constants import COMMANDS_FILE
 from scrapli.driver.core import IOSXEDriver
 from scrapli.response import Response
-
-COMMANDS_FILE = str(Path(__file__).parents[2] / "files" / "send_commands_from_file")
 
 
 def test_send_commands_from_file(nornir, monkeypatch):
