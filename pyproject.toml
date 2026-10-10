@@ -65,7 +65,7 @@ scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 [project.optional-dependencies]
 dev = [
     "nornir_scrapli[genie]",
-    "black>=23.3.0,<25.0.0",
+    "black>=23.3.0,<27.0.0",
     "darglint>=1.8.1,<2.0.0",
     "isort>=5.10.1,<6.0.0",
     "mypy>1.0.0,<2.0.0",
@@ -105,7 +105,7 @@ test = [
     "pytest-cov>=3.0.0,<5.0.0",
 ]
 lint = [
-    "black>=23.3.0,<25.0.0",
+    "black>=23.3.0,<27.0.0",
     "darglint>=1.8.1,<2.0.0",
     "isort>=5.10.1,<6.0.0",
     "mypy>1.0.0,<2.0.0",
