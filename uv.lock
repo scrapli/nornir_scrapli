@@ -33,12 +33,12 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohappyeyeballs" },
     { name = "aiosignal" },
-    { name = "async-timeout", marker = "python_full_version < '3.11' or python_full_version >= '3.14'" },
+    { name = "async-timeout", marker = "python_full_version < '3.11' or python_full_version >= '3.15'" },
     { name = "attrs" },
     { name = "frozenlist" },
     { name = "multidict" },
     { name = "propcache" },
-    { name = "typing-extensions", marker = "python_full_version != '3.13.*'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.13' or python_full_version >= '3.15'" },
     { name = "yarl" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/58/d9/22ce5786ac0c1653ae8b6c23bded02c1686d11f0dbb45b31ce128e0df985/aiohttp-3.14.3.tar.gz", hash = "sha256:9491196535a88924a60afd5b5f434b5b203b6cc616250878dbdb223a8f7844bc", size = 7971213, upload-time = "2026-07-23T01:57:27.037Z" }
@@ -151,7 +151,7 @@ version = "1.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "frozenlist" },
-    { name = "typing-extensions", marker = "python_full_version != '3.13.*'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.13' or python_full_version >= '3.15'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/61/62/06741b579156360248d1ec624842ad0edf697050bbaf7c3e46394e106ad1/aiosignal-1.4.0.tar.gz", hash = "sha256:f47eecd9468083c2029cc99945502cb7708b082c232f9aca65da147157b251c7", size = 25007, upload-time = "2025-07-03T22:54:43.528Z" }
 wheels = [
@@ -184,7 +184,7 @@ name = "async-lru"
 version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.11' or python_full_version >= '3.14'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11' or python_full_version >= '3.15'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/e8/1f/989ecfef8e64109a489fff357450cb73fa73a865a92bd8c272170a6922c2/async_lru-2.3.0.tar.gz", hash = "sha256:89bdb258a0140d7313cf8f4031d816a042202faa61d0ab310a0a538baa1c24b6", size = 16332, upload-time = "2026-03-19T01:04:32.413Z" }
 wheels = [
@@ -323,7 +323,7 @@ resolution-markers = [
     "python_full_version == '3.11.*'",
 ]
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.12' or python_full_version >= '3.14'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12' or python_full_version >= '3.15'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a8/f2/8d2dd8276ca05e1f5157b6a0d34efb2f585f47a0fbed61e8aad04b221f0b/bidict-0.24.1.tar.gz", hash = "sha256:4dca6c17f0b01700e9f24359daa5ebabf7be022d99f4cb2a257b6af2a5076c88", size = 30818, upload-time = "2026-08-25T23:45:52.214Z" }
 wheels = [
@@ -816,7 +816,7 @@ version = "50.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cffi", marker = "platform_python_implementation != 'PyPy'" },
-    { name = "typing-extensions", marker = "python_full_version < '3.11' or python_full_version >= '3.14'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11' or python_full_version >= '3.15'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/bb/ad/5d6702db60b1e40b41ef513b6967ff5848f307d50f8449baf1634f5908f1/cryptography-50.0.1.tar.gz", hash = "sha256:5dd9bda1c12b4162f6ff568eeb5e0ff956c28d14406e875cfe8a63a2d414ff20", size = 880381, upload-time = "2026-08-25T19:45:45.499Z" }
 wheels = [
@@ -1942,7 +1942,7 @@ name = "multidict"
 version = "6.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.11' or python_full_version >= '3.14'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11' or python_full_version >= '3.15'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/14/95/989c1b5ca17b72128661530cd6e351a0a83cda9a4d6c036e9ed976c18931/multidict-6.8.0.tar.gz", hash = "sha256:5cd4637ce76312ba1e05eb9c5193fec231f64fee0944e135fa1e951242355b37", size = 122412, upload-time = "2026-09-09T13:57:57.967Z" }
 wheels = [
@@ -2213,11 +2213,11 @@ dependencies = [
 dev = [
     { name = "black" },
     { name = "darglint" },
-    { name = "genie", marker = "python_full_version < '3.14' and sys_platform != 'win32'" },
+    { name = "genie", marker = "python_full_version < '3.15' and sys_platform != 'win32'" },
     { name = "isort" },
     { name = "mypy" },
     { name = "nox" },
-    { name = "pyats", marker = "python_full_version < '3.14' and sys_platform != 'win32'" },
+    { name = "pyats", marker = "python_full_version < '3.15' and sys_platform != 'win32'" },
     { name = "pydocstyle" },
     { name = "pylint" },
     { name = "pytest" },
@@ -2235,8 +2235,8 @@ docs = [
     { name = "mkdocstrings", extra = ["python"] },
 ]
 genie = [
-    { name = "genie", marker = "python_full_version < '3.14' and sys_platform != 'win32'" },
-    { name = "pyats", marker = "python_full_version < '3.14' and sys_platform != 'win32'" },
+    { name = "genie", marker = "python_full_version < '3.15' and sys_platform != 'win32'" },
+    { name = "pyats", marker = "python_full_version < '3.15' and sys_platform != 'win32'" },
 ]
 
 [package.dev-dependencies]
@@ -2280,7 +2280,7 @@ test = [
 requires-dist = [
     { name = "black", marker = "extra == 'dev'", specifier = ">=23.3.0,<25.0.0" },
     { name = "darglint", marker = "extra == 'dev'", specifier = ">=1.8.1,<2.0.0" },
-    { name = "genie", marker = "python_full_version < '3.14' and sys_platform != 'win32' and extra == 'genie'", specifier = ">=20.2" },
+    { name = "genie", marker = "python_full_version < '3.15' and sys_platform != 'win32' and extra == 'genie'", specifier = ">=20.2" },
     { name = "isort", marker = "extra == 'dev'", specifier = ">=5.10.1,<6.0.0" },
     { name = "mdx-gh-links", marker = "extra == 'docs'", specifier = ">=0.2,<1.0" },
     { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.2.3,<2.0.0" },
@@ -2296,7 +2296,7 @@ requires-dist = [
     { name = "nornir-utils", specifier = ">=0.1.0" },
     { name = "nox", marker = "extra == 'dev'", specifier = ">=2025.2.9" },
     { name = "ntc-templates", specifier = ">=1.1.0" },
-    { name = "pyats", marker = "python_full_version < '3.14' and sys_platform != 'win32' and extra == 'genie'", specifier = ">=20.2" },
+    { name = "pyats", marker = "python_full_version < '3.15' and sys_platform != 'win32' and extra == 'genie'", specifier = ">=20.2" },
     { name = "pydocstyle", marker = "extra == 'dev'", specifier = ">=6.1.1,<7.0.0" },
     { name = "pylint", marker = "extra == 'dev'", specifier = ">=3.0.0,<4.0.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0,<8.0.0" },
@@ -3104,8 +3104,8 @@ name = "pyftpdlib"
 version = "2.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "pyasynchat", marker = "python_full_version >= '3.12' and python_full_version < '3.14'" },
-    { name = "pyasyncore", marker = "python_full_version >= '3.12' and python_full_version < '3.14'" },
+    { name = "pyasynchat", marker = "python_full_version >= '3.12' and python_full_version < '3.15'" },
+    { name = "pyasyncore", marker = "python_full_version >= '3.12' and python_full_version < '3.15'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f9/42/8751c5f58ae59b09e070da4fa322ae9693a340d2cc456b5a380b2c1ee47a/pyftpdlib-2.2.0.tar.gz", hash = "sha256:4ba0642078792df63dd3b2e9c8f838f2a3ecf428c7518d5921c0530d53512acf", size = 189150, upload-time = "2026-02-07T23:09:26.519Z" }
 
@@ -3262,8 +3262,8 @@ name = "python-socketio"
 version = "5.11.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "bidict", version = "0.23.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or python_full_version >= '3.14'" },
-    { name = "bidict", version = "0.24.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' and python_full_version < '3.14'" },
+    { name = "bidict", version = "0.23.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or python_full_version >= '3.15'" },
+    { name = "bidict", version = "0.24.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' and python_full_version < '3.15'" },
     { name = "python-engineio" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a8/55/f24a0e5e29c9e344eb04a5d2483d756196b04ab1de3988a1242b9a13d1b6/python-socketio-5.11.2.tar.gz", hash = "sha256:ae6a1de5c5209ca859dc574dccc8931c4be17ee003e74ce3b8d1306162bb4a37", size = 116905, upload-time = "2024-03-24T09:55:59.217Z" }

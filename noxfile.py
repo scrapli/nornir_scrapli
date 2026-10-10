@@ -56,7 +56,7 @@ def unit_tests(session):
     )
 
 
-@nox.session(python="3.13")
+@nox.session(python=["3.13", "3.14"])
 def genie(session):
     """Exercise optional parsers on a compatible interpreter."""
     sync(session, "test", "--extra", "genie")

@@ -42,4 +42,5 @@ jobs:
           version: "0.12.1"
           python-version: "3.13"
           enable-cache: auto
+      - run: uv python install 3.13 3.14
       - run: uv run --locked --only-group nox nox -s genie

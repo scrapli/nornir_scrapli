@@ -78,8 +78,8 @@ docs = [
     "mkdocs-section-index>=0.3.4,<1.0.0", "mkdocstrings[python]>=0.19.0,<1.0.0",
 ]
 genie = [
-    "genie>=20.2; sys_platform != 'win32' and python_version < '3.14'",
-    "pyats>=20.2; sys_platform != 'win32' and python_version < '3.14'",
+    "genie>=20.2; sys_platform != 'win32' and python_version < '3.15'",
+    "pyats>=20.2; sys_platform != 'win32' and python_version < '3.15'",
 ]
 
 [dependency-groups]
