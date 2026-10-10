@@ -14,7 +14,7 @@ from nornir.core.task import Task
 from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
 
 if TYPE_CHECKING:
-    from nornir.core.plugins.connections import ConnectionPlugin  # pylint: disable=C0412
+    from nornir.core.plugins.connections import ConnectionPlugin
 
 CONNECTION_NAME = "scrapli"
 
@@ -30,7 +30,7 @@ PLATFORM_MAP = {
 class ScrapliCore:
     """Scrapli connection plugin for nornir"""
 
-    def open(  # pylint: disable=R0917
+    def open(
         self,
         hostname: Optional[str],
         username: Optional[str],
@@ -104,7 +104,7 @@ class ScrapliCore:
                 ) from exc
 
         connection.open()
-        self.connection = connection  # pylint: disable=W0201
+        self.connection = connection
 
     def close(self) -> None:
         """
@@ -213,7 +213,7 @@ class ScrapliConfig:
 class ScrapliNetconf:
     """Scrapli NETCONF connection plugin for nornir"""
 
-    def open(  # pylint: disable=R0917
+    def open(
         self,
         hostname: Optional[str],
         username: Optional[str],
@@ -262,7 +262,7 @@ class ScrapliNetconf:
 
         connection = NetconfDriver(**parameters)
         connection.open()
-        self.connection = connection  # pylint: disable=W0201
+        self.connection = connection
 
     def close(self) -> None:
         """

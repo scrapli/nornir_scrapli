@@ -8,7 +8,7 @@ from scrapli_cfg.response import ScrapliCfgResponse
 from nornir.core.task import Result
 
 if TYPE_CHECKING:
-    from nornir.core.inventory import Host  # pylint: disable=C0412
+    from nornir.core.inventory import Host
 
 
 def process_command_result(scrapli_response: Union[Response, MultiResponse]) -> str:
@@ -85,7 +85,7 @@ class ScrapliResult(Result):
 
     @staticmethod
     def _process_failed(
-        scrapli_response: Optional[Union[Response, MultiResponse, ScrapliCfgResponse]]
+        scrapli_response: Optional[Union[Response, MultiResponse, ScrapliCfgResponse]],
     ) -> bool:
         """
         Process and return string of scrapli response(s)

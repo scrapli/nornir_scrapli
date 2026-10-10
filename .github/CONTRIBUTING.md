@@ -13,9 +13,8 @@ creates isolated uv environments and syncs each session from the lockfile.
 
 ```shell
 make test                 # Python 3.13 unit tests and coverage
-make lint                 # import, format, lint, docstring, and type checks
-make format               # apply import sorting and formatting
-make darglint
+make lint                 # ruff format, lint, and docstring checks, plus mypy
+make format               # apply ruff formatting and safe lint fixes
 make cov                  # HTML coverage
 uv run --locked --only-group nox nox  # default checks on Python 3.13
 
