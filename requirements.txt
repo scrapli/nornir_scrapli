@@ -1,8 +1,0 @@
-nornir>=3.0.0
-nornir_utils>=0.1.0
-ntc_templates>=1.1.0
-scrapli>=2022.01.30
-scrapli_cfg>=2022.01.30
-scrapli_community>=2021.01.30
-scrapli_netconf>=2022.01.30
-textfsm>=1.1.0

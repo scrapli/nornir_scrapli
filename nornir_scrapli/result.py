@@ -21,9 +21,6 @@ def process_command_result(scrapli_response: Union[Response, MultiResponse]) -> 
     Returns:
         str: string result from nornir task or None
 
-    Raises:
-        N/A
-
     """
     if isinstance(scrapli_response, Response):
         result: str = scrapli_response.result
@@ -40,9 +37,6 @@ def process_config_result(scrapli_response: Union[Response, MultiResponse]) -> s
 
     Returns:
         str: string result from nornir task or None
-
-    Raises:
-        N/A
 
     """
     full_results = ""
@@ -82,12 +76,6 @@ class ScrapliResult(Result):
             changed: bool indicating if a change has occurred
             kwargs: keyword arguments to pass to nornir Result
 
-        Returns:
-            N/A  # noqa: DAR202
-
-        Raises:
-            N/A
-
         """
         failed = self._process_failed(scrapli_response=scrapli_response)
 
@@ -107,9 +95,6 @@ class ScrapliResult(Result):
 
         Returns:
             bool: bool indicating if the nornir task failed
-
-        Raises:
-            N/A
 
         """
         if scrapli_response is None:

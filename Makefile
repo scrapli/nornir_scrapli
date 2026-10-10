@@ -1,43 +1,36 @@
+NOX = uv run --locked --only-group nox nox
+
+.PHONY: setup lint format darglint test cov test_unit cov_unit docs test_docs deploy_docs build
+
+setup:
+	uv sync --locked
+
 lint:
-	python -m isort .
-	python -m black .
-	python -m pylint nornir_scrapli/
-	python -m pydocstyle .
-	python -m mypy --strict nornir_scrapli/
+	$(NOX) -s isort black pylint pydocstyle mypy
+
+format:
+	uv run --locked isort .
+	uv run --locked black .
 
 darglint:
-	find nornir_scrapli -type f \( -iname "*.py"\ ) | xargs darglint -x
+	$(NOX) -s darglint
 
-test:
-	python -m pytest \
-	tests/
+test test_unit:
+	$(NOX) -s unit_tests-3.13
 
-cov:
-	python -m pytest \
-	--cov=nornir_scrapli \
-	--cov-report html \
-	--cov-report term \
-	tests/
+cov cov_unit:
+	$(NOX) -s unit_tests-3.13 -- --cov-report=html
 
-test_unit:
-	python -m pytest \
-	tests/unit/
-
-cov_unit:
-	python -m pytest \
-	--cov=nornir_scrapli \
-	--cov-report html \
-	--cov-report term \
-	tests/unit/
-
-.PHONY: docs
 docs:
-	python docs/generate.py
+	uv run --locked --group docs python docs/generate.py
 
 test_docs:
-	mkdocs build --clean --strict
+	$(NOX) -s docs
 	htmltest -c docs/htmltest.yml -s
 	rm -rf tmp
 
 deploy_docs:
-	mkdocs gh-deploy
+	uv run --locked --group docs mkdocs gh-deploy
+
+build:
+	$(NOX) -s build

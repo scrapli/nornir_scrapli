@@ -20,9 +20,6 @@ def cfg_diff_config(task: Task, source: str = "running") -> Result:
         Result: nornir result object with Result.result value set the string result of the
             load_config operation
 
-    Raises:
-        N/A
-
     """
     scrapli_cfg_conn = ScrapliConfig.get_connection(task=task)
 

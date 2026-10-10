@@ -36,9 +36,6 @@ def send_commands_from_file(  # pylint: disable=R0917
         Result: nornir result object with Result.result value set to returned scrapli Response
             object
 
-    Raises:
-        N/A
-
     """
     scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
     scrapli_response = scrapli_conn.send_commands_from_file(

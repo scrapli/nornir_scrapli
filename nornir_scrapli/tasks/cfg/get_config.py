@@ -16,9 +16,6 @@ def cfg_get_config(task: Task, source: str = "running") -> Result:
     Returns:
         Result: nornir result object with Result.result value set to current prompt
 
-    Raises:
-        N/A
-
     """
     scrapli_cfg_conn = ScrapliConfig.get_connection(task=task)
 

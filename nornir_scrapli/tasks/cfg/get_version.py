@@ -14,9 +14,6 @@ def cfg_get_version(task: Task) -> Result:
     Returns:
         Result: nornir result object with Result.result value set to current version of device
 
-    Raises:
-        N/A
-
     """
     scrapli_cfg_conn = ScrapliConfig.get_connection(task=task)
 
