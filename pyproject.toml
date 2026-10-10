@@ -15,7 +15,8 @@ dependencies = [
     "nornir>=3.0.0",
     "nornir_utils>=0.1.0",
     "ntc_templates>=1.1.0",
-    "scrapli>=2022.01.30",
+    # scrapli 2.0 (2026.10.3 and later, including the 2026.2.22rc1+ pre-releases) is not supported yet
+    "scrapli>=2022.01.30,<2026.2.21",
     "scrapli_cfg>=2022.01.30",
     "scrapli_community>=2021.01.30",
     "scrapli_netconf>=2022.01.30",
