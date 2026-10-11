@@ -15,10 +15,9 @@ dependencies = [
     "nornir>=3.0.0",
     "nornir_utils>=0.1.0",
     "ntc_templates>=1.1.0",
-    "scrapli>=2022.01.30",
-    "scrapli_cfg>=2022.01.30",
-    "scrapli_community>=2021.01.30",
-    "scrapli_netconf>=2022.01.30",
+    "scrapli>=2026.10.8",
+    "PyYAML>=6.0",
+    "regex>=2024.11.6",
     "textfsm>=1.1.0",
 ]
 authors = [
@@ -59,13 +58,13 @@ Docs = "https://scrapli.github.io/nornir_scrapli/"
 
 [project.entry-points."nornir.plugins.connections"]
 scrapli = "nornir_scrapli.connection:ScrapliCore"
-scrapli_cfg= "nornir_scrapli.connection:ScrapliConfig"
 scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 
 [project.optional-dependencies]
 dev = [
     "nornir_scrapli[genie]",
     "mypy>1.0.0,<2.0.0",
+    "types-PyYAML>=6.0",
     "nox>=2025.2.9",
     "pytest-cov>=3.0.0,<5.0.0",
     "pytest>=7.0.0,<8.0.0",
@@ -101,6 +100,7 @@ test = [
 ]
 lint = [
     "mypy>1.0.0,<2.0.0",
+    "types-PyYAML>=6.0",
     "ruff>=0.16.7,<0.17.0",
 ]
 docs = [
