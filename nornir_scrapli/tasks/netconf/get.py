@@ -1,34 +1,48 @@
-"""nornir_scrapli.tasks.netconf_get"""
+"""Read NETCONF data."""
+
+from typing import Optional
+
+from scrapli.ffi_types import Cancel
+from scrapli.netconf import DefaultsType, FilterType
 
 from nornir.core.task import Result, Task
-from nornir_scrapli.result import ScrapliResult, process_command_result
+from nornir_scrapli.result import ScrapliResult
 
 
 def netconf_get(
     task: Task,
-    filter_: str,
-    filter_type: str = "subtree",
+    *,
+    filter_: str = "",
+    filter_type: FilterType = FilterType.SUBTREE,
+    filter_namespace_prefix: str = "",
+    filter_namespace: str = "",
+    defaults_type: DefaultsType = DefaultsType.UNSET,
+    operation_timeout_ns: Optional[int] = None,
+    cancel: Optional[Cancel] = None,
 ) -> Result:
-    """
-    Get from the device with scrapli_netconf
+    """Read data with native NETCONF filtering options.
 
     Args:
-        task: nornir task object
-        filter_: string filter to apply to the get
-        filter_type: type of filter; subtree|xpath
+        task: Nornir task.
+        filter_: Filter payload.
+        filter_type: Native filter type.
+        filter_namespace_prefix: Filter namespace prefix.
+        filter_namespace: Filter namespace URI.
+        defaults_type: Defaults reporting mode.
+        operation_timeout_ns: Operation timeout in nanoseconds.
+        cancel: Native cancellation context.
 
     Returns:
-        Result: nornir result object with Result.result value set the string result of the
-            get operation
-
+        Nornir result containing reply XML.
     """
-    scrapli_conn = task.host.get_connection("scrapli_netconf", task.nornir.config)
-    scrapli_response = scrapli_conn.get(filter_=filter_, filter_type=filter_type)
-
-    result = ScrapliResult(
-        host=task.host,
-        result=process_command_result(scrapli_response=scrapli_response),
-        scrapli_response=scrapli_response,
-        changed=False,
+    connection = task.host.get_connection("scrapli_netconf", task.nornir.config)
+    response = connection.get(
+        filter_=filter_,
+        filter_type=filter_type,
+        filter_namespace_prefix=filter_namespace_prefix,
+        filter_namespace=filter_namespace,
+        defaults_type=defaults_type,
+        operation_timeout_ns=operation_timeout_ns,
+        cancel=cancel,
     )
-    return result
+    return ScrapliResult(task.host, response.result, response)

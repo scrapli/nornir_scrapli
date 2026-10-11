@@ -21,7 +21,7 @@ def netconf_capabilities(
 
     result = Result(
         host=task.host,
-        result=scrapli_conn.server_capabilities,
+        result=scrapli_conn.get_capabilities(),
         failed=False,
         changed=False,
     )

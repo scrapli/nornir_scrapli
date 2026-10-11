@@ -1,23 +1,15 @@
-"""nornir_scrapli.connection"""
+"""Nornir lifecycle adapters for scrapli v2 CLI and NETCONF connections."""
 
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import Any, Dict, Optional
 
-from scrapli import Scrapli
-from scrapli.driver import GenericDriver
-from scrapli.exceptions import ScrapliModuleNotFound
-from scrapli_cfg import ScrapliCfg
-from scrapli_cfg.platform.base.sync_platform import ScrapliCfgPlatform
-from scrapli_netconf.driver import NetconfDriver
+from scrapli import Cli, Netconf
+from scrapli.exceptions import OptionsException
 
 from nornir.core.configuration import Config
-from nornir.core.task import Task
-from nornir_scrapli.exceptions import NornirScrapliInvalidPlatform
-
-if TYPE_CHECKING:
-    from nornir.core.plugins.connections import ConnectionPlugin
+from nornir_scrapli.connection_options import build_connection_options
+from nornir_scrapli.exceptions import NornirScrapliInvalidOptions, NornirScrapliInvalidPlatform
 
 CONNECTION_NAME = "scrapli"
-
 PLATFORM_MAP = {
     "ios": "cisco_iosxe",
     "nxos": "cisco_nxos",
@@ -28,7 +20,9 @@ PLATFORM_MAP = {
 
 
 class ScrapliCore:
-    """Scrapli connection plugin for nornir"""
+    """Scrapli CLI connection plugin for Nornir."""
+
+    connection: Cli
 
     def open(
         self,
@@ -40,178 +34,58 @@ class ScrapliCore:
         extras: Optional[Dict[str, Any]] = None,
         configuration: Optional[Config] = None,
     ) -> None:
-        """
-        Open a scrapli connection to a device
+        """Open a CLI connection using nested inventory options.
 
         Args:
-            hostname: hostname from nornir inventory
-            username: username from nornir inventory/connection_options for scrapli
-            password: password from nornir inventory/connection_options for scrapli
-            port: port from nornir inventory/connection_options for scrapli
-            platform: platform from nornir inventory/connection_options for scrapli
-            extras: extras dict from connection_options for scrapli -- pass all other scrapli
-                arguments here
-            configuration: nornir configuration
-
-        Returns:
-            None
+            hostname: Nornir connection hostname.
+            username: Nornir username fallback.
+            password: Nornir password fallback.
+            port: Explicit port, or scrapli's transport default.
+            platform: Scrapli definition or NAPALM alias.
+            extras: Native option sections and optional definition override.
+            configuration: Nornir configuration.
 
         Raises:
-            NornirScrapliInvalidPlatform: if no platform or an invalid scrapli/napalm platform
-                string is provided
-
+            NornirScrapliInvalidOptions: If the hostname is absent.
+            NornirScrapliInvalidPlatform: If the definition cannot be loaded.
         """
-        extras = extras or {}
-        # 99.9% configuration will always be passed here... but to be consistent w/ the other
-        # plugins we'll leave the function signature same/same as the others
-        global_config = configuration.dict() if configuration else {}
-
-        parameters: Dict[str, Any] = {
-            "host": hostname,
-            "auth_username": username or "",
-            "auth_password": password or "",
-            "port": port or 22,
-            "ssh_config_file": global_config.get("ssh", {}).get("config_file", False),
-        }
-
-        # will override any of the configs from global nornir config (such as ssh config file) with
-        # options from "extras" (connection options)
-        parameters.update(extras)
-
-        if extras.get("channel_log", False) is True:
-            # if channel_log value is just "True" we append the hostname so that we don't have a
-            # single file for potentially hundreds (or more!) of devices which obviously won't
-            # work very well. don't update the extras dict directly as that is probably coming from
-            # group/default vars, so just push this right onto the new parameters' dict.
-            parameters.update({"channel_log": f"scrapli_channel_{hostname}.log"})
-
-        if not platform:
-            raise NornirScrapliInvalidPlatform(
-                f"'platform' not provided in inventory for host `{hostname}`"
+        if hostname is None:
+            raise NornirScrapliInvalidOptions("Connection hostname is required")
+        options = build_connection_options(
+            hostname=hostname,
+            username=username,
+            password=password,
+            extras=extras,
+            configuration=configuration,
+            netconf=False,
+        )
+        definition = (extras or {}).get("definition")
+        if definition is None:
+            definition = (
+                "default"
+                if not platform or platform == "generic"
+                else PLATFORM_MAP.get(platform, platform)
             )
-
-        final_platform: str = PLATFORM_MAP.get(platform, platform)
-
-        if final_platform == "generic":
-            connection = GenericDriver(**parameters)
-        else:
-            try:
-                connection = Scrapli(**parameters, platform=final_platform)
-            except ScrapliModuleNotFound as exc:
-                raise NornirScrapliInvalidPlatform(
-                    f"Provided platform `{final_platform}` is not a valid scrapli or napalm "
-                    "platform, or is not a valid scrapli-community platform."
-                ) from exc
-
+        try:
+            connection = Cli(
+                host=hostname, port=port, definition_file_or_name=definition, **options
+            )
+        except OptionsException as exc:
+            raise NornirScrapliInvalidPlatform(
+                f"Invalid platform/definition `{definition}` for host `{hostname}`"
+            ) from exc
         connection.open()
         self.connection = connection
 
     def close(self) -> None:
-        """
-        Close a scrapli connection to a device
-
-        Returns:
-            None
-
-        """
+        """Close the CLI connection."""
         self.connection.close()
 
 
-class ScrapliConfig:
-    """Scrapli connection plugin for nornir"""
-
-    connection: ScrapliCfgPlatform
-
-    @staticmethod
-    def get_connection(task: Task) -> ScrapliCfgPlatform:
-        """
-        Try to fetch scrapli-cfg conn, create it if it doesnt exist
-
-        This is a little different than "normal" in that we dont have a connection and we dont
-        create them in the "normal" nornir way -- we actually just steal the scrapli connection and
-        wrap the scrapli_cfg bits around it.
-
-        Args:
-            task: nornir Task object
-
-        Returns:
-            ScrapliCfg
-
-        """
-        connection: ScrapliCfgPlatform
-
-        try:
-            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
-        except AttributeError:
-            task.host.connections["scrapli_cfg"] = ScrapliConfig.spawn(task=task)
-            connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
-
-        return connection
-
-    @staticmethod
-    def spawn(task: Task) -> "ConnectionPlugin":
-        """
-        Spawn a ScrapliConfig object for a nornir host
-
-        This is a little different than "normal" in that we dont have a connection and we dont
-        create them in the "normal" nornir way -- we actually just steal the scrapli connection and
-        wrap the scrapli_cfg bits around it.
-
-        Args:
-            task: nornir Task object
-
-        Returns:
-            ScrapliConfig
-
-        """
-        scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
-        scrapli_cfg_parameters = task.host.get_connection_parameters(connection="scrapli_cfg")
-
-        # should always be a dict afaik, but typing doesnt appreciate the possibility it is None
-        extras = scrapli_cfg_parameters.extras or {}
-        # always overwrite `dedicated_connection` as we are *not* having a dedicated connection
-        # since we are wrapping the "normal" scrapli connection!
-        extras["dedicated_connection"] = False
-
-        final_scrapli_cfg_parameters: Dict[str, Any] = {
-            "conn": scrapli_conn,
-            **extras,
-        }
-        connection = ScrapliCfg(**final_scrapli_cfg_parameters)
-        scrapli_config_connection_obj = ScrapliConfig()
-        scrapli_config_connection_obj.connection = connection
-        scrapli_config_connection_obj.open()
-        return scrapli_config_connection_obj
-
-    def open(self, *args: Any, **kwargs: Any) -> None:
-        """
-        Override open method of normal nornir connection so we can coopt an existing conn
-
-        Args:
-            args: args for not dealing w/ overridden hings
-            kwargs: kwargs for not dealing w/ overridden hings
-
-        Returns:
-            None
-
-        """
-        _, _ = args, kwargs
-        self.connection.prepare()
-
-    def close(self) -> None:
-        """
-        Override close method of normal nornir connection so we never close things
-
-        Never closing allows us to not accidentally step on the underlying "normal" scrapli conn
-
-        Returns:
-            None
-
-        """
-
-
 class ScrapliNetconf:
-    """Scrapli NETCONF connection plugin for nornir"""
+    """Scrapli NETCONF connection plugin for Nornir."""
+
+    connection: Netconf
 
     def open(
         self,
@@ -223,53 +97,35 @@ class ScrapliNetconf:
         extras: Optional[Dict[str, Any]] = None,
         configuration: Optional[Config] = None,
     ) -> None:
-        """
-        Open a scrapli connection to a device
+        """Open a NETCONF connection using nested inventory options.
 
         Args:
-            hostname: hostname from nornir inventory
-            username: username from nornir inventory/connection_options for scrapli
-            password: password from nornir inventory/connection_options for scrapli
-            port: port from nornir inventory/connection_options for scrapli
-            platform: platform from nornir inventory/connection_options for scrapli; ignored with
-                scrapli netconf
-            extras: extras dict from connection_options for scrapli -- pass all other scrapli
-                arguments here
-            configuration: nornir configuration
+            hostname: Nornir connection hostname.
+            username: Nornir username fallback.
+            password: Nornir password fallback.
+            port: Explicit port, otherwise 830.
+            platform: Unused for NETCONF.
+            extras: Native option sections.
+            configuration: Nornir configuration.
 
-        Returns:
-            None
-
+        Raises:
+            NornirScrapliInvalidOptions: If the hostname is absent.
         """
-        # platform is irrelevant for scrapli netconf for now
         _ = platform
-        extras = extras or {}
-        # 99.9% configuration will always be passed here... but to be consistent w/ the other
-        # plugins we'll leave the function signature same/same as the others
-        global_config = configuration.dict() if configuration else {}
-
-        parameters: Dict[str, Any] = {
-            "host": hostname,
-            "auth_username": username or "",
-            "auth_password": password or "",
-            "port": port or 830,
-            "ssh_config_file": global_config.get("ssh", {}).get("config_file", False),
-        }
-
-        # will override any of the configs from global nornir config (such as ssh config file) with
-        # options from "extras" (connection options)
-        parameters.update(extras)
-
-        connection = NetconfDriver(**parameters)
+        if hostname is None:
+            raise NornirScrapliInvalidOptions("Connection hostname is required")
+        options = build_connection_options(
+            hostname=hostname,
+            username=username,
+            password=password,
+            extras=extras,
+            configuration=configuration,
+            netconf=True,
+        )
+        connection = Netconf(host=hostname, port=830 if port is None else port, **options)
         connection.open()
         self.connection = connection
 
     def close(self) -> None:
-        """
-        Close a scrapli netconf connection to a device
-
-        Returns:
-            None
-
-        """
+        """Close the NETCONF connection."""
         self.connection.close()
