@@ -1,14 +1,18 @@
 import os
+import sys
 
 import pytest
 
 from nornir import InitNornir
 
+# Preserve imports of shared test helpers after relocating this conftest.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
 
 @pytest.fixture(scope="function", autouse=True)
 def nornir():
     """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
     nornir = InitNornir(
         inventory={
@@ -28,7 +32,7 @@ def nornir():
 @pytest.fixture(scope="function", autouse=True)
 def nornir_global_dry_run():
     """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
     nornir_global_dry_run = InitNornir(
         inventory={
@@ -48,7 +52,7 @@ def nornir_global_dry_run():
 @pytest.fixture(scope="function", autouse=True)
 def nornir_community():
     """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
     nornir = InitNornir(
         inventory={
@@ -68,7 +72,7 @@ def nornir_community():
 @pytest.fixture(scope="function", autouse=True)
 def nornir_generic():
     """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
     nornir = InitNornir(
         inventory={
@@ -88,7 +92,7 @@ def nornir_generic():
 @pytest.fixture(scope="function", autouse=True)
 def nornir_raise_on_error():
     """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
     nornir = InitNornir(
         inventory={
@@ -109,7 +113,7 @@ def nornir_raise_on_error():
 @pytest.fixture(scope="function", autouse=True)
 def nornir_netconf():
     """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
     nornir = InitNornir(
         inventory={
@@ -129,7 +133,7 @@ def nornir_netconf():
 @pytest.fixture(scope="function", autouse=True)
 def nornir_global_ssh():
     """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
     nornir_global_ssh = InitNornir(
         inventory={
@@ -150,7 +154,7 @@ def nornir_global_ssh():
 @pytest.fixture(scope="function", autouse=True)
 def nornir_global_ssh_no_connection_option_ssh():
     """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
     nornir_global_ssh_no_connection_option_ssh = InitNornir(
         inventory={

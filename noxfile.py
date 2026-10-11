@@ -50,6 +50,14 @@ def unit_tests(session):
     )
 
 
+@nox.session(python="3.13")
+def functional_tests(session):
+    """Run functional tests against fake devices."""
+    sync(session, "functional")
+    test_args = session.posargs or ["tests/functional"]
+    session.run("pytest", *test_args)
+
+
 @nox.session(python=["3.13", "3.14"])
 def genie(session):
     """Exercise optional parsers on a compatible interpreter."""
