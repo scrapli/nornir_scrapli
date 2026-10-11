@@ -23,6 +23,7 @@ nav:
       - Project Details: user_guide/project_details.md
       - Versioning: user_guide/versioning.md
       - Installation: user_guide/installation.md
+      - Migrating to v2: user_guide/migrating_to_v2.md
       - Basic Usage: user_guide/basic_usage.md
       - Available Tasks: user_guide/available_tasks.md
       - Available Functions: user_guide/available_functions.md

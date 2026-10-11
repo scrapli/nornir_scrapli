@@ -34,13 +34,11 @@ iosxe-1:
       platform: cisco_iosxe
       port: 22
       extras:
-        ssh_config_file: True
-        auth_strict_key: False
+        transport: {kind: bin, ssh_config_path: ~/.ssh/config}
     scrapli_netconf:
       port: 830
       extras:
-        ssh_config_file: True
-        auth_strict_key: False
+        transport: {kind: bin, ssh_config_path: ~/.ssh/config}
 ```
 
 **NOTE:** `scrapli-netconf` has no concept (at the moment!) of "platforms" - it simply implements RFC compliant
@@ -110,14 +108,14 @@ config = """<config>
     </interfaces>
 </config>"""
 result = nr.run(task=netconf_edit_config, config=config)
-print(result['iosxe1'][0].result)
-print(result['iosxe1'][0].scrapli_response.xml_result)
+print(result['iosxe-1'][0].result)
+print(result['iosxe-1'][0].scrapli_response.rpc_errors)
 ```
 
 When using the `scrapli-netconf` tasks the result object `result` will be the string of the returned data from the
  device. As with all other `nornir-scrapli` results, the `scrapli_response` object will be assigned to the `Result
  ` object and will contain all of the "normal" `scrapli` response object data (or `scrapli-netconf` response data
- ), such as the `elapsed_time`, `raw_result`, `xml_result`, etc. -- you can see this in the above example!
+ ), such as `elapsed_time_seconds`, `result_raw`, and `rpc_errors`.
 
 
 

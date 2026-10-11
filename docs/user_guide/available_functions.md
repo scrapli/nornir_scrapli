@@ -1,5 +1,8 @@
 # Available Functions
 
+`print_structured_result` parses native v2 CLI results by input index. It keeps the
+original Nornir aggregate unchanged and can fall back to each input's output string.
+
 - [print_structured_result](https://scrapli.github.io/nornir_scrapli/reference/functions/#print_structured_result) -- 
   this function is very similar to the "normal" 
   `print_result` function that now ships with the `nornir_utils` library (historically with nornir "core"), except 

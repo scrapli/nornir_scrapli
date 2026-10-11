@@ -1,30 +1,26 @@
-"""nornir_scrapli.tasks.netconf_commit"""
+"""Commit NETCONF candidate configuration."""
+
+from typing import Optional
+
+from scrapli.ffi_types import Cancel
 
 from nornir.core.task import Result, Task
-from nornir_scrapli.result import ScrapliResult, process_command_result
+from nornir_scrapli.result import ScrapliResult
 
 
 def netconf_commit(
-    task: Task,
+    task: Task, *, operation_timeout_ns: Optional[int] = None, cancel: Optional[Cancel] = None
 ) -> Result:
-    """
-    Commit the device config with scrapli_netconf
+    """Commit the candidate datastore.
 
     Args:
-        task: nornir task object
+        task: Nornir task.
+        operation_timeout_ns: Operation timeout in nanoseconds.
+        cancel: Native cancellation context.
 
     Returns:
-        Result: nornir result object with Result.result value set the string result of the
-            get operation
-
+        Nornir result containing reply XML.
     """
-    scrapli_conn = task.host.get_connection("scrapli_netconf", task.nornir.config)
-    scrapli_response = scrapli_conn.commit()
-
-    result = ScrapliResult(
-        host=task.host,
-        result=process_command_result(scrapli_response=scrapli_response),
-        scrapli_response=scrapli_response,
-        changed=True,
-    )
-    return result
+    connection = task.host.get_connection("scrapli_netconf", task.nornir.config)
+    response = connection.commit(operation_timeout_ns=operation_timeout_ns, cancel=cancel)
+    return ScrapliResult(task.host, response.result, response, changed=True)

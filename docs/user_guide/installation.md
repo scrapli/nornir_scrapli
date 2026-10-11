@@ -17,6 +17,10 @@ Each `1.x` release is also published with a calendar version, such as `2026.10.3
 `pip install nornir-scrapli` installs the latest calendar version, which uses scrapli v1. Calendar versions will later
 follow `2.x` instead. See [Versioning](versioning.md) for details.
 
+The `2.x` line requires Python 3.10 or newer and `scrapli>=2026.10.8`. Python 3.10–3.14
+is tested. Install optional Genie parsing support with `pip install 'nornir-scrapli[genie]'`.
+TextFSM and ntc-templates are installed by default.
+
 
 ## Installing from a branch
 
@@ -49,11 +53,15 @@ cd nornir_scrapli
 pip install .
 ```
 
+For development, use the repository's uv/nox workflow described in the contributing guide.
+
 
 ## Supported Platforms
 
-As for platforms to *run* scrapli on -- it has and will be tested on MacOS and Ubuntu regularly and should work on any
- POSIX system. Windows at one point was being tested very minimally via GitHub Actions builds, however this is no
-  longer the case as it is just not worth the effort. While scrapli should work on Windows when using the paramiko or
-   ssh2-python transport drivers, it is not "officially" supported. It is *strongly* recommended/preferred for folks
-    to use WSL/Cygwin instead of Windows.
+scrapli v2 uses libscrapli native wheels for Linux x86_64/aarch64 (glibc and musl) and
+macOS Apple silicon. Windows and Intel macOS are unsupported. Choose a supported
+Linux environment when running automation from an unsupported desktop platform.
+
+Upgrading from `1.x` requires changes to inventory extras and task arguments. Follow
+[Migrating to v2](migrating_to_v2.md). Users needing the removed `cfg_*` tasks stay on
+`nornir-scrapli>=1,<2`.

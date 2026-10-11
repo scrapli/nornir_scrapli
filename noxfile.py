@@ -67,6 +67,28 @@ def genie(session):
 
 
 @nox.session(python="3.13")
+def unit_tests_min_scrapli(session):
+    """Verify the minimum supported scrapli version in an isolated environment."""
+    sync(session, "test")
+    session.run(
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        session.virtualenv.location,
+        "scrapli==2026.10.8",
+        external=True,
+    )
+    session.run(
+        "python",
+        "-I",
+        "-c",
+        "from importlib.metadata import version; assert version('scrapli') == '2026.10.8'",
+    )
+    session.run("pytest", "tests/unit", *session.posargs)
+
+
+@nox.session(python="3.13")
 def ruff(session):
     """Check formatting, imports, and lint rules."""
     sync(session, "lint")
