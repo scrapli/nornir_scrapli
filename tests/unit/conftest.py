@@ -1,172 +1,72 @@
-import os
 import sys
+from pathlib import Path
 
 import pytest
 
 from nornir import InitNornir
 
-# Preserve imports of shared test helpers after relocating this conftest.
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+sys.path.insert(0, str(Path(__file__).parents[1]))
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture
 def nornir():
-    """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
-    nornir = InitNornir(
+    root = Path(__file__).parents[1] / "inventory_data"
+    return InitNornir(
         inventory={
             "plugin": "YAMLInventory",
             "options": {
-                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
-                "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
-                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
+                "host_file": str(root / "hosts.yaml"),
+                "group_file": str(root / "groups.yaml"),
+                "defaults_file": str(root / "defaults.yaml"),
             },
         },
-        dry_run=False,
         logging={"enabled": False},
     )
-    return nornir
 
 
-@pytest.fixture(scope="function", autouse=True)
-def nornir_global_dry_run():
-    """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+@pytest.fixture
+def make_cli_result():
+    from scrapli.cli_result import Result
 
-    nornir_global_dry_run = InitNornir(
-        inventory={
-            "plugin": "YAMLInventory",
-            "options": {
-                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
-                "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
-                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            },
-        },
-        dry_run=True,
-        logging={"enabled": False},
-    )
-    return nornir_global_dry_run
+    def make(inputs=None, outputs=None, failed_indicator=""):
+        inputs = [] if inputs is None else inputs
+        outputs = [] if outputs is None else outputs
+        packed_inputs = [x.encode() for x in inputs]
+        packed_outputs = [x.encode() for x in outputs]
+        return Result(
+            host="test",
+            port=22,
+            inputs=b"".join(packed_inputs),
+            input_lens=[len(x) for x in packed_inputs],
+            start_time=1,
+            splits=[2] * len(outputs),
+            result_raw_journals=b"",
+            result_raw_journal_lens=[0] * len(outputs),
+            results=b"".join(packed_outputs),
+            result_lens=[len(x) for x in packed_outputs],
+            results_failed_indicator=failed_indicator,
+            textfsm_platform="cisco_iosxe",
+            genie_platform="iosxe",
+        )
 
-
-@pytest.fixture(scope="function", autouse=True)
-def nornir_community():
-    """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
-    nornir = InitNornir(
-        inventory={
-            "plugin": "YAMLInventory",
-            "options": {
-                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
-                "group_file": "{}/inventory_data/community_groups.yaml".format(dir_path),
-                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            },
-        },
-        dry_run=False,
-        logging={"enabled": False},
-    )
-    return nornir
+    return make
 
 
-@pytest.fixture(scope="function", autouse=True)
-def nornir_generic():
-    """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+@pytest.fixture
+def make_netconf_result():
+    from scrapli.netconf_result import Result
 
-    nornir = InitNornir(
-        inventory={
-            "plugin": "YAMLInventory",
-            "options": {
-                "host_file": "{}/inventory_data/hosts_generic.yaml".format(dir_path),
-                "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
-                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            },
-        },
-        dry_run=False,
-        logging={"enabled": False},
-    )
-    return nornir
+    def make(output="<ok/>", rpc_errors=""):
+        return Result(
+            input_="<rpc/>",
+            host="test",
+            port=830,
+            start_time=1,
+            end_time=2,
+            result_raw_journal=b"",
+            _result=output,
+            rpc_warnings="",
+            rpc_errors=rpc_errors,
+        )
 
-
-@pytest.fixture(scope="function", autouse=True)
-def nornir_raise_on_error():
-    """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
-    nornir = InitNornir(
-        inventory={
-            "plugin": "YAMLInventory",
-            "options": {
-                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
-                "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
-                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            },
-        },
-        core={"raise_on_error": True},
-        logging={"enabled": False},
-        dry_run=False,
-    )
-    return nornir
-
-
-@pytest.fixture(scope="function", autouse=True)
-def nornir_netconf():
-    """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
-    nornir = InitNornir(
-        inventory={
-            "plugin": "YAMLInventory",
-            "options": {
-                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
-                "group_file": "{}/inventory_data/netconf_groups.yaml".format(dir_path),
-                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            },
-        },
-        dry_run=False,
-        logging={"enabled": False},
-    )
-    return nornir
-
-
-@pytest.fixture(scope="function", autouse=True)
-def nornir_global_ssh():
-    """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
-    nornir_global_ssh = InitNornir(
-        inventory={
-            "plugin": "YAMLInventory",
-            "options": {
-                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
-                "group_file": "{}/inventory_data/netconf_groups.yaml".format(dir_path),
-                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            },
-        },
-        dry_run=False,
-        logging={"enabled": False},
-        ssh={"config_file": "notarealfile!"},
-    )
-    return nornir_global_ssh
-
-
-@pytest.fixture(scope="function", autouse=True)
-def nornir_global_ssh_no_connection_option_ssh():
-    """Initializes nornir"""
-    dir_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-
-    nornir_global_ssh_no_connection_option_ssh = InitNornir(
-        inventory={
-            "plugin": "YAMLInventory",
-            "options": {
-                "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
-                "group_file": "{}/inventory_data/no_ssh_config_groups.yaml".format(dir_path),
-                "defaults_file": "{}/inventory_data/defaults.yaml".format(dir_path),
-            },
-        },
-        dry_run=False,
-        logging={"enabled": False},
-        ssh={"config_file": ""},
-    )
-    return nornir_global_ssh_no_connection_option_ssh
+    return make

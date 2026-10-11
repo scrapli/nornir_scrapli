@@ -29,8 +29,8 @@ def main() -> None:
     print_structured_result(result=show_result, parser="textfsm", fail_to_string=True)
 
     # if you prefer to fetch/store/manipulate the structured data instead of simply printing it, you
-    # can do so by accessing the underlying scrapli `Response` object... first to keep this easy to
-    # read we can snag the specific host results out of the nornir `AggregateResult` object:
+    # can do so by accessing the underlying native scrapli `Result` object. First, fetch
+    # the specific host result from the Nornir aggregate:
     host_result = show_result["iosxe1"][0]
 
     # now we can see we've gotten the `Result` object -- or rather the `ScrapliResult` object from
@@ -46,8 +46,8 @@ def main() -> None:
 
     # At this point we can simply work with that `scrapli_response` like we would a "normal" scrapli
     # response object:
-    textfsm_results = host_result.scrapli_response.textfsm_parse_output()
-    genie_results = host_result.scrapli_response.genie_parse_output()
+    textfsm_results = host_result.scrapli_response.textfsm_parse(index=0)
+    genie_results = host_result.scrapli_response.genie_parse(index=0)
 
     print("TEXTFSM RESULTS: \n", textfsm_results)
     print("GENIE RESULTS: \n", genie_results)
