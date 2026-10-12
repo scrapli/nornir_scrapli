@@ -1,6 +1,7 @@
 """Bounded loopback FakeNOS lab and fresh Nornir inventories."""
 
 import errno
+import os
 import socket
 import threading
 import time
@@ -151,7 +152,8 @@ class _LabServer(ParamikoSshServer):
                 and str(exc)
                 in {
                     "Error reading SSH protocol banner",
-                    "Error reading SSH protocol banner[Errno 104] Connection reset by peer",
+                    "Error reading SSH protocol banner"
+                    f"[Errno {errno.ECONNRESET}] {os.strerror(errno.ECONNRESET)}",
                 }
             )
             auth_error = (
