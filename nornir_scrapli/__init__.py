@@ -1,3 +1,3 @@
 """nornir_scrapli"""
 
-__version__ = "2026.10.10"
+__version__ = "2026.10.13"

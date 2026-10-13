@@ -1,10 +1,10 @@
 # Changelog
 
-This file lists the changes in each nornir_scrapli release, starting with release 2026.10.10. For earlier releases, view the [GitHub releases page](https://github.com/scrapli/nornir_scrapli/releases).
+This file lists the changes in each nornir_scrapli release, starting with release 2026.10.13. For earlier releases, view the [GitHub releases page](https://github.com/scrapli/nornir_scrapli/releases).
 
-## 2026.10.10 - 2026-10-10
+## 2026.10.13 - 2026-10-13
 
-[Full list of commits since 2025.01.30](https://github.com/scrapli/nornir_scrapli/compare/2025.01.30...2026.10.10)
+[Full list of commits since 2025.01.30](https://github.com/scrapli/nornir_scrapli/compare/2025.01.30...2026.10.13)
 
 ### Breaking changes
 
