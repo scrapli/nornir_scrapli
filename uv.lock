@@ -2209,7 +2209,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0,<8.0.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=3.0.0,<5.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.16.7,<0.17.0" },
-    { name = "scrapli", specifier = ">=2022.1.30" },
+    { name = "scrapli", specifier = ">=2022.1.30,<2026.2.21" },
     { name = "scrapli-cfg", specifier = ">=2022.1.30" },
     { name = "scrapli-community", specifier = ">=2021.1.30" },
     { name = "scrapli-netconf", specifier = ">=2022.1.30" },
