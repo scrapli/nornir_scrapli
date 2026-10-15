@@ -1,7 +1,7 @@
 """nornir_scrapli.connection"""
 
 import asyncio
-from typing import Any, Dict, Optional
+from typing import Any, Dict, FrozenSet, Optional
 
 from scrapli import AsyncScrapli, Scrapli
 from scrapli.driver import AsyncGenericDriver, GenericDriver
@@ -10,8 +10,8 @@ from scrapli_cfg import AsyncScrapliCfg, ScrapliCfg
 from scrapli_netconf.driver import NetconfDriver
 
 from nornir.core.configuration import Config
+from nornir.core.plugins.connections import ConnectionCapability
 from nornir.core.task import Task
-from nornir_scrapli.connection_mode import ModeBoundConnection
 from nornir_scrapli.exceptions import NornirScrapliException, NornirScrapliInvalidPlatform
 
 CONNECTION_NAME = "scrapli"
@@ -25,44 +25,20 @@ PLATFORM_MAP = {
 }
 
 
-class ScrapliCore(ModeBoundConnection):
+class ScrapliCore:
     """Scrapli connection plugin for nornir"""
 
-    connection_name = CONNECTION_NAME
+    def __init__(self) -> None:
+        """Initialize without opening a transport."""
+        self.connection: Any = None
 
-    @staticmethod
-    def get_connection(task: Task) -> Any:
-        """Acquire the raw synchronous driver with a cache-hit mode guard.
-
-        Args:
-            task: nornir Task object
+    def get_capabilities(self) -> FrozenSet[ConnectionCapability]:
+        """Return supported opening modes without device I/O.
 
         Returns:
-            The established synchronous Scrapli driver
-
+            Both synchronous and asyncio capabilities.
         """
-        connection = task.host.get_connection(CONNECTION_NAME, task.nornir.config)
-        plugin = task.host.connections[CONNECTION_NAME]
-        if isinstance(plugin, ModeBoundConnection):
-            plugin.require_mode("sync")
-        return connection
-
-    @staticmethod
-    async def aget_connection(task: Task) -> Any:
-        """Acquire the raw asyncio driver with a cache-hit mode guard.
-
-        Args:
-            task: nornir Task object
-
-        Returns:
-            The established asynchronous Scrapli driver
-
-        """
-        connection = await task.host.aget_connection(CONNECTION_NAME, task.nornir.config)
-        plugin = task.host.connections[CONNECTION_NAME]
-        if isinstance(plugin, ModeBoundConnection):
-            plugin.require_mode("asyncio")
-        return connection
+        return frozenset({"sync", "asyncio"})
 
     def open(
         self,
@@ -95,7 +71,6 @@ class ScrapliCore(ModeBoundConnection):
                 string is provided
 
         """
-        self.require_unopened("sync")
         extras = extras or {}
         # 99.9% configuration will always be passed here... but to be consistent w/ the other
         # plugins we'll leave the function signature same/same as the others
@@ -140,7 +115,6 @@ class ScrapliCore(ModeBoundConnection):
 
         connection.open()
         self.connection = connection
-        self.mode = "sync"
 
     async def aopen(
         self,
@@ -167,7 +141,6 @@ class ScrapliCore(ModeBoundConnection):
             NornirScrapliInvalidPlatform: if no platform or an invalid platform is supplied
 
         """
-        self.require_unopened("asyncio")
         extras = extras or {}
         global_config = configuration.dict() if configuration else {}
         parameters: Dict[str, Any] = {
@@ -214,7 +187,6 @@ class ScrapliCore(ModeBoundConnection):
                 cleanup.exception()
             raise
         self.connection = connection
-        self.mode = "asyncio"
 
     def close(self) -> None:
         """
@@ -224,15 +196,12 @@ class ScrapliCore(ModeBoundConnection):
             None
 
         """
-        self.require_mode("sync")
         if self.connection is not None:
             self.connection.close()
             self.connection = None
-            self.mode = None
 
     async def aclose(self) -> None:
         """Close an asyncio driver, retaining its state if closing fails."""
-        self.require_mode("asyncio")
         if self.connection is not None:
             connection = self.connection
             if isinstance(connection, AsyncGenericDriver) and not connection.isalive():
@@ -247,13 +216,22 @@ class ScrapliCore(ModeBoundConnection):
             else:
                 await connection.close()
             self.connection = None
-            self.mode = None
 
 
-class ScrapliConfig(ModeBoundConnection):
+class ScrapliConfig:
     """Scrapli connection plugin for nornir"""
 
-    connection_name = "scrapli_cfg"
+    def __init__(self) -> None:
+        """Initialize without preparing a configuration wrapper."""
+        self.connection: Any = None
+
+    def get_capabilities(self) -> FrozenSet[ConnectionCapability]:
+        """Return supported opening modes without device I/O.
+
+        Returns:
+            Both synchronous and asyncio capabilities.
+        """
+        return frozenset({"sync", "asyncio"})
 
     @staticmethod
     def get_connection(task: Task) -> Any:
@@ -272,15 +250,12 @@ class ScrapliConfig(ModeBoundConnection):
 
         """
         if "scrapli_cfg" not in task.host.connections:
-            cli = ScrapliCore.get_connection(task)
+            cli = task.host.get_connection(CONNECTION_NAME, task.nornir.config)
             options = task.host.get_connection_parameters("scrapli_cfg")
             task.host.open_connection(
                 "scrapli_cfg", task.nornir.config, extras={**(options.extras or {}), "conn": cli}
             )
         connection = task.host.get_connection("scrapli_cfg", task.nornir.config)
-        plugin = task.host.connections["scrapli_cfg"]
-        if isinstance(plugin, ModeBoundConnection):
-            plugin.require_mode("sync")
         ScrapliConfig._require_current_cli(task, connection)
         return connection
 
@@ -296,15 +271,12 @@ class ScrapliConfig(ModeBoundConnection):
 
         """
         if "scrapli_cfg" not in task.host.connections:
-            cli = await ScrapliCore.aget_connection(task)
+            cli = await task.host.aget_connection(CONNECTION_NAME, task.nornir.config)
             options = task.host.get_connection_parameters("scrapli_cfg")
             await task.host.aopen_connection(
                 "scrapli_cfg", task.nornir.config, extras={**(options.extras or {}), "conn": cli}
             )
         connection = await task.host.aget_connection("scrapli_cfg", task.nornir.config)
-        plugin = task.host.connections["scrapli_cfg"]
-        if isinstance(plugin, ModeBoundConnection):
-            plugin.require_mode("asyncio")
         ScrapliConfig._require_current_cli(task, connection)
         return connection
 
@@ -334,7 +306,7 @@ class ScrapliConfig(ModeBoundConnection):
             ScrapliConfig
 
         """
-        scrapli_conn = ScrapliCore.get_connection(task)
+        scrapli_conn = task.host.get_connection(CONNECTION_NAME, task.nornir.config)
         scrapli_cfg_parameters = task.host.get_connection_parameters(connection="scrapli_cfg")
 
         # should always be a dict afaik, but typing doesnt appreciate the possibility it is None
@@ -379,12 +351,10 @@ class ScrapliConfig(ModeBoundConnection):
             None
 
         """
-        self.require_unopened("sync")
         parameters = self._parameters(extras)
         connection = ScrapliCfg(**parameters)
         connection.prepare()
         self.connection = connection
-        self.mode = "sync"
 
     async def aopen(
         self,
@@ -408,12 +378,10 @@ class ScrapliConfig(ModeBoundConnection):
             configuration: unused; supplied by Nornir
 
         """
-        self.require_unopened("asyncio")
         parameters = self._parameters(extras)
         connection = AsyncScrapliCfg(**parameters)
         await connection.prepare()
         self.connection = connection
-        self.mode = "asyncio"
 
     @staticmethod
     def _parameters(extras: Optional[Dict[str, Any]]) -> Dict[str, Any]:
@@ -427,15 +395,11 @@ class ScrapliConfig(ModeBoundConnection):
 
     def close(self) -> None:
         """Release the sync wrapper without closing its shared CLI driver."""
-        self.require_mode("sync")
         self.connection = None
-        self.mode = None
 
     async def aclose(self) -> None:
         """Release the async wrapper without closing its shared CLI driver."""
-        self.require_mode("asyncio")
         self.connection = None
-        self.mode = None
 
 
 class ScrapliNetconf:

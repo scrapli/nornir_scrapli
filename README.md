@@ -41,10 +41,12 @@ nornir_scrapli -- scrapli's plugin for nornir
 
 MacOS or \*nix<sup>1</sup>, Python 3.10–3.14 (development defaults to Python 3.13)
 
-This branch targets Nornir's experimental asyncio/capability-registry implementation
-and pins its Git dependency to commit `f62f07a`. Released Nornir 3.6.0 does not
-contain these APIs. Both synchronous and asynchronous CLI/configuration plugins
-use the capability registry in this branch.
+This branch requires the asyncio runner and capability-aware connection plugins from
+Nornir's `develop` branch
+([Nornir PR #1111](https://github.com/nornir-automation/nornir/pull/1111)), and pins its Git
+dependency to commit `6229e53`. Released Nornir 3.6.1 does not contain these APIs.
+Both synchronous and asynchronous CLI/configuration plugins use the capability
+registry in this branch.
 
 <sup>1</sup> Although many parts of scrapli *do* run on Windows, Windows is not officially supported
 
@@ -116,7 +118,8 @@ async def main():
 results = asyncio.run(main())
 ```
 
-Connections are mode-bound: using a synchronous task on an established async
-connection, or the reverse, raises `NornirScrapliConnectionModeError`. Close through
-the matching lifecycle before switching modes. See the
+Nornir owns connection mode binding: using a synchronous task on an established
+async connection, or the reverse, raises Nornir's `ConnectionModeMismatchError`.
+Use `host.connection_mode(name)` to query it and await `host.aclose_connections()`
+to clean up either or both execution modes. See the
 [asyncio guide](docs/user_guide/asyncio.md) for configuration workflows and cleanup.

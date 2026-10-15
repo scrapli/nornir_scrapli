@@ -4,7 +4,7 @@
 
 **Goal:** Run command and configuration tasks natively through Nornir's asyncio runner using single, mode-bound connection plugins.
 
-**Architecture:** Extend the existing CLI and configuration plugins with capability reporting and async lifecycle operations. Shared task acquisition helpers enforce the established mode on cache hits. Async task counterparts preserve raw drivers and existing ScrapliResult processing.
+**Architecture:** Extend the existing CLI and configuration plugins with capability reporting and async lifecycle operations. Nornir PR #1111 owns the established execution mode and cache-hit guards. Async task counterparts use public Host getters and preserve raw drivers and existing ScrapliResult processing.
 
 **Tech Stack:** Python >=3.10, Nornir async branch, Scrapli, Scrapli-Cfg, asyncssh, pytest, uv/nox.
 
@@ -42,21 +42,21 @@
 
 ### Task 2: Mode-bound connections
 
-**Files:** `connection.py`, `connection_mode.py`, `exceptions.py`, `tests/unit/test_async_connection.py`.
+**Files:** `connection.py`, `tests/unit/test_async_connection.py`.
 
-**Interfaces:** `ScrapliCore.get_connection(task)`, `ScrapliCore.aget_connection(task)`, `ScrapliConfig.get_connection(task)`, `ScrapliConfig.aget_connection(task)` return guarded raw drivers/wrappers. `open`/`aopen` retain Nornir's parameter contract; `get_capabilities` returns both modes.
+**Interfaces:** `Host.get_connection`, `Host.aget_connection` and `Host.connection_mode` provide Nornir-owned mode validation. `ScrapliConfig.get_connection(task)` and `ScrapliConfig.aget_connection(task)` retain shared-wrapper preparation/identity validation. `open`/`aopen` retain Nornir's parameter contract; `get_capabilities` returns both modes.
 
 - [x] Write and run failing tests for both guards, lifecycle retry, failed/cancelled opening, and wrapper ownership.
-- [x] Implement lifecycle state and async CLI opening with `AsyncScrapli`/`AsyncGenericDriver`.
+- [x] Implement transport ownership and async CLI opening with `AsyncScrapli`/`AsyncGenericDriver`, without duplicating Nornir's execution-mode state.
 - [x] Implement public-API cfg acquisition and preparation with `AsyncScrapliCfg`.
-- [x] Route sync CLI tasks through guarded acquisition.
+- [x] Route sync and async CLI tasks through Nornir's public getters.
 - [x] Run connection tests and the existing suite.
 
 ### Task 3: Native async tasks
 
 **Files:** `async_tasks/__init__.py`, `async_tasks/core.py`, `async_tasks/cfg.py`, `tests/unit/test_async_tasks.py`.
 
-**Interfaces:** Explicit `async def` counterparts of all eight CLI and six cfg task signatures, importing the shared guarded acquisition interfaces from Task 2.
+**Interfaces:** Explicit `async def` counterparts of all eight CLI and six cfg task signatures, using the Nornir-owned acquisition interfaces from Task 2.
 
 - [x] Write and run failing runner/subtask tests for response parity, config dry-run, cfg candidate/diff/commit/abort, and wrong-mode task use.
 - [x] Implement native awaited device operations; offload file reading, not device I/O.
@@ -71,7 +71,7 @@
 - [x] Run unit/functional tests, lint, strict mypy, docs, and distribution builds.
 - [x] Review the complete diff and report results and integration limitations.
 
-## Execution record
+## Initial execution record
 
 - Initial baseline: 44 unit tests passed, 4 optional-parser tests skipped.
 - Connection tests: 8 failures for missing async/guard APIs, then green after implementation.
@@ -94,8 +94,29 @@
   package and experimental branch both report Nornir 3.6.0, so a version floor
   could install an incompatible core. This requires Git/source installation until
   upstream releases the APIs.
-- Keep raw driver types and enforce mode at task acquisition and plugin lifecycle
-  boundaries. Bare Nornir getters and synchronous cache-removing cleanup need
-  upstream preflight support; custom tasks should use the guarded helpers.
+- Keep raw driver types and delegate execution-mode validation to Nornir's public
+  Host API. Pin the mode-binding revision of PR #1111; the plugin's former duplicate
+  mode state, guarded CLI accessors and custom mode error are removed.
 - Reject stale cfg wrappers instead of automatically replacing them, to preserve
   visibility of any candidate workflow tied to the old driver.
+
+## Nornir PR #1111 alignment
+
+- Updated the runtime Git pin from `f62f07a` to `01bac1d`, the reviewed mode-binding
+  revision of Nornir's async branch.
+- Removed the plugin-owned mode state/base class, custom mode error and guarded CLI
+  getter wrappers. All CLI tasks now use public Host getters; Nornir owns mode
+  validation, queries and mixed cleanup.
+- Kept plugin-owned partial-open cleanup, retryable async transport cleanup and cfg
+  shared-driver identity validation.
+- Preserved the existing uncommitted pytest 8 / pytest-asyncio test conversions.
+- Verified wrong-mode rejection and cache retention through Nornir, mode queries and
+  reopen, async-close retry, single-close shared cfg ownership in both modes, and
+  mixed legacy NETCONF plus async CLI cleanup.
+- Combined unit/functional selection: **132 passed, 4 optional-parser skips** in
+  118.47 seconds. This includes all 49 real-SSH simulator cases.
+- Installed-package units on Python 3.10–3.14: **83 passed, 4 skips** per interpreter.
+  Genie on Python 3.13/3.14: **87 passed** each. Ruff, strict mypy, strict docs and
+  wheel/sdist builds passed.
+- Focused independent review found no functional issues; its lifecycle-summary
+  clarification was applied to the design document.

@@ -4,7 +4,6 @@ import asyncio
 from typing import Any, List, Optional, Tuple, Union
 
 from nornir.core.task import Result, Task
-from nornir_scrapli.connection import ScrapliCore
 from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 from nornir_scrapli.result import ScrapliResult, process_command_result, process_config_result
 
@@ -19,7 +18,7 @@ async def get_prompt(task: Task) -> Result:
         The prompt in a Nornir result
 
     """
-    conn = await ScrapliCore.aget_connection(task)
+    conn = await task.host.aget_connection("scrapli", task.nornir.config)
     prompt = await conn.get_prompt()
     return Result(host=task.host, result=prompt, failed=False, changed=False)
 
@@ -44,7 +43,7 @@ async def send_command(
         Command output and the original Scrapli response
 
     """
-    conn = await ScrapliCore.aget_connection(task)
+    conn = await task.host.aget_connection("scrapli", task.nornir.config)
     response = await conn.send_command(
         command=command,
         strip_prompt=strip_prompt,
@@ -80,7 +79,7 @@ async def send_commands(
         Combined output and the original Scrapli responses
 
     """
-    conn = await ScrapliCore.aget_connection(task)
+    conn = await task.host.aget_connection("scrapli", task.nornir.config)
     response = await conn.send_commands(
         commands=commands,
         strip_prompt=strip_prompt,
@@ -118,7 +117,7 @@ async def send_commands_from_file(
         Combined output and the original Scrapli responses
 
     """
-    conn = await ScrapliCore.aget_connection(task)
+    conn = await task.host.aget_connection("scrapli", task.nornir.config)
     commands = await asyncio.to_thread(
         conn._pre_send_from_file, file=file, caller="send_commands_from_file"
     )
@@ -147,7 +146,7 @@ async def send_interactive(
         A Nornir result containing the original response, matching the sync task
 
     """
-    conn = await ScrapliCore.aget_connection(task)
+    conn = await task.host.aget_connection("scrapli", task.nornir.config)
     response = await conn.send_interactive(
         interact_events=interact_events,
         failed_when_contains=failed_when_contains,
@@ -162,7 +161,7 @@ async def send_interactive(
 async def _config_connection(task: Task, dry_run: Optional[bool]) -> Tuple[Any, bool]:
     if task.host.platform == "generic":
         raise NornirScrapliNoConfigModeGenericDriver("No config mode for 'generic' platform type")
-    conn = await ScrapliCore.aget_connection(task)
+    conn = await task.host.aget_connection("scrapli", task.nornir.config)
     is_dry_run = dry_run if dry_run is not None else task.global_dry_run
     if is_dry_run:
         await conn.acquire_priv("configuration")

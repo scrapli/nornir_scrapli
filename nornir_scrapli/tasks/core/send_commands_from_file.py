@@ -3,7 +3,6 @@
 from typing import List, Optional, Union
 
 from nornir.core.task import Result, Task
-from nornir_scrapli.connection import ScrapliCore
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
@@ -38,7 +37,7 @@ def send_commands_from_file(
             object
 
     """
-    scrapli_conn = ScrapliCore.get_connection(task)
+    scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
     scrapli_response = scrapli_conn.send_commands_from_file(
         file=file,
         strip_prompt=strip_prompt,
