@@ -3,7 +3,6 @@
 from typing import List, Optional, Union
 
 from nornir.core.task import Result, Task
-from nornir_scrapli.connection import ScrapliCore
 from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 from nornir_scrapli.result import ScrapliResult, process_config_result
 
@@ -57,7 +56,7 @@ def send_configs(
     if task.host.platform == "generic":
         raise NornirScrapliNoConfigModeGenericDriver("No config mode for 'generic' platform type")
 
-    scrapli_conn = ScrapliCore.get_connection(task)
+    scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
 
     _task_dry_run = dry_run if dry_run is not None else task.global_dry_run
 

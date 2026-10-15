@@ -1,6 +1,4 @@
-import asyncio
 import importlib
-from types import SimpleNamespace
 
 import pytest
 from scrapli.driver.core import AsyncIOSXEDriver, IOSXEDriver
@@ -8,10 +6,9 @@ from scrapli.response import MultiResponse, Response
 from scrapli_cfg.platform.core.cisco_iosxe.async_platform import AsyncScrapliCfgIOSXE
 from scrapli_cfg.response import ScrapliCfgResponse
 
+from nornir.core.exceptions import ConnectionModeMismatchError
 from nornir.core.task import Result
 from nornir.plugins.runners import AsyncioRunner, SerialRunner
-from nornir_scrapli.connection import ScrapliCore
-from nornir_scrapli.exceptions import NornirScrapliConnectionModeError
 from nornir_scrapli.tasks import send_command as sync_send_command
 
 
@@ -65,7 +62,8 @@ def drivers(monkeypatch):
         ("send_configs_from_file", {}, "send_configs", "configs", "one\ntwo\n", True),
     ],
 )
-def test_async_cli_response_parity(
+@pytest.mark.asyncio
+async def test_async_cli_response_parity(
     nornir, drivers, monkeypatch, tmp_path, name, arguments, method, input_key, expected, changed
 ):
     tasks = importlib.import_module("nornir_scrapli.async_tasks")
@@ -90,26 +88,24 @@ def test_async_cli_response_parity(
 
     monkeypatch.setattr(AsyncIOSXEDriver, method, send)
 
-    async def exercise():
-        async with nr:
-            result = await nr.arun(
-                task=getattr(tasks, name),
-                **arguments,
-                strip_prompt=False,
-                failed_when_contains="ERROR",
-                timeout_ops=7,
-            )
-            value = result["sea-ios-1"][0]
-            assert not value.failed, value.exception
-            assert value.result == expected
-            assert value.changed is changed
-            assert isinstance(value.scrapli_response, (Response, MultiResponse))
-        assert not nr.inventory.hosts["sea-ios-1"].connections
-
-    asyncio.run(exercise())
+    async with nr:
+        result = await nr.arun(
+            task=getattr(tasks, name),
+            **arguments,
+            strip_prompt=False,
+            failed_when_contains="ERROR",
+            timeout_ops=7,
+        )
+        value = result["sea-ios-1"][0]
+        assert not value.failed, value.exception
+        assert value.result == expected
+        assert value.changed is changed
+        assert isinstance(value.scrapli_response, (Response, MultiResponse))
+    assert not nr.inventory.hosts["sea-ios-1"].connections
 
 
-def test_async_prompt_and_interactive_nested_tasks(nornir, drivers, monkeypatch):
+@pytest.mark.asyncio
+async def test_async_prompt_and_interactive_nested_tasks(nornir, drivers, monkeypatch):
     tasks = importlib.import_module("nornir_scrapli.async_tasks")
     nr = async_nr(nornir)
 
@@ -133,23 +129,21 @@ def test_async_prompt_and_interactive_nested_tasks(nornir, drivers, monkeypatch)
         await task.arun(task=tasks.send_interactive, interact_events=[("clear", "confirm", False)])
         return Result(host=task.host, result="done")
 
-    async def exercise():
-        async with nr:
-            result = await nr.arun(task=workflow)
-            values = result["sea-ios-1"]
-            assert not values.failed
-            assert values[1].result == "router#"
-            assert type(values[2]) is Result
-            assert values[2].result is values[2].scrapli_response
-            assert values[2].result.result == "cleared"
-            assert values[2].changed is True
-
-    asyncio.run(exercise())
+    async with nr:
+        result = await nr.arun(task=workflow)
+        values = result["sea-ios-1"]
+        assert not values.failed
+        assert values[1].result == "router#"
+        assert type(values[2]) is Result
+        assert values[2].result is values[2].scrapli_response
+        assert values[2].result.result == "cleared"
+        assert values[2].changed is True
 
 
 @pytest.mark.parametrize("name", ["send_config", "send_configs", "send_configs_from_file"])
 @pytest.mark.parametrize("global_dry_run,explicit", [(False, True), (True, None)])
-def test_async_config_dry_run(nornir, drivers, monkeypatch, name, global_dry_run, explicit):
+@pytest.mark.asyncio
+async def test_async_config_dry_run(nornir, drivers, monkeypatch, name, global_dry_run, explicit):
     tasks = importlib.import_module("nornir_scrapli.async_tasks")
     nr = async_nr(nornir)
     nr.data.dry_run = global_dry_run
@@ -170,20 +164,18 @@ def test_async_config_dry_run(nornir, drivers, monkeypatch, name, global_dry_run
         "send_configs_from_file": {"file": "/must-not-read-this"},
     }[name]
 
-    async def exercise():
-        async with nr:
-            result = await nr.arun(task=getattr(tasks, name), **args, dry_run=explicit)
-            value = result["sea-ios-1"][0]
-            assert not value.failed, value.exception
-            assert value.result is None
-            assert value.changed is False
-            assert value.scrapli_response is None
-            assert privileges == ["configuration", "privilege_exec"]
-
-    asyncio.run(exercise())
+    async with nr:
+        result = await nr.arun(task=getattr(tasks, name), **args, dry_run=explicit)
+        value = result["sea-ios-1"][0]
+        assert not value.failed, value.exception
+        assert value.result is None
+        assert value.changed is False
+        assert value.scrapli_response is None
+        assert privileges == ["configuration", "privilege_exec"]
 
 
-def test_async_failed_response_is_recorded(nornir, drivers, monkeypatch):
+@pytest.mark.asyncio
+async def test_async_failed_response_is_recorded(nornir, drivers, monkeypatch):
     tasks = importlib.import_module("nornir_scrapli.async_tasks")
     nr = async_nr(nornir)
 
@@ -192,40 +184,32 @@ def test_async_failed_response_is_recorded(nornir, drivers, monkeypatch):
 
     monkeypatch.setattr(AsyncIOSXEDriver, "send_command", send)
 
-    async def exercise():
-        async with nr:
-            result = await nr.arun(task=tasks.send_command, command="bad")
-            assert result["sea-ios-1"].failed
-            assert result["sea-ios-1"][0].result == "ERROR"
-            await nr.aclose_connections(on_good=True, on_failed=True)
-
-    asyncio.run(exercise())
+    async with nr:
+        result = await nr.arun(task=tasks.send_command, command="bad")
+        assert result["sea-ios-1"].failed
+        assert result["sea-ios-1"][0].result == "ERROR"
+        await nr.aclose_connections(on_good=True, on_failed=True)
 
 
 @pytest.mark.parametrize("opened_mode", ["sync", "asyncio"])
-def test_wrong_mode_task_records_named_error(nornir, drivers, monkeypatch, opened_mode):
+@pytest.mark.asyncio
+async def test_wrong_mode_task_records_named_error(nornir, drivers, monkeypatch, opened_mode):
     tasks = importlib.import_module("nornir_scrapli.async_tasks")
     nr = async_nr(nornir)
     host = nr.inventory.hosts["sea-ios-1"]
-    task = SimpleNamespace(host=host, nornir=nr)
     monkeypatch.setattr(IOSXEDriver, "open", lambda self: None)
     monkeypatch.setattr(IOSXEDriver, "close", lambda self: None)
 
-    async def exercise():
-        if opened_mode == "sync":
-            host.connection_options["scrapli"].extras["transport"] = "system"
-            ScrapliCore.get_connection(task)
-            results = await nr.arun(task=tasks.send_command, command="show version")
-            host.close_connection("scrapli")
-        else:
-            await ScrapliCore.aget_connection(task)
-            results = nr.with_runner(SerialRunner()).run(
-                task=sync_send_command, command="show version"
-            )
-            await host.aclose_connections()
-        assert isinstance(results["sea-ios-1"][0].exception, NornirScrapliConnectionModeError)
-
-    asyncio.run(exercise())
+    if opened_mode == "sync":
+        host.connection_options["scrapli"].extras["transport"] = "system"
+        host.get_connection("scrapli", nr.config)
+        results = await nr.arun(task=tasks.send_command, command="show version")
+        host.close_connection("scrapli")
+    else:
+        await host.aget_connection("scrapli", nr.config)
+        results = nr.with_runner(SerialRunner()).run(task=sync_send_command, command="show version")
+        await host.aclose_connections()
+    assert isinstance(results["sea-ios-1"][0].exception, ConnectionModeMismatchError)
 
 
 @pytest.mark.parametrize(
@@ -245,7 +229,8 @@ def test_wrong_mode_task_records_named_error(nornir, drivers, monkeypatch, opene
         ("cfg_abort_config", "abort_config", {}, "aborted", False),
     ],
 )
-def test_async_cfg_response_parity(
+@pytest.mark.asyncio
+async def test_async_cfg_response_parity(
     nornir, drivers, monkeypatch, name, method, args, expected, changed
 ):
     tasks = importlib.import_module("nornir_scrapli.async_tasks")
@@ -263,12 +248,9 @@ def test_async_cfg_response_parity(
 
     monkeypatch.setattr(AsyncScrapliCfgIOSXE, method, operation)
 
-    async def exercise():
-        async with nr:
-            result = await nr.arun(task=getattr(tasks, name), **args)
-            value = result["sea-ios-1"][0]
-            assert not value.failed, value.exception
-            assert value.result == expected
-            assert value.changed is changed
-
-    asyncio.run(exercise())
+    async with nr:
+        result = await nr.arun(task=getattr(tasks, name), **args)
+        value = result["sea-ios-1"][0]
+        assert not value.failed, value.exception
+        assert value.result == expected
+        assert value.changed is changed

@@ -5,9 +5,12 @@
 Use one plugin class and connection name for synchronous and asyncio execution:
 `ScrapliCore` / `scrapli` and `ScrapliConfig` / `scrapli_cfg`. Register these names
 once in Nornir's capability registry. Each instance reports both capabilities,
-chooses its driver on open, and retains that mode until successful close.
-Wrong-mode task acquisition and lifecycle operations raise a named error with
-instructions to close and reopen. No transparent thread or event-loop bridge is used.
+chooses its driver on open, and lets Nornir record the opening mode.
+Opposite-mode acquisition and synchronous cleanup of an asyncio-bound connection
+raise Nornir's named mismatch error. Async cleanup dispatches to the matching close
+method and retains a failed async close for retry. Synchronous host close follows
+Nornir's existing behavior of removing the cache and binding before calling the plugin.
+No transparent thread or event-loop bridge is used for device operations.
 
 Add explicit native coroutine tasks in `nornir_scrapli.async_tasks` for the eight
 CLI tasks and six Scrapli-Cfg tasks. Preserve arguments, result objects, failure
@@ -17,23 +20,21 @@ they do not own or close it, and copy inventory extras before overriding options
 
 ## Implementation decisions
 
-- Target Nornir commit `f62f07aab4a1285c4c1e918151c3476472b15a84` from
+- Target Nornir commit `01bac1d326092489d688a72cd9d19569c6e1688a` from
   `dga/feat-async-spplb`; pin the runtime dependency while upstream support is unreleased.
 - Released Nornir 3.6.0 lacks discovery of the new registry despite sharing the
   branch's version number. A version floor alone cannot select the required APIs.
 - Default async CLI opening to `asyncssh`, exposed through an optional `asyncio` extra.
 - Keep the raw Scrapli driver type so Scrapli-Cfg's exact-type factory continues
-  to work. Guards cover this package's tasks and plugin lifecycle. Raw-driver
-  access is not intercepted; Nornir itself currently returns opposite-mode cache hits.
-- Nornir's documented dual-capability contract assumes cross-mode transport reuse.
-  This package instead implements the explicitly approved mode-bound policy;
-  documentation must explain that distinction and the upstream integration limit.
+  to work. Nornir PR #1111 owns execution-mode binding, cache-hit validation, named
+  mismatch errors, and mixed-mode cleanup. Do not duplicate those features in the
+  plugin; use the public Host getters and `connection_mode` query.
 - Use public host APIs for configuration-wrapper registration, including explicit
   extras carrying the existing CLI driver. No private Nornir cache access.
 - Publish connections only on successful open; reclaim partial async opens on
-  failure/cancellation. Failed closes retain state for retry. Wrong-mode closing
-  raises too; mixed-mode inventories require explicit cleanup through the matching
-  host/plugin lifecycle operations.
+  failure/cancellation. Failed async closes retain transport state for retry.
+  Nornir's async cleanup selects `close` for sync-bound connections and `aclose`
+  for asyncio-bound connections, retaining failed async cache entries for retry.
 
 ## Verification
 

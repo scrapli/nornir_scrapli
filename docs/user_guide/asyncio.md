@@ -7,7 +7,8 @@ async imports are in `nornir_scrapli.async_tasks`.
 ## Install
 
 This implementation targets Nornir's experimental `dga/feat-async-spplb` branch
-at commit `f62f07aab4a1285c4c1e918151c3476472b15a84`. The checkout pins that Git
+at commit `01bac1d326092489d688a72cd9d19569c6e1688a` from
+[PR #1111](https://github.com/nornir-automation/nornir/pull/1111). The checkout pins that Git
 dependency because released Nornir 3.6.0 does not expose the capability registry
 or async runner, although the experimental branch reports the same version.
 
@@ -130,49 +131,50 @@ wrapper does not close the CLI driver. Candidate loading and diffing report
 tasks, cfg commit does not implicitly honor global dry-run: choose commit or
 abort explicitly in the workflow.
 
-## Mode guards and switching
+## Connection execution modes and switching
 
-A plugin supports both opening modes, but an established connection has one
-active mode. Tasks acquire the driver through `ScrapliCore.get_connection(task)`
-or `await ScrapliCore.aget_connection(task)`. Configuration tasks use the matching
-`ScrapliConfig` helpers. These helpers validate cache hits and reject the opposite
-mode with `NornirScrapliConnectionModeError` before a device operation.
+Each plugin declares both opening capabilities, while Nornir binds an established
+connection to the execution mode that opened it. CLI tasks and custom tasks use
+Nornir's public getters directly:
 
-Plugin `open`/`aopen` and `close`/`aclose` operations also enforce the active mode.
-To change modes, close the cfg wrapper first, then its CLI driver, using matching
-host lifecycle operations. For an async connection:
+```python
+driver = task.host.get_connection("scrapli", task.nornir.config)  # synchronous task
+# In a coroutine task:
+driver = await task.host.aget_connection("scrapli", task.nornir.config)
+mode = task.host.connection_mode("scrapli")  # "sync", "asyncio", or None
+```
+
+Nornir checks both fresh and cached access. Opposite-mode access raises
+`nornir.core.exceptions.ConnectionModeMismatchError` before a device operation.
+Synchronous host cleanup of an asyncio-bound connection raises the same error and
+leaves the cached connection available for asynchronous cleanup. This package does
+not keep a second execution-mode field or implement a parallel mode guard.
+
+To switch execution modes, close the cfg wrapper first, then its CLI driver:
 
 ```python
 await host.aclose_connection("scrapli_cfg")  # if a wrapper was opened
 await host.aclose_connection("scrapli")
 ```
 
-For a sync connection, use `host.close_connection` instead. Once closed, the
-same connection name can be reopened in the other mode. Ensure any explicit
-transport option matches the new mode, and serialize operations for each host.
+These asynchronous host cleanup methods work for sync-bound connections too:
+Nornir selects the matching plugin `close` or `aclose` method. For a host with only
+synchronous connections, synchronous `host.close_connection` is also available.
+Once closed, `host.connection_mode(name)` returns `None`, and that name can reopen
+in either mode. Ensure any explicit transport option matches the new mode and
+serialize operations for each host.
+
+Configuration tasks retain `ScrapliConfig.get_connection(task)` and
+`await ScrapliConfig.aget_connection(task)` for preparing and validating the shared
+configuration wrapper. Their mode checks are performed by Nornir's getters.
 
 If the CLI driver is closed or replaced while its configuration wrapper remains
 cached, configuration-task acquisition rejects that stale wrapper. Close the
 wrapper before starting a new candidate workflow on the replacement driver.
 
-### Boundaries of the experimental Nornir contract
-
-The upstream dual-capability protocol currently promises cross-mode reuse of an
-established transport. Scrapli has distinct sync and async drivers, so this
-package implements a mode-bound policy instead. The capability declaration
-describes supported opening modes, not interchangeable established drivers.
-
-Nornir's bare `host.get_connection` and `host.aget_connection` currently return
-opposite-mode cache hits without inspecting this package's active mode. Custom
-tasks should use the guarded helpers. Direct calls on a raw Scrapli driver are
-outside these guards; retaining the raw driver's concrete type is necessary for
-Scrapli-Cfg platform selection.
-
-The upstream synchronous `host.close_connection` removes its cache entry before
-calling the plugin's `close`. Calling it on an async connection raises the mode
-error but also removes Nornir's cache entry. Use the matching cleanup method;
-if this mistake occurs, retain the plugin reference and await `plugin.aclose()`
-to reclaim its transport. Host-level preflight guards require an upstream change.
+Raw Scrapli driver operations remain Scrapli's API; retaining their concrete types
+is necessary for Scrapli-Cfg platform selection. Use Nornir's host lifecycle APIs
+for managed connections rather than calling plugin lifecycle methods directly.
 
 ## Cleanup and cancellation
 
@@ -188,6 +190,8 @@ propagating the original error. Async close is idempotent, and a failed close
 retains plugin state for retry. Already-disconnected drivers skip device logout
 hooks while still closing channel resources.
 
-Mixed-mode connections need matching per-host cleanup; a dual-capability plugin
-opened synchronously rejects `aclose` as well as async task operations. Do not
-perform concurrent task operations or cleanup on the same host connection.
+Nornir's asynchronous cleanup handles mixed inventories, including the legacy
+sync-only NETCONF plugin. The plugin still owns cleanup of resources acquired before
+an unsuccessful async open because Nornir does not cache unsuccessful opens. Stale
+Scrapli-Cfg wrappers are also plugin-specific and remain rejected until closed.
+Do not perform concurrent task operations or cleanup on the same host connection.

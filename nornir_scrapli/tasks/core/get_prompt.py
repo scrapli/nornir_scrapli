@@ -1,7 +1,6 @@
 """nornir_scrapli.tasks.get_prompt"""
 
 from nornir.core.task import Result, Task
-from nornir_scrapli.connection import ScrapliCore
 
 
 def get_prompt(task: Task) -> Result:
@@ -15,6 +14,6 @@ def get_prompt(task: Task) -> Result:
         Result: nornir result object with Result.result value set to current prompt
 
     """
-    scrapli_conn = ScrapliCore.get_connection(task)
+    scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
     prompt = scrapli_conn.get_prompt()
     return Result(host=task.host, result=prompt, failed=False, changed=False)

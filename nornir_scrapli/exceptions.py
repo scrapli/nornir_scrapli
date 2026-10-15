@@ -11,7 +11,3 @@ class NornirScrapliInvalidPlatform(NornirScrapliException):
 
 class NornirScrapliNoConfigModeGenericDriver(NornirScrapliException):
     """nornir_scrapli exception for attempting config mode on generic platform"""
-
-
-class NornirScrapliConnectionModeError(NornirScrapliException):
-    """A connection was requested through the wrong execution mode."""
