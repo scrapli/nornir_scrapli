@@ -1,6 +1,6 @@
 NOX = uv run --locked --only-group nox nox
 
-.PHONY: setup lint format test cov test_unit cov_unit docs test_docs deploy_docs build
+.PHONY: setup lint format test cov test_unit test_functional cov_unit docs test_docs deploy_docs build
 
 setup:
 	uv sync --locked
@@ -14,6 +14,9 @@ format:
 
 test test_unit:
 	$(NOX) -s unit_tests-3.13
+
+test_functional:
+	$(NOX) -s functional_tests
 
 cov cov_unit:
 	$(NOX) -s unit_tests-3.13 -- --cov-report=html

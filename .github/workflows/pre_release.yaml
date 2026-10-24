@@ -23,4 +23,6 @@ jobs:
           python-version: "3.13"
           enable-cache: auto
       - run: uv lock --upgrade
+      - if: matrix.os == 'ubuntu-latest'
+        run: uv run --locked --only-group nox nox -s functional_tests
       - run: uv run --locked --only-group nox nox -s unit_tests-3.13
