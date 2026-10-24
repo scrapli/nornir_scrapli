@@ -46,9 +46,21 @@ MacOS or \*nix<sup>1</sup>, Python 3.10–3.14 (development defaults to Python 3
 
 ## Installation
 
+nornir_scrapli uses [semantic versions](https://semver.org/). The major version matches the scrapli major version.
+Install the release line that matches your scrapli version:
+
 ```
-pip install nornir-scrapli
+# scrapli v1
+pip install "nornir-scrapli>=1,<2"
+
+# scrapli v2
+pip install "nornir-scrapli>=2,<3"
 ```
+
+`2026.10.13` is the last release with a calendar version. Without a version constraint, `pip install nornir-scrapli`
+installs `2026.10.13`, which receives no further fixes. See the
+[versioning docs](https://scrapli.github.io/nornir_scrapli/user_guide/versioning) and
+[issue #178](https://github.com/scrapli/nornir_scrapli/issues/178) for details.
 
 See the [docs](https://scrapli.github.io/nornir_scrapli/user_guide/installation) for other installation methods/details.
 
