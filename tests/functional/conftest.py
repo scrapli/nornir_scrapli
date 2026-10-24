@@ -16,20 +16,22 @@ import yaml
 from fakenos import FakeNOS
 from fakenos.plugins.servers.ssh_server_paramiko import ParamikoSshServer
 from paramiko import SSHException
+from scrapli import Cli
 
 from functional.constants import (
     AUTH_FAILURE_HOST,
     HEALTHY_REPLICAS,
+    OPERATION_TIMEOUT_NS,
     PASSWORD,
     REJECTED_LOGIN_PASSWORD,
     SLOW_RESPONSE_DELAY,
     SUPPORTED_PLATFORMS,
     TIMEOUT_FAILURE_HOST,
-    TIMEOUT_OPS,
     USERNAME,
 )
 from nornir import InitNornir
 from nornir.core import Nornir
+from nornir_scrapli import connection as connection_plugins
 
 
 @dataclass(frozen=True)
@@ -51,6 +53,18 @@ class InventoryFiles:
     hosts: Path
     groups: Path
     defaults: Path
+
+
+class _TrackedCli(Cli):
+    """Observe native allocation release without replacing any SSH operations."""
+
+    def __init__(self, **options):
+        super().__init__(**options)
+        self.lab_released = False
+
+    def _free(self):
+        super()._free()
+        self.lab_released = True
 
 
 class _LabThreads:
@@ -300,14 +314,15 @@ def functional_inventory_files(
                 "scrapli": {
                     "platform": platform,
                     "extras": {
-                        "transport": "system",
-                        "auth_strict_key": False,
-                        "ssh_config_file": False,
-                        "ssh_known_hosts_file": False,
-                        "auth_secondary": PASSWORD,
-                        "timeout_socket": 3,
-                        "timeout_transport": 5,
-                        "timeout_ops": TIMEOUT_OPS,
+                        "auth": {"lookups": {"enable": PASSWORD}},
+                        "session": {"operation_timeout_ns": OPERATION_TIMEOUT_NS},
+                        "transport": {
+                            "kind": "bin",
+                            "enable_strict_key": False,
+                            "ssh_config_path": "/dev/null",
+                            "known_hosts_path": "/dev/null",
+                            "extra_open_args": ["-o", "ConnectTimeout=3"],
+                        },
                     },
                 }
             }
@@ -325,7 +340,10 @@ def functional_inventory_files(
 
 @pytest.fixture
 def functional_nornir(
-    functional_inventory_files: InventoryFiles, fake_nos_lab: FakeNosLab
+    functional_inventory_files: InventoryFiles,
+    fake_nos_lab: FakeNosLab,
+    monkeypatch,
+    tmp_path: Path,
 ) -> Iterator[Nornir]:
     files = functional_inventory_files
     nr = InitNornir(
@@ -343,15 +361,17 @@ def functional_nornir(
     drivers = []
     lock = threading.Lock()
 
-    def track_driver(driver):
-        # Called before transport.open(), including rejected/incomplete opens.
+    def track_driver(**options):
+        # Observe real constructors to reclaim incomplete opens. All native I/O stays real.
+        driver = _TrackedCli(**options)
+        driver.session_options.recorder_path = str(tmp_path / f"session-{driver.port}.log")
         with lock:
             drivers.append(driver)
+        return driver
 
+    monkeypatch.setattr(connection_plugins, "Cli", track_driver)
     for host in nr.inventory.hosts.values():
-        options = host.get_connection_parameters("scrapli")
-        options.extras = {**options.extras, "on_init": track_driver}
-        host.connection_options["scrapli"] = options
+        host.data["recorder_path"] = str(tmp_path / f"session-{host.port}.log")
     try:
         yield nr
     finally:
@@ -361,23 +381,16 @@ def functional_nornir(
             for plugin in host.connections.values()
             if hasattr(plugin, "connection")
         }
-        for driver in drivers:
-            if (
-                id(driver) not in stored
-                or stored[id(driver)] in nr.data.failed_hosts
-                or not driver.isalive()
-            ):
-                driver.on_close = None
         try:
             # Nornir otherwise records teardown errors without raising them.
             nr.config.core.raise_on_error = True
-            nr.close_connections(on_good=True, on_failed=True)
+            nr.close_connections(on_good=True, on_failed=False)
             surviving_healthy = [
                 stored[id(driver)]
                 for driver in drivers
                 if id(driver) in stored
                 and stored[id(driver)] not in nr.data.failed_hosts
-                and driver.isalive()
+                and not driver.lab_released
             ]
             assert not surviving_healthy, (
                 f"Healthy drivers survived normal close: {surviving_healthy}"
@@ -386,14 +399,11 @@ def functional_nornir(
             try:
                 errors = []
                 for driver in drivers:
-                    # Reclaim orphaned opens; stored healthy drivers kept their CLI close hook.
+                    # Force-close failed/orphaned sessions without on-close mode changes.
                     try:
-                        if id(driver) not in stored:
-                            driver.close()
-                        else:
-                            driver.transport.close()
-                            driver.channel.close()
-                        assert not driver.isalive()
+                        if driver.ptr is not None and not driver.lab_released:
+                            driver.close(force=True, operation_timeout_ns=OPERATION_TIMEOUT_NS)
+                        assert driver.ptr is None or driver.lab_released
                     except Exception as exc:  # noqa: PERF203 - Reclaim every driver after a close failure.
                         errors.append(exc)
                 if errors:

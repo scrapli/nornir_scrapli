@@ -4,10 +4,15 @@ import time
 
 from functional.constants import (
     CONFIG_LINES,
+    FIRST_SECRET,
     INTERACTIVE_COMMAND,
     INTERACTIVE_CONFIRMATION,
     INTERACTIVE_RESPONSE,
+    MULTISTEP_COMMAND,
+    PASSWORD,
+    PASSWORD_PROMPT,
     SECOND_COMMAND,
+    SECOND_SECRET,
     SHOW_VERSION_COMMAND,
     SLOW_RESPONSE_DELAY,
     TIMEOUT_FAILURE_HOST,
@@ -60,6 +65,21 @@ def commands_for(platform):
             "prompt": "[confirm]",
             "new_prompt": default,
         },
+        MULTISTEP_COMMAND: {
+            "output": "First password",
+            "prompt": default,
+            "new_prompt": PASSWORD_PROMPT,
+        },
+        FIRST_SECRET: {
+            "output": "Second password",
+            "prompt": PASSWORD_PROMPT,
+            "new_prompt": PASSWORD_PROMPT,
+        },
+        SECOND_SECRET: {
+            "output": "Transfer complete for {base_prompt}",
+            "prompt": PASSWORD_PROMPT,
+            "new_prompt": default,
+        },
     }
     commands.update({line: {"output": "", "prompt": config} for line in CONFIG_LINES})
     if platform == "juniper_junos":
@@ -84,11 +104,12 @@ def commands_for(platform):
         if platform != "cisco_iosxr":
             commands.update(
                 {
-                    "enable": {"output": "", "prompt": low, "new_prompt": privileged},
+                    "enable": {"output": "", "prompt": low, "new_prompt": "Password:"},
+                    PASSWORD: {"output": "", "prompt": "Password:", "new_prompt": privileged},
                     "disable": {"output": "", "prompt": privileged, "new_prompt": low},
                 }
             )
         width = {"cisco_iosxe": 512, "cisco_nxos": 511, "cisco_iosxr": 512, "arista_eos": 32767}
-        startup = ("terminal length 0", f"terminal width {width[platform]}")
+        startup = ("term len 0", f"term width {width[platform]}")
     commands.update({command: {"output": "", "prompt": default} for command in startup})
     return commands
