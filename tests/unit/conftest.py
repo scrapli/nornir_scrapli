@@ -16,7 +16,7 @@ def nornir():
 
     nornir = InitNornir(
         inventory={
-            "plugin": "YAMLInventory",
+            "plugin": "SimpleInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
@@ -36,7 +36,7 @@ def nornir_global_dry_run():
 
     nornir_global_dry_run = InitNornir(
         inventory={
-            "plugin": "YAMLInventory",
+            "plugin": "SimpleInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
@@ -56,7 +56,7 @@ def nornir_community():
 
     nornir = InitNornir(
         inventory={
-            "plugin": "YAMLInventory",
+            "plugin": "SimpleInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/community_groups.yaml".format(dir_path),
@@ -76,7 +76,7 @@ def nornir_generic():
 
     nornir = InitNornir(
         inventory={
-            "plugin": "YAMLInventory",
+            "plugin": "SimpleInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts_generic.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
@@ -96,7 +96,7 @@ def nornir_raise_on_error():
 
     nornir = InitNornir(
         inventory={
-            "plugin": "YAMLInventory",
+            "plugin": "SimpleInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/groups.yaml".format(dir_path),
@@ -117,7 +117,7 @@ def nornir_netconf():
 
     nornir = InitNornir(
         inventory={
-            "plugin": "YAMLInventory",
+            "plugin": "SimpleInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/netconf_groups.yaml".format(dir_path),
@@ -137,7 +137,7 @@ def nornir_global_ssh():
 
     nornir_global_ssh = InitNornir(
         inventory={
-            "plugin": "YAMLInventory",
+            "plugin": "SimpleInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/netconf_groups.yaml".format(dir_path),
@@ -158,7 +158,7 @@ def nornir_global_ssh_no_connection_option_ssh():
 
     nornir_global_ssh_no_connection_option_ssh = InitNornir(
         inventory={
-            "plugin": "YAMLInventory",
+            "plugin": "SimpleInventory",
             "options": {
                 "host_file": "{}/inventory_data/hosts.yaml".format(dir_path),
                 "group_file": "{}/inventory_data/no_ssh_config_groups.yaml".format(dir_path),

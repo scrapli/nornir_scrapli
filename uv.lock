@@ -229,6 +229,15 @@ wheels = [
 ]
 
 [[package]]
+name = "backports-asyncio-runner"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/ff/70dca7d7cb1cbc0edb2c6cc0c38b65cba36cccc491eca64cabd5fe7f8670/backports_asyncio_runner-1.2.0.tar.gz", hash = "sha256:a5aa7b2b7d8f8bfcaa2b57313f70792df84e32a2a746f585213373f900b42162", size = 69893, upload-time = "2025-07-02T02:27:15.685Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a0/59/76ab57e3fe74484f48a53f8e337171b4a2349e506eabe136d7e01d059086/backports_asyncio_runner-1.2.0-py3-none-any.whl", hash = "sha256:0da0a936a8aeb554eccb426dc55af3ba63bcdc69fa1a600b5bb305413a4477b5", size = 12313, upload-time = "2025-07-02T02:27:14.263Z" },
+]
+
+[[package]]
 name = "backrefs"
 version = "8.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2184,13 +2193,9 @@ wheels = [
 [[package]]
 name = "nornir"
 version = "3.6.0"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/nornir-automation/nornir?rev=01bac1d326092489d688a72cd9d19569c6e1688a#01bac1d326092489d688a72cd9d19569c6e1688a" }
 dependencies = [
     { name = "ruamel-yaml" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/62/d4/8009ac1c8f8c7dfb5c0f28b631665d8f497bcaccc882ffc00809edf0051c/nornir-3.6.0.tar.gz", hash = "sha256:829e52b37cbe6c0454fc81b73b010f148f107d81e22b81db4583b570cce6f0e7", size = 26916, upload-time = "2026-08-02T13:15:01.201Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/1f/8a778c5cd5a88d40d149de05c76f1eaa528ff185663747a87f1a2909ad37/nornir-3.6.0-py3-none-any.whl", hash = "sha256:887da5e476cc00a36704aab98abfbe86e6bfedb0769c96ff786cf7b94a86ca4a", size = 32316, upload-time = "2026-08-02T13:15:00.167Z" },
 ]
 
 [[package]]
@@ -2208,12 +2213,16 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+asyncio = [
+    { name = "scrapli", extra = ["asyncssh"] },
+]
 dev = [
     { name = "genie", marker = "python_full_version < '3.15' and sys_platform != 'win32'" },
     { name = "mypy" },
     { name = "nox" },
     { name = "pyats", marker = "python_full_version < '3.15' and sys_platform != 'win32'" },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "pytest-cov" },
     { name = "ruff" },
 ]
@@ -2239,8 +2248,10 @@ build = [
 ]
 dev = [
     { name = "mypy" },
+    { name = "nornir-scrapli", extra = ["asyncio"] },
     { name = "nox" },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "pytest-cov" },
     { name = "ruff" },
 ]
@@ -2249,7 +2260,9 @@ docs = [
 ]
 functional = [
     { name = "fakenos", marker = "python_full_version >= '3.11'" },
+    { name = "nornir-scrapli", extra = ["asyncio"] },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "pytest-cov" },
 ]
 lint = [
@@ -2260,7 +2273,9 @@ nox = [
     { name = "nox" },
 ]
 test = [
+    { name = "nornir-scrapli", extra = ["asyncio"] },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "pytest-cov" },
 ]
 
@@ -2276,22 +2291,24 @@ requires-dist = [
     { name = "mkdocs-section-index", marker = "extra == 'docs'", specifier = ">=0.3.4,<1.0.0" },
     { name = "mkdocstrings", extras = ["python"], marker = "extra == 'docs'", specifier = ">=0.19.0,<2.0.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">1.0.0,<2.0.0" },
-    { name = "nornir", specifier = ">=3.0.0" },
+    { name = "nornir", git = "https://github.com/nornir-automation/nornir?rev=01bac1d326092489d688a72cd9d19569c6e1688a" },
     { name = "nornir-scrapli", extras = ["genie"], marker = "extra == 'dev'" },
     { name = "nornir-utils", specifier = ">=0.1.0" },
     { name = "nox", marker = "extra == 'dev'", specifier = ">=2025.2.9" },
     { name = "ntc-templates", specifier = ">=1.1.0" },
     { name = "pyats", marker = "python_full_version < '3.15' and sys_platform != 'win32' and extra == 'genie'", specifier = ">=20.2" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0,<8.0.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.2.0,<9.0.0" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=1.2.0,<2.0.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=3.0.0,<5.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.16.7,<0.17.0" },
     { name = "scrapli", specifier = ">=2022.1.30,<2026.2.21" },
+    { name = "scrapli", extras = ["asyncssh"], marker = "extra == 'asyncio'", specifier = ">=2022.1.30" },
     { name = "scrapli-cfg", specifier = ">=2022.1.30" },
     { name = "scrapli-community", specifier = ">=2021.1.30" },
     { name = "scrapli-netconf", specifier = ">=2022.1.30" },
     { name = "textfsm", specifier = ">=1.1.0" },
 ]
-provides-extras = ["dev", "docs", "genie"]
+provides-extras = ["asyncio", "dev", "docs", "genie"]
 
 [package.metadata.requires-dev]
 build = [
@@ -2300,15 +2317,19 @@ build = [
 ]
 dev = [
     { name = "mypy", specifier = ">1.0.0,<2.0.0" },
+    { name = "nornir-scrapli", extras = ["asyncio"] },
     { name = "nox", specifier = ">=2025.2.9" },
-    { name = "pytest", specifier = ">=7.0.0,<8.0.0" },
+    { name = "pytest", specifier = ">=8.2.0,<9.0.0" },
+    { name = "pytest-asyncio", specifier = ">=1.2.0,<2.0.0" },
     { name = "pytest-cov", specifier = ">=3.0.0,<5.0.0" },
     { name = "ruff", specifier = ">=0.16.7,<0.17.0" },
 ]
 docs = [{ name = "nornir-scrapli", extras = ["docs"] }]
 functional = [
     { name = "fakenos", marker = "python_full_version >= '3.11'", specifier = ">=1.2.1" },
-    { name = "pytest", specifier = ">=7.0.0,<8.0.0" },
+    { name = "nornir-scrapli", extras = ["asyncio"] },
+    { name = "pytest", specifier = ">=8.2.0,<9.0.0" },
+    { name = "pytest-asyncio", specifier = ">=1.2.0,<2.0.0" },
     { name = "pytest-cov", specifier = ">=3.0.0,<5.0.0" },
 ]
 lint = [
@@ -2317,7 +2338,9 @@ lint = [
 ]
 nox = [{ name = "nox", specifier = ">=2025.2.9" }]
 test = [
-    { name = "pytest", specifier = ">=7.0.0,<8.0.0" },
+    { name = "nornir-scrapli", extras = ["asyncio"] },
+    { name = "pytest", specifier = ">=8.2.0,<9.0.0" },
+    { name = "pytest-asyncio", specifier = ">=1.2.0,<2.0.0" },
     { name = "pytest-cov", specifier = ">=3.0.0,<5.0.0" },
 ]
 
@@ -3331,7 +3354,7 @@ wheels = [
 
 [[package]]
 name = "pytest"
-version = "7.4.4"
+version = "8.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorama", marker = "sys_platform == 'win32'" },
@@ -3339,11 +3362,26 @@ dependencies = [
     { name = "iniconfig" },
     { name = "packaging" },
     { name = "pluggy" },
+    { name = "pygments" },
     { name = "tomli", marker = "python_full_version < '3.11'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/80/1f/9d8e98e4133ffb16c90f3b405c43e38d3abb715bb5d7a63a5a684f7e46a3/pytest-7.4.4.tar.gz", hash = "sha256:2cf0005922c6ace4a3e2ec8b4080eb0d9753fdc93107415332f50ce9e7994280", size = 1357116, upload-time = "2023-12-31T12:00:18.035Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a3/5c/00a0e072241553e1a7496d638deababa67c5058571567b92a7eaa258397c/pytest-8.4.2.tar.gz", hash = "sha256:86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01", size = 1519618, upload-time = "2025-09-04T14:34:22.711Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/ff/f6e8b8f39e08547faece4bd80f89d5a8de68a38b2d179cc1c4490ffa3286/pytest-7.4.4-py3-none-any.whl", hash = "sha256:b090cdf5ed60bf4c45261be03239c2c1c22df034fbffe691abe93cd80cea01d8", size = 325287, upload-time = "2023-12-31T12:00:13.963Z" },
+    { url = "https://files.pythonhosted.org/packages/a8/a4/20da314d277121d6534b3a980b29035dcd51e6744bd79075a6ce8fa4eb8d/pytest-8.4.2-py3-none-any.whl", hash = "sha256:872f880de3fc3a5bdc88a11b39c9710c3497a547cfa9320bc3c5e62fbf272e79", size = 365750, upload-time = "2025-09-04T14:34:20.226Z" },
+]
+
+[[package]]
+name = "pytest-asyncio"
+version = "1.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "backports-asyncio-runner", marker = "python_full_version < '3.11'" },
+    { name = "pytest" },
+    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/43/7c/d36d04db312ecf4298932ef77e6e4a9e8ad017906e24e34f0b0c361a2473/pytest_asyncio-1.4.0.tar.gz", hash = "sha256:c6c0d2259945122819f171a32ecea2c349ead889ee28176caaf492143424be42", size = 58514, upload-time = "2026-05-26T09:56:04.083Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/e2/08a497ef684b88559c9cc5f4ad53a37e7b99e727094a86d6ea32536d5d3c/pytest_asyncio-1.4.0-py3-none-any.whl", hash = "sha256:933ca923a23075a87fb7070c0ec272a6848489824d887c85c812670932835aa1", size = 16930, upload-time = "2026-05-26T09:56:02.576Z" },
 ]
 
 [[package]]
@@ -3620,6 +3658,11 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/cc/20/5a16997013f9aca4100e41493a93af774b1e73ef2c0fafc312a250b7425a/scrapli-2026.2.20.tar.gz", hash = "sha256:b6f8492110601c11ca8394d8540814464bb97681b87e92b30bb6853b5213558a", size = 104525, upload-time = "2026-02-20T23:42:57.414Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2f/bd/4297e274df5cb43d0e3a85d9a30e7298daa13185f26442ef3f142a047105/scrapli-2026.2.20-py3-none-any.whl", hash = "sha256:abbe6f0d70e9b59166e590a74335781e4b5987a488403e08110ce75321a255af", size = 145891, upload-time = "2026-02-20T23:42:56.113Z" },
+]
+
+[package.optional-dependencies]
+asyncssh = [
+    { name = "asyncssh" },
 ]
 
 [[package]]

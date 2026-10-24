@@ -12,7 +12,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = [
-    "nornir>=3.0.0",
+    "nornir @ git+https://github.com/nornir-automation/nornir@01bac1d326092489d688a72cd9d19569c6e1688a",
     "nornir_utils>=0.1.0",
     "ntc_templates>=1.1.0",
     # scrapli 2.0 (2026.10.3 and later, including the 2026.2.22rc1+ pre-releases) is not supported yet
@@ -59,17 +59,23 @@ Homepage = "https://github.com/scrapli/nornir_scrapli"
 Docs = "https://scrapli.github.io/nornir_scrapli/"
 
 [project.entry-points."nornir.plugins.connections"]
-scrapli = "nornir_scrapli.connection:ScrapliCore"
-scrapli_cfg= "nornir_scrapli.connection:ScrapliConfig"
 scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 
+[project.entry-points."nornir.plugins.capability_connections"]
+scrapli = "nornir_scrapli.connection:ScrapliCore"
+scrapli_cfg= "nornir_scrapli.connection:ScrapliConfig"
+
 [project.optional-dependencies]
+asyncio = [
+    "scrapli[asyncssh]>=2022.01.30",
+]
 dev = [
     "nornir_scrapli[genie]",
     "mypy>1.0.0,<2.0.0",
     "nox>=2025.2.9",
     "pytest-cov>=3.0.0,<5.0.0",
-    "pytest>=7.0.0,<8.0.0",
+    "pytest>=8.2.0,<9.0.0",
+    "pytest-asyncio>=1.2.0,<2.0.0",
     "ruff>=0.16.7,<0.17.0",
 ]
 docs = [
@@ -97,11 +103,14 @@ nox = [
     "nox>=2025.2.9",
 ]
 test = [
-    "pytest>=7.0.0,<8.0.0",
+    "nornir_scrapli[asyncio]",
+    "pytest>=8.2.0,<9.0.0",
     "pytest-cov>=3.0.0,<5.0.0",
+    "pytest-asyncio>=1.2.0,<2.0.0",
 ]
 functional = [
     {include-group = "test"},
+    "nornir_scrapli[asyncio]",
     "fakenos>=1.2.1; python_version >= '3.11'",
 ]
 lint = [
@@ -131,6 +140,11 @@ include = ["nornir_scrapli*"]
 source = [
     "nornir_scrapli"
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+asyncio_default_test_loop_scope = "function"
 
 [tool.coverage.report]
 sort = "cover"
