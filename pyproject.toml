@@ -62,7 +62,7 @@ scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 [project.optional-dependencies]
 dev = [
     "nornir_scrapli[genie]",
-    "mypy>1.0.0,<2.0.0",
+    "mypy>1.0.0,<3.0.0",
     "nox>=2025.2.9",
     "pytest-cov>=3.0.0,<5.0.0",
     "pytest>=7.0.0,<8.0.0",
@@ -101,7 +101,7 @@ functional = [
     "fakenos>=1.2.1; python_version >= '3.11'",
 ]
 lint = [
-    "mypy>1.0.0,<2.0.0",
+    "mypy>1.0.0,<3.0.0",
     "ruff>=0.16.7,<0.17.0",
 ]
 docs = [
