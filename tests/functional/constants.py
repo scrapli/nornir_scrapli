@@ -13,9 +13,14 @@ CONFIG_LINES = ("interface Loopback0", "description functional-test")
 INTERACTIVE_COMMAND = "clear logging"
 INTERACTIVE_CONFIRMATION = "Clear logging buffer [confirm]"
 INTERACTIVE_RESPONSE = "y"
+MULTISTEP_COMMAND = "copy secure"
+FIRST_SECRET = "first-functional-secret"
+SECOND_SECRET = "second-functional-secret"
+PASSWORD_PROMPT = "Password:"
+UNDEFINED_COMMAND = "undefined functional command"
 AUTH_FAILURE_HOST = "cisco-iosxe-auth-failure"
 TIMEOUT_FAILURE_HOST = "cisco-iosxe-timeout"
-TIMEOUT_OPS = 2.0
+OPERATION_TIMEOUT_NS = 2_000_000_000
 SLOW_RESPONSE_DELAY = 4.0
 
 
