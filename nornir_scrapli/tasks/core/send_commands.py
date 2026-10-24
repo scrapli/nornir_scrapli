@@ -1,6 +1,9 @@
-"""nornir_scrapli.tasks.send_commands"""
+"""Send multiple CLI commands with scrapli v2."""
 
-from typing import List, Optional, Union
+from typing import List, Optional
+
+from scrapli.cli import InputHandling
+from scrapli.ffi_types import Cancel
 
 from nornir.core.task import Result, Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
@@ -9,49 +12,40 @@ from nornir_scrapli.result import ScrapliResult, process_command_result
 def send_commands(
     task: Task,
     commands: List[str],
-    strip_prompt: bool = True,
-    failed_when_contains: Optional[Union[str, List[str]]] = None,
-    stop_on_failed: bool = False,
-    eager: bool = False,
-    timeout_ops: Optional[float] = None,
+    *,
+    requested_mode: str = "",
+    input_handling: InputHandling = InputHandling.FUZZY,
+    retain_input: bool = False,
+    retain_trailing_prompt: bool = False,
+    stop_on_indicated_failure: bool = True,
+    operation_timeout_ns: Optional[int] = None,
+    cancel: Optional[Cancel] = None,
 ) -> Result:
-    """
-    Send a list of commands to device using scrapli
+    """Send commands and join outputs with blank lines.
 
     Args:
-        task: nornir task object
-        commands: list of strings to send to device in privilege exec mode
-        strip_prompt: True/False strip prompt from returned output
-        failed_when_contains: string or list of strings indicating failure if found in response
-        stop_on_failed: True/False stop executing commands if a command fails, returns results as of
-            current execution
-        eager: if eager is True we do not read until prompt is seen at each command sent to the
-            channel. Do *not* use this unless you know what you are doing as it is possible that
-            it can make scrapli less reliable!
-        timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
-            the duration of the operation, value is reset to initial value after operation is
-            completed. Note that this is the timeout value PER COMMAND sent, not for the total
-            of the commands being sent!
+        task: Nornir task.
+        commands: Commands to send.
+        requested_mode: Mode in which to send commands.
+        input_handling: Native input matching strategy.
+        retain_input: Retain echoed input in output.
+        retain_trailing_prompt: Retain the trailing prompt.
+        stop_on_indicated_failure: Stop at a definition failure indicator.
+        operation_timeout_ns: Per-operation timeout in nanoseconds.
+        cancel: Native cancellation context.
 
     Returns:
-        Result: nornir result object with Result.result value set to returned scrapli Response
-            object
-
+        Nornir result containing joined command outputs.
     """
-    scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
-    scrapli_response = scrapli_conn.send_commands(
-        commands=commands,
-        strip_prompt=strip_prompt,
-        failed_when_contains=failed_when_contains,
-        stop_on_failed=stop_on_failed,
-        eager=eager,
-        timeout_ops=timeout_ops,
+    connection = task.host.get_connection("scrapli", task.nornir.config)
+    response = connection.send_inputs(
+        inputs=commands,
+        requested_mode=requested_mode,
+        input_handling=input_handling,
+        retain_input=retain_input,
+        retain_trailing_prompt=retain_trailing_prompt,
+        stop_on_indicated_failure=stop_on_indicated_failure,
+        operation_timeout_ns=operation_timeout_ns,
+        cancel=cancel,
     )
-
-    result = ScrapliResult(
-        host=task.host,
-        result=process_command_result(scrapli_response=scrapli_response),
-        scrapli_response=scrapli_response,
-        changed=False,
-    )
-    return result
+    return ScrapliResult(task.host, process_command_result(response), response)

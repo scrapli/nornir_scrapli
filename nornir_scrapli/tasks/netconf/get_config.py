@@ -1,40 +1,51 @@
-"""nornir_scrapli.tasks.netconf_get_config"""
+"""Read a NETCONF configuration datastore."""
 
-from typing import List, Optional, Union
+from typing import Optional
+
+from scrapli.ffi_types import Cancel
+from scrapli.netconf import DatastoreType, DefaultsType, FilterType
 
 from nornir.core.task import Result, Task
-from nornir_scrapli.result import ScrapliResult, process_command_result
+from nornir_scrapli.result import ScrapliResult
 
 
 def netconf_get_config(
     task: Task,
-    source: str = "running",
-    filter_: Optional[Union[str, List[str]]] = None,
-    filter_type: str = "subtree",
+    *,
+    source: DatastoreType = DatastoreType.RUNNING,
+    filter_: str = "",
+    filter_type: FilterType = FilterType.SUBTREE,
+    filter_namespace_prefix: str = "",
+    filter_namespace: str = "",
+    defaults_type: DefaultsType = DefaultsType.UNSET,
+    operation_timeout_ns: Optional[int] = None,
+    cancel: Optional[Cancel] = None,
 ) -> Result:
-    """
-    Get config from the device with scrapli_netconf
+    """Read configuration with native NETCONF filtering options.
 
     Args:
-        task: nornir task object
-        source: configuration source to get; typically one of running|startup|candidate
-        filter_: string of filter(s) to apply to configuration
-        filter_type: type of filter; subtree|xpath
+        task: Nornir task.
+        source: Source datastore.
+        filter_: Filter payload.
+        filter_type: Native filter type.
+        filter_namespace_prefix: Filter namespace prefix.
+        filter_namespace: Filter namespace URI.
+        defaults_type: Defaults reporting mode.
+        operation_timeout_ns: Operation timeout in nanoseconds.
+        cancel: Native cancellation context.
 
     Returns:
-        Result: nornir result object with Result.result value set the string result of the
-            get_config operation
-
+        Nornir result containing reply XML.
     """
-    scrapli_conn = task.host.get_connection("scrapli_netconf", task.nornir.config)
-    scrapli_response = scrapli_conn.get_config(
-        source=source, filter_=filter_, filter_type=filter_type
+    connection = task.host.get_connection("scrapli_netconf", task.nornir.config)
+    response = connection.get_config(
+        source=source,
+        filter_=filter_,
+        filter_type=filter_type,
+        filter_namespace_prefix=filter_namespace_prefix,
+        filter_namespace=filter_namespace,
+        defaults_type=defaults_type,
+        operation_timeout_ns=operation_timeout_ns,
+        cancel=cancel,
     )
-
-    result = ScrapliResult(
-        host=task.host,
-        result=process_command_result(scrapli_response=scrapli_response),
-        scrapli_response=scrapli_response,
-        changed=False,
-    )
-    return result
+    return ScrapliResult(task.host, response.result, response)

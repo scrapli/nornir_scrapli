@@ -1,6 +1,9 @@
-"""nornir_scrapli.tasks.send_command"""
+"""Send a CLI command with scrapli v2."""
 
-from typing import List, Optional, Union
+from typing import Optional
+
+from scrapli.cli import InputHandling
+from scrapli.ffi_types import Cancel
 
 from nornir.core.task import Result, Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
@@ -9,40 +12,37 @@ from nornir_scrapli.result import ScrapliResult, process_command_result
 def send_command(
     task: Task,
     command: str,
-    strip_prompt: bool = True,
-    failed_when_contains: Optional[Union[str, List[str]]] = None,
-    timeout_ops: Optional[float] = None,
+    *,
+    requested_mode: str = "",
+    input_handling: InputHandling = InputHandling.FUZZY,
+    retain_input: bool = False,
+    retain_trailing_prompt: bool = False,
+    operation_timeout_ns: Optional[int] = None,
+    cancel: Optional[Cancel] = None,
 ) -> Result:
-    """
-    Send a single command to device using scrapli
+    """Send one command and retain its native result.
 
     Args:
-        task: nornir task object
-        command: string to send to device in privilege exec mode
-        strip_prompt: True/False strip prompt from returned output
-        failed_when_contains: string or list of strings indicating failure if found in response
-        timeout_ops: timeout ops value for this operation; only sets the timeout_ops value for
-            the duration of the operation, value is reset to initial value after operation is
-            completed
+        task: Nornir task.
+        command: Command to send.
+        requested_mode: Mode in which to send the command.
+        input_handling: Native input matching strategy.
+        retain_input: Retain echoed input in output.
+        retain_trailing_prompt: Retain the trailing prompt.
+        operation_timeout_ns: Per-operation timeout in nanoseconds.
+        cancel: Native cancellation context.
 
     Returns:
-        Result: scrapli nornir result object; almost identical to a "normal" nornir result object,
-            but contains an additional attribute "scrapli_response" that contains the original
-            response from scrapli
-
+        Nornir result containing command output.
     """
-    scrapli_conn = task.host.get_connection("scrapli", task.nornir.config)
-    scrapli_response = scrapli_conn.send_command(
-        command=command,
-        strip_prompt=strip_prompt,
-        failed_when_contains=failed_when_contains,
-        timeout_ops=timeout_ops,
+    connection = task.host.get_connection("scrapli", task.nornir.config)
+    response = connection.send_input(
+        input_=command,
+        requested_mode=requested_mode,
+        input_handling=input_handling,
+        retain_input=retain_input,
+        retain_trailing_prompt=retain_trailing_prompt,
+        operation_timeout_ns=operation_timeout_ns,
+        cancel=cancel,
     )
-
-    result = ScrapliResult(
-        host=task.host,
-        result=process_command_result(scrapli_response=scrapli_response),
-        scrapli_response=scrapli_response,
-        changed=False,
-    )
-    return result
+    return ScrapliResult(task.host, process_command_result(response), response)
