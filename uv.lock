@@ -2269,10 +2269,6 @@ genie = [
 ]
 
 [package.dev-dependencies]
-build = [
-    { name = "setuptools" },
-    { name = "wheel" },
-]
 dev = [
     { name = "mypy" },
     { name = "nox" },
@@ -2302,6 +2298,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
+    { name = "genie", marker = "python_full_version < '3.15' and sys_platform != 'win32' and extra == 'dev'", specifier = ">=20.2" },
     { name = "genie", marker = "python_full_version < '3.15' and sys_platform != 'win32' and extra == 'genie'", specifier = ">=20.2" },
     { name = "mdx-gh-links", marker = "extra == 'docs'", specifier = ">=0.2,<1.0" },
     { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.2.3,<2.0.0" },
@@ -2313,10 +2310,10 @@ requires-dist = [
     { name = "mkdocstrings", extras = ["python"], marker = "extra == 'docs'", specifier = ">=0.19.0,<2.0.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">1.0.0,<2.0.0" },
     { name = "nornir", specifier = ">=3.0.0" },
-    { name = "nornir-scrapli", extras = ["genie"], marker = "extra == 'dev'" },
     { name = "nornir-utils", specifier = ">=0.1.0" },
     { name = "nox", marker = "extra == 'dev'", specifier = ">=2025.2.9" },
     { name = "ntc-templates", specifier = ">=1.1.0" },
+    { name = "pyats", marker = "python_full_version < '3.15' and sys_platform != 'win32' and extra == 'dev'", specifier = ">=20.2" },
     { name = "pyats", marker = "python_full_version < '3.15' and sys_platform != 'win32' and extra == 'genie'", specifier = ">=20.2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0,<8.0.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=3.0.0,<5.0.0" },
@@ -2330,10 +2327,6 @@ requires-dist = [
 provides-extras = ["dev", "docs", "genie"]
 
 [package.metadata.requires-dev]
-build = [
-    { name = "setuptools" },
-    { name = "wheel" },
-]
 dev = [
     { name = "mypy", specifier = ">1.0.0,<2.0.0" },
     { name = "nox", specifier = ">=2025.2.9" },

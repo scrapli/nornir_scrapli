@@ -49,8 +49,8 @@ range, run `uv lock --upgrade-package PACKAGE`. Commit both the declarations and
 Regular CI uses locked dependencies; scheduled checks refresh their temporary lockfile
 to test newer stable and prerelease dependencies.
 
-Build distributions with `make build`. The Nox build session installs locked setuptools
-and wheel versions and invokes `uv build --no-build-isolation`. Release CI publishes
+Build distributions with `make build`. The Nox build session runs `uv build`, which installs
+the build backend declared in `[build-system]` in an isolated environment. Release CI publishes
 these artifacts with `uv publish`.
 
 Thanks for thinking about contributing to nornir_scrapli! Contributions are not expected, but are quite welcome.

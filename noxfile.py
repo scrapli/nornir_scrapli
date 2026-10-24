@@ -88,15 +88,7 @@ def docs(session):
     session.run("mkdocs", "build", "--clean", "--strict")
 
 
-@nox.session(python="3.13")
+@nox.session(venv_backend="none")
 def build(session):
-    """Build distributions with locked build tools."""
-    sync(session, "build")
-    session.run(
-        "uv",
-        "build",
-        "--no-build-isolation",
-        "--python",
-        session.virtualenv.location,
-        external=True,
-    )
+    """Build distributions in an isolated build environment."""
+    session.run("uv", "build", "--python", "3.13", external=True)

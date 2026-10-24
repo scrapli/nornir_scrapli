@@ -1,7 +1,3 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "nornir_scrapli"
 dynamic = [
@@ -9,7 +5,8 @@ dynamic = [
 ]
 description = "Scrapli's plugin for Nornir"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
     "nornir>=3.0.0",
@@ -26,7 +23,6 @@ authors = [
     { name = "Carl Montanari", email = "carl.r.montanari@gmail.com" },
 ]
 classifiers = [
-    "License :: OSI Approved :: MIT License",
     "Operating System :: POSIX :: Linux",
     "Operating System :: MacOS",
     "Programming Language :: Python",
@@ -111,21 +107,14 @@ lint = [
 docs = [
     "nornir_scrapli[docs]",
 ]
-build = [
-    "setuptools",
-    "wheel",
-]
+[tool.hatch.version]
+path = "nornir_scrapli/__init__.py"
 
-[tool.setuptools.dynamic]
-version = { attr = "nornir_scrapli.__version__" }
+[tool.hatch.build.targets.wheel]
+packages = ["nornir_scrapli"]
 
-[tool.setuptools.package-data]
-nornir_scrapli = [
-    "py.typed"
-]
-
-[tool.setuptools.packages.find]
-include = ["nornir_scrapli*"]
+[tool.hatch.build.targets.sdist]
+include = ["/nornir_scrapli"]
 
 [tool.coverage.run]
 source = [
@@ -194,3 +183,7 @@ ignore_missing_imports = true
 warn_redundant_casts = true
 warn_unused_configs = true
 strict_optional = true
+
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
