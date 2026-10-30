@@ -2,7 +2,7 @@
 site_name: Nornir Scrapli
 site_description: Scrapli's plugin for Nornir
 site_author: Carl Montanari
-site_url: https://scrapli.github.io/
+site_url: https://scrapli.github.io/nornir_scrapli/
 
 repo_name: scrapli/nornir_scrapli
 repo_url: https://github.com/scrapli/nornir_scrapli
@@ -58,10 +58,6 @@ extra:
           link: 'https://github.com/carlmontanari/'
         - icon: fontawesome/brands/twitter
           link: 'https://twitter.com/carlrmontanari'
-        - icon: fontawesome/brands/linkedin
-          link: 'https://www.linkedin.com/in/carl-montanari-47888931/'
-        - icon: fontawesome/solid/globe
-          link: 'https://montanari.io'
 
 plugins:
     - search
