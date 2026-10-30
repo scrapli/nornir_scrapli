@@ -66,3 +66,12 @@ Some notes on contributing:
   - All PRs should pass tests -- checkout the Makefile for some shortcuts for linting and testing.
   - Please include tests! Even simple/basic tests are better than nothing -- it helps make sure changes in the future
    don't break functionality or make things act in unexpected ways!
+
+## Choosing a target branch
+
+- Bug fixes for `1.x` (scrapli v1): open the pull request against `main`.
+- Other changes for the next `1.x` minor release: open the pull request against `develop-v1`.
+- Changes for `2.x` (scrapli v2): open the pull request against `develop`.
+
+See the [versioning docs](https://scrapli.github.io/nornir_scrapli/user_guide/versioning) for how releases are made
+from these branches.

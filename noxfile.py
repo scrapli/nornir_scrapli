@@ -92,3 +92,20 @@ def docs(session):
 def build(session):
     """Build distributions in an isolated build environment."""
     session.run("uv", "build", "--python", "3.13", external=True)
+
+
+@nox.session(venv_backend="none")
+def release_check(session):
+    """Check the release versions; pass `-- --tag <version> --pypi`."""
+    session.run(
+        "uv",
+        "run",
+        "--no-project",
+        "--python",
+        "3.13",
+        "python",
+        "scripts/release.py",
+        "check",
+        *session.posargs,
+        external=True,
+    )

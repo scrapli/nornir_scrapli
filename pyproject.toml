@@ -110,6 +110,13 @@ docs = [
 [tool.hatch.version]
 path = "nornir_scrapli/__init__.py"
 
+[tool.nornir_scrapli.release]
+# Releases of this major version are also published on PyPI with a calendar version.
+calver-line = 1
+# Calendar version of the next release on this branch, such as "2026.10.30".
+# Empty on a branch whose major version is not calver-line.
+calver = "2026.10.30"
+
 [tool.hatch.build.targets.wheel]
 packages = ["nornir_scrapli"]
 
@@ -137,6 +144,7 @@ include = [
     "*.py",
     "docs/generate.py",
     "nornir_scrapli/**/*.py",
+    "scripts/**/*.py",
     "tests/**/*.py",
     "examples/**/*.py",
 ]
