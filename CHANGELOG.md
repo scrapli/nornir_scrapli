@@ -4,7 +4,7 @@ This file lists the changes in each nornir_scrapli release, starting with releas
 
 From 1.5.0, the heading of a release that is also published with a calendar version names that version, for example `## 1.5.1 (also published as 2026.10.30) - 2026-10-30`.
 
-## 1.5.0 - Unreleased
+## 1.5.0 (also published as 2026.10.30) - 2026-10-30
 
 [Full list of commits since 2026.10.13](https://github.com/scrapli/nornir_scrapli/compare/2026.10.13...1.5.0)
 

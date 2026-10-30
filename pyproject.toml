@@ -115,7 +115,7 @@ path = "nornir_scrapli/__init__.py"
 calver-line = 1
 # Calendar version of the next release on this branch, such as "2026.10.30".
 # Empty on a branch whose major version is not calver-line.
-calver = ""
+calver = "2026.10.30"
 
 [tool.hatch.build.targets.wheel]
 packages = ["nornir_scrapli"]
