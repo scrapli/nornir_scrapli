@@ -2318,7 +2318,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0,<8.0.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=3.0.0,<5.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.16.7,<0.17.0" },
-    { name = "scrapli", specifier = ">=2022.1.30,<2026.2.21" },
+    { name = "scrapli", specifier = ">=2022.1.30,<2026.10.15" },
     { name = "scrapli-cfg", specifier = ">=2022.1.30" },
     { name = "scrapli-community", specifier = ">=2021.1.30" },
     { name = "scrapli-netconf", specifier = ">=2022.1.30" },
@@ -3644,11 +3644,15 @@ wheels = [
 
 [[package]]
 name = "scrapli"
-version = "2026.2.20"
+version = "2026.10.14"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/cc/20/5a16997013f9aca4100e41493a93af774b1e73ef2c0fafc312a250b7425a/scrapli-2026.2.20.tar.gz", hash = "sha256:b6f8492110601c11ca8394d8540814464bb97681b87e92b30bb6853b5213558a", size = 104525, upload-time = "2026-02-20T23:42:57.414Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/58/bb/a5fc7478ed0e4ec22d2d2de1f7db513b651fa8f163fbd9cb3b3c9352f603/scrapli-2026.10.14.tar.gz", hash = "sha256:85479f5a944595166d624e4aca6919309b1d3a869f4289361b0e9a42a15049dc", size = 4539714, upload-time = "2026-10-14T21:06:35.935Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2f/bd/4297e274df5cb43d0e3a85d9a30e7298daa13185f26442ef3f142a047105/scrapli-2026.2.20-py3-none-any.whl", hash = "sha256:abbe6f0d70e9b59166e590a74335781e4b5987a488403e08110ce75321a255af", size = 145891, upload-time = "2026-02-20T23:42:56.113Z" },
+    { url = "https://files.pythonhosted.org/packages/83/d4/74043353986ffcbc5f3cf488a6e120777748bc8ee355a018437a5ae25eaf/scrapli-2026.10.14-py3-none-macosx_11_0_arm64.whl", hash = "sha256:0ee963ca2a26baf19fa5bafb4065648bceb6d787bef66f39cf6ca0a97fe13cf8", size = 2324576, upload-time = "2026-10-14T21:06:26.747Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/9e/539113c7647dc134821288b5de795502020d6f74780c7bd7908d803d4c3d/scrapli-2026.10.14-py3-none-manylinux2010_x86_64.whl", hash = "sha256:d35780ef4dae478dfb08889e99d0519201003ae170a4824ecabbef789c4f49f5", size = 6822374, upload-time = "2026-10-14T21:06:28.231Z" },
+    { url = "https://files.pythonhosted.org/packages/c0/d5/7cb462cb38e854469e274fc0d30dd3fc15af23bee118bb99504ed13596f7/scrapli-2026.10.14-py3-none-manylinux2014_aarch64.whl", hash = "sha256:e640c5fbe1eb441256ae07de46f4b389bd6baf50c06cc800bac1d7db927de9ce", size = 15638562, upload-time = "2026-10-14T21:06:30.317Z" },
+    { url = "https://files.pythonhosted.org/packages/38/73/b1471001210047526eb17e335e1c688a3636f91a22d601fb837946c24086/scrapli-2026.10.14-py3-none-musllinux_1_1_aarch64.whl", hash = "sha256:cc301b381da9e054f7cbd523f660f15e92d34da7c249f2683c5787f7ba8dbd1b", size = 19957683, upload-time = "2026-10-14T21:06:32.357Z" },
+    { url = "https://files.pythonhosted.org/packages/fb/50/be9983ab77219560bf2a13a78ed311d2ec9edad29ce736c67ed61345905c/scrapli-2026.10.14-py3-none-musllinux_1_1_x86_64.whl", hash = "sha256:769c114d8e3fbecdbe1431515146974a07dc42337b85e846f87e60f90275a15f", size = 11332869, upload-time = "2026-10-14T21:06:34.209Z" },
 ]
 
 [[package]]
