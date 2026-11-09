@@ -42,8 +42,8 @@ Native wheels support Linux x86_64/aarch64 (glibc/musl) and macOS Apple silicon.
 Windows and Intel macOS are unsupported.
 
 Upgrading from v1? Follow the [migration guide](docs/user_guide/migrating_to_v2.md).
-Inventory extras and task arguments change; `cfg_*` tasks are removed. Stay on
-`nornir-scrapli==2026.10.10` if you need v1 or scrapli_cfg integration.
+Inventory extras and task arguments change; `cfg_*` tasks are removed. Stay on the `1.x`
+line (`nornir-scrapli>=1,<2`) if you need scrapli v1 or scrapli_cfg integration.
 
 
 ## Installation

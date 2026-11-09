@@ -2,7 +2,8 @@
 
 This release uses `scrapli>=2026.10.8` and its native `Cli` and `Netconf` connections.
 Task names and Nornir script structure stay the same. Update inventory extras and task
-arguments before upgrading. The v1 line ends at `nornir-scrapli==2026.10.10`.
+arguments before upgrading. The `1.x` line (`nornir-scrapli>=1,<2`) keeps
+scrapli v1 support; see [Versioning](versioning.md).
 
 The first v2 release, `2026.10.3`, lacks the public NETCONF capabilities accessor.
 `2026.10.8` is the earliest release supporting the complete task surface.
@@ -13,7 +14,7 @@ Python 3.10–3.14 is supported on Linux x86_64/aarch64 (glibc or musl) and macO
 silicon. Windows and Intel macOS have no supported scrapli v2 wheels.
 
 The `scrapli_cfg` connection and all six `cfg_*` tasks are removed. Users needing those
-tasks must stay on `2026.10.10`. The separate scrapli_netconf and scrapli_community
+tasks can stay on `nornir-scrapli>=1,<2`. The separate scrapli_netconf and scrapli_community
 packages are no longer dependencies: NETCONF is included in scrapli, and custom device
 support comes from definition files.
 
