@@ -153,10 +153,26 @@ nr.run(task=netconf_get_config, source=DatastoreType.CANDIDATE,
 nr.run(task=netconf_rpc, payload="<get/>")
 ```
 
-`netconf_edit_config` retains `diff` and `dry_run`: it still sends the edit and then
-discards candidate changes. This cannot undo running-datastore edits, and discard also
-removes pre-existing uncommitted candidate changes. New mutating NETCONF operations
-have no transactional dry run.
+Datastore arguments (`source` and `target`) accept a `DatastoreType` member or, as in
+1.x, its name as a string, such as `"candidate"`. Prefer the enum in new code. Any other
+value fails the task before it sends a request.
+
+Some datastore arguments that were required in 1.x now have a default:
+
+| Task | 1.x | 2.x default |
+| --- | --- | --- |
+| `netconf_lock`, `netconf_unlock` | `target` required | `running` |
+| `netconf_validate` | `source` required | `running` |
+| `netconf_delete_config` | `candidate` | `candidate` (unchanged) |
+| `netconf_edit_config` | `running` | `running` (unchanged) |
+
+`netconf_edit_config` retains `diff` and `dry_run`. A dry run now requires
+`target=DatastoreType.CANDIDATE`: it sends the edit and then discards candidate changes,
+including uncommitted candidate changes that existed before the task. In 1.x, a dry run
+against the running datastore changed the device configuration, because those changes
+take effect at once and cannot be discarded. In 2.x, a dry run with any target other than
+candidate fails before it sends anything. New mutating NETCONF operations have no
+transactional dry run.
 
 ## Results and parsing
 

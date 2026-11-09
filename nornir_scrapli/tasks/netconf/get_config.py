@@ -1,18 +1,19 @@
 """Read a NETCONF configuration datastore."""
 
-from typing import Optional
+from typing import Optional, Union
 
 from scrapli.ffi_types import Cancel
 from scrapli.netconf import DatastoreType, DefaultsType, FilterType
 
 from nornir.core.task import Result, Task
+from nornir_scrapli.helper import to_datastore
 from nornir_scrapli.result import ScrapliResult
 
 
 def netconf_get_config(
     task: Task,
     *,
-    source: DatastoreType = DatastoreType.RUNNING,
+    source: Union[DatastoreType, str] = DatastoreType.RUNNING,
     filter_: str = "",
     filter_type: FilterType = FilterType.SUBTREE,
     filter_namespace_prefix: str = "",
@@ -39,7 +40,7 @@ def netconf_get_config(
     """
     connection = task.host.get_connection("scrapli_netconf", task.nornir.config)
     response = connection.get_config(
-        source=source,
+        source=to_datastore(source),
         filter_=filter_,
         filter_type=filter_type,
         filter_namespace_prefix=filter_namespace_prefix,

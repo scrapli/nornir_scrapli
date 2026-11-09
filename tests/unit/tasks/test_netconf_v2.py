@@ -255,3 +255,98 @@ def test_failed_edit_reply_survives_failed_cleanup(nornir, monkeypatch, make_net
     assert result.failed is True
     assert "edit" in str(result.exception).lower()
     assert result.exception.__cause__ is not None
+
+
+def test_delete_config_targets_candidate_by_default(nornir, monkeypatch, make_netconf_result):
+    from nornir_scrapli.tasks import netconf_delete_config
+
+    calls = []
+    monkeypatch.setattr(Netconf, "open", lambda self: None)
+    monkeypatch.setattr(
+        Netconf,
+        "delete_config",
+        lambda self, **kwargs: calls.append(kwargs) or make_netconf_result(),
+    )
+    result = nornir.run(task=netconf_delete_config)["sea-ios-1"][0]
+    assert result.exception is None
+    assert calls[0]["target"] is DatastoreType.CANDIDATE
+
+
+@pytest.mark.parametrize(
+    "name,kwargs,expected",
+    [
+        ("get_config", {"source": "candidate"}, {"source": DatastoreType.CANDIDATE}),
+        (
+            "edit_config",
+            {"config": "<c/>", "target": "Candidate"},
+            {"target": DatastoreType.CANDIDATE},
+        ),
+        ("delete_config", {"target": "startup"}, {"target": DatastoreType.STARTUP}),
+        ("lock", {"target": "candidate"}, {"target": DatastoreType.CANDIDATE}),
+        ("unlock", {"target": "candidate"}, {"target": DatastoreType.CANDIDATE}),
+        ("validate", {"source": "candidate"}, {"source": DatastoreType.CANDIDATE}),
+        (
+            "copy_config",
+            {"source": "running", "target": "startup"},
+            {"source": DatastoreType.RUNNING, "target": DatastoreType.STARTUP},
+        ),
+        ("get_data", {"source": "running"}, {"source": DatastoreType.RUNNING}),
+        (
+            "edit_data",
+            {"content": "<c/>", "target": "candidate"},
+            {"target": DatastoreType.CANDIDATE},
+        ),
+    ],
+)
+def test_datastore_names_as_strings(
+    nornir, monkeypatch, make_netconf_result, name, kwargs, expected
+):
+    from nornir_scrapli import tasks
+
+    calls = []
+    monkeypatch.setattr(Netconf, "open", lambda self: None)
+    monkeypatch.setattr(
+        Netconf, name, lambda self, **options: calls.append(options) or make_netconf_result()
+    )
+    result = nornir.run(task=getattr(tasks, "netconf_" + name), **kwargs)["sea-ios-1"][0]
+    assert result.exception is None
+    for key, value in expected.items():
+        assert calls[0][key] is value
+
+
+def test_unknown_datastore_name_fails(nornir, monkeypatch):
+    from nornir_scrapli.tasks import netconf_lock
+
+    calls = []
+    monkeypatch.setattr(Netconf, "open", lambda self: None)
+    monkeypatch.setattr(Netconf, "lock", lambda self, **kwargs: calls.append(kwargs))
+    result = nornir.run(task=netconf_lock, target="candiate")["sea-ios-1"][0]
+    assert result.failed is True
+    assert isinstance(result.exception, ValueError)
+    assert "candiate" in str(result.exception)
+    assert calls == []
+
+
+@pytest.mark.parametrize("target", [None, DatastoreType.RUNNING, "startup"])
+@pytest.mark.parametrize("global_dry_run", [False, True])
+def test_edit_config_dry_run_refuses_non_candidate_target(
+    nornir, monkeypatch, target, global_dry_run
+):
+    from nornir_scrapli.tasks import netconf_edit_config
+
+    calls = []
+    monkeypatch.setattr(Netconf, "open", lambda self: calls.append("open"))
+    for name in ("get_config", "edit_config", "discard"):
+        monkeypatch.setattr(Netconf, name, lambda self, _name=name, **kwargs: calls.append(_name))
+    kwargs = {} if target is None else {"target": target}
+    if global_dry_run:
+        monkeypatch.setattr(nornir.data, "dry_run", True)
+    else:
+        kwargs["dry_run"] = True
+    result = nornir.run(task=netconf_edit_config, config="<config/>", diff=True, **kwargs)[
+        "sea-ios-1"
+    ][0]
+    assert result.failed is True
+    assert isinstance(result.exception, ValueError)
+    assert "candidate" in str(result.exception)
+    assert calls == []

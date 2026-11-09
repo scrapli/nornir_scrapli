@@ -1,6 +1,6 @@
 """Edit NETCONF configuration with optional diff and candidate discard."""
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from scrapli import Netconf
 from scrapli.exceptions import OperationException
@@ -9,7 +9,7 @@ from scrapli.netconf import DatastoreType, DefaultOperation, ErrorOption, TestOp
 from scrapli.netconf_result import Result as NetconfResult
 
 from nornir.core.task import Result, Task
-from nornir_scrapli.helper import diff_xml_text
+from nornir_scrapli.helper import diff_xml_text, to_datastore
 from nornir_scrapli.result import ScrapliResult
 
 
@@ -57,7 +57,7 @@ def netconf_edit_config(
     dry_run: Optional[bool] = None,
     diff: bool = False,
     *,
-    target: DatastoreType = DatastoreType.RUNNING,
+    target: Union[DatastoreType, str] = DatastoreType.RUNNING,
     default_operation: DefaultOperation = DefaultOperation.UNSET,
     test_option: TestOption = TestOption.UNSET,
     error_option: ErrorOption = ErrorOption.UNSET,
@@ -66,13 +66,15 @@ def netconf_edit_config(
 ) -> Result:
     """Edit configuration and optionally diff/discard candidate changes.
 
-    A dry run still sends edit_config, then discards candidate changes. It cannot undo
-    writes to the running datastore and discards pre-existing candidate changes too.
+    A dry run requires the candidate datastore as the target. It sends edit_config, then
+    discards candidate changes, including candidate changes that existed before the task.
+    A dry run with any other target fails before sending anything, because changes to the
+    running or startup datastore take effect at once and cannot be discarded.
 
     Args:
         task: Nornir task.
         config: Configuration XML.
-        dry_run: Override global dry run.
+        dry_run: Override global dry run. Requires the candidate target.
         diff: Capture a datastore diff before discarding.
         target: Target datastore.
         default_operation: Default edit operation.
@@ -85,14 +87,21 @@ def netconf_edit_config(
         Nornir result containing edit reply XML and optional diff.
 
     Raises:
+        ValueError: If a dry run targets a datastore other than candidate.
         OperationException: If a diff read or discard reports failure.
     """
+    target = to_datastore(target)
+    dry = task.global_dry_run if dry_run is None else dry_run
+    if dry and target is not DatastoreType.CANDIDATE:
+        raise ValueError(
+            f"NETCONF edit_config dry run requires the candidate datastore, not {target.value!r}: "
+            "changes to other datastores take effect at once and cannot be discarded"
+        )
     connection = task.host.get_connection("scrapli_netconf", task.nornir.config)
     options = {"operation_timeout_ns": operation_timeout_ns, "cancel": cancel}
     original = connection.get_config(source=target, **options) if diff else None
     if original is not None and original.failed:
         raise OperationException("Failed to read configuration before edit")
-    dry = task.global_dry_run if dry_run is None else dry_run
     diff_result = ""
     response = None
     error = None

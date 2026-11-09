@@ -1,11 +1,12 @@
 """Edit NMDA NETCONF datastore data."""
 
-from typing import Optional
+from typing import Optional, Union
 
 from scrapli.ffi_types import Cancel
 from scrapli.netconf import DatastoreType, DefaultOperation
 
 from nornir.core.task import Result, Task
+from nornir_scrapli.helper import to_datastore
 from nornir_scrapli.result import ScrapliResult
 
 
@@ -13,7 +14,7 @@ def netconf_edit_data(
     task: Task,
     content: str,
     *,
-    target: DatastoreType = DatastoreType.RUNNING,
+    target: Union[DatastoreType, str] = DatastoreType.RUNNING,
     default_operation: DefaultOperation = DefaultOperation.UNSET,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
@@ -34,7 +35,7 @@ def netconf_edit_data(
     connection = task.host.get_connection("scrapli_netconf", task.nornir.config)
     response = connection.edit_data(
         content=content,
-        target=target,
+        target=to_datastore(target),
         default_operation=default_operation,
         operation_timeout_ns=operation_timeout_ns,
         cancel=cancel,

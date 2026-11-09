@@ -1,6 +1,9 @@
 import re
 
-from nornir_scrapli.helper import diff_xml_text
+import pytest
+from scrapli.netconf import DatastoreType
+
+from nornir_scrapli.helper import diff_xml_text, to_datastore
 
 
 def strip_ansi(buf: bytes) -> bytes:
@@ -85,3 +88,21 @@ def test_diff_xml_text():
      </netconf-yang>"""
     actual_diff = diff_xml_text(document_one=xml_one, document_two=xml_two)
     assert strip_ansi(actual_diff.encode()).decode() == expected_diff
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        (DatastoreType.RUNNING, DatastoreType.RUNNING),
+        ("candidate", DatastoreType.CANDIDATE),
+        ("STARTUP", DatastoreType.STARTUP),
+    ],
+)
+def test_to_datastore(value, expected):
+    assert to_datastore(value) is expected
+
+
+@pytest.mark.parametrize("value", ["candiate", "", 1, None])
+def test_to_datastore_rejects_unknown_values(value):
+    with pytest.raises(ValueError, match="expected one of: "):
+        to_datastore(value)
