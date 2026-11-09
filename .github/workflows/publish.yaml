@@ -7,6 +7,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.event.release.tag_name }}
     steps:
       - uses: actions/checkout@v7
       - name: set up uv and Python 3.13
@@ -15,14 +19,42 @@ jobs:
           version: "0.12.1"
           python-version: "3.13"
           enable-cache: auto
+      - name: check release versions
+        id: versions
+        run: uv run --no-project --python 3.13 python scripts/release.py check --tag "$TAG" --pypi >> "$GITHUB_OUTPUT"
       - name: functional tests
         run: uv run --locked --only-group nox nox -s functional_tests
-      - name: build and publish
+      - name: build and publish the semantic version
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.PYPI_PROJECT_TOKEN }}
         run: |
           uv run --locked --only-group nox nox -s build
-          uv publish
+          uv publish --check-url https://pypi.org/simple/
+      - name: build and publish the calendar version
+        if: steps.versions.outputs.calver != ''
+        env:
+          CALVER: ${{ steps.versions.outputs.calver }}
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_PROJECT_TOKEN }}
+        run: |
+          uv run --no-project --python 3.13 python scripts/release.py set-calver "$CALVER"
+          rm -rf dist
+          uv run --locked --only-group nox nox -s build
+          uv publish --check-url https://pypi.org/simple/
+      - name: tag the calendar version and name it in the release notes
+        if: steps.versions.outputs.calver != ''
+        env:
+          CALVER: ${{ steps.versions.outputs.calver }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! git ls-remote --exit-code --tags origin "refs/tags/$CALVER" > /dev/null; then
+            git tag "$CALVER" "$GITHUB_SHA"
+            git push origin "refs/tags/$CALVER"
+          fi
+          notes="$(gh release view "$TAG" --json body --jq .body)"
+          line="Also published on PyPI as \`$CALVER\`: \`pip install nornir-scrapli==$CALVER\` installs the same code as \`$TAG\`."
+          if ! grep -qF "$line" <<< "$notes"; then
+            gh release edit "$TAG" --notes "$(printf '%s\n\n%s' "$line" "$notes")"
+          fi
       - name: create release branch
         uses: peterjgrainger/action-create-branch@v4.0.0
         env:

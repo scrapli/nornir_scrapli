@@ -1,107 +1,66 @@
-"""nornir_scrapli.result"""
+"""Adapt native scrapli v2 results to Nornir."""
 
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import Any, Optional, Union
 
-from scrapli.response import MultiResponse, Response
-from scrapli_cfg.response import ScrapliCfgResponse
+from scrapli.cli_result import Result as CliResult
+from scrapli.netconf_result import Result as NetconfResult
 
+from nornir.core.inventory import Host
 from nornir.core.task import Result
 
-if TYPE_CHECKING:
-    from nornir.core.inventory import Host
 
-
-def process_command_result(scrapli_response: Union[Response, MultiResponse]) -> str:
-    """
-    Process and return string of scrapli response(s)
+def process_command_result(scrapli_response: Union[CliResult, NetconfResult]) -> str:
+    """Format command outputs with the plugin's blank-line separator.
 
     Args:
-        scrapli_response: scrapli Response or MultiResponse object
+        scrapli_response: Native CLI or NETCONF result.
 
     Returns:
-        str: string result from nornir task or None
-
+        Command output text or NETCONF XML.
     """
-    if isinstance(scrapli_response, Response):
-        result: str = scrapli_response.result
-        return result
-    return "\n\n".join([response.result for response in scrapli_response])
+    if isinstance(scrapli_response, CliResult):
+        return "\n\n".join(scrapli_response.results)
+    return scrapli_response.result
 
 
-def process_config_result(scrapli_response: Union[Response, MultiResponse]) -> str:
-    """
-    Process and return string of scrapli response(s)
+def process_config_result(scrapli_response: CliResult) -> str:
+    """Include each configuration input before its complete output.
 
     Args:
-        scrapli_response: scrapli Response or MultiResponse object
+        scrapli_response: Native result with one input per configuration line.
 
     Returns:
-        str: string result from nornir task or None
-
+        Configuration inputs and outputs in the legacy string format.
     """
-    full_results = ""
-    if isinstance(scrapli_response, Response):
-        for config_input, config_result in zip(
-            scrapli_response.channel_input.split("\n"), scrapli_response.result.split("\n")
-        ):
-            if config_input == config_result:
-                full_results += f"{config_input}\n"
-            else:
-                full_results += "\n".join([config_input, config_result])
-    else:
-        for response in scrapli_response:
-            full_results += "\n".join([response.channel_input, response.result])
-    return full_results
+    return "".join(
+        f"{input_}\n{output}"
+        for input_, output in zip(scrapli_response.inputs, scrapli_response.results)
+    )
 
 
 class ScrapliResult(Result):
     def __init__(
         self,
-        host: "Host",
+        host: Host,
         result: Optional[str],
-        scrapli_response: Optional[Union[Response, MultiResponse, ScrapliCfgResponse]] = None,
+        scrapli_response: Optional[Union[CliResult, NetconfResult]] = None,
         changed: bool = False,
         **kwargs: Any,
-    ):
-        """
-        Scrapli Nornir Result object
-
-        A "normal" nornir result object with an additional attribute "scrapli_response" which houses
-        the original response object returned from scrapli
+    ) -> None:
+        """Create a Nornir result retaining the native result object.
 
         Args:
-            host: nornir task host object
-            result: result text returned from scrapli task
-            scrapli_response: original response object returned from scrapli task
-            changed: bool indicating if a change has occurred
-            kwargs: keyword arguments to pass to nornir Result
-
+            host: Nornir host.
+            result: Formatted output text.
+            scrapli_response: Original native result.
+            changed: Whether this task changes device state.
+            kwargs: Additional Nornir result metadata.
         """
-        failed = self._process_failed(scrapli_response=scrapli_response)
-
-        super().__init__(host=host, result=result, failed=failed, changed=changed, **kwargs)
-
+        super().__init__(
+            host=host,
+            result=result,
+            failed=scrapli_response.failed if scrapli_response is not None else False,
+            changed=changed,
+            **kwargs,
+        )
         self.scrapli_response = scrapli_response
-
-    @staticmethod
-    def _process_failed(
-        scrapli_response: Optional[Union[Response, MultiResponse, ScrapliCfgResponse]],
-    ) -> bool:
-        """
-        Process and return string of scrapli response(s)
-
-        Args:
-            scrapli_response: scrapli Response or MultiResponse object
-
-        Returns:
-            bool: bool indicating if the nornir task failed
-
-        """
-        if scrapli_response is None:
-            return False
-        if isinstance(scrapli_response, (Response, ScrapliCfgResponse)):
-            failed: bool = scrapli_response.failed
-            return failed
-        if any(response.failed for response in scrapli_response):
-            return True
-        return False

@@ -2,7 +2,7 @@
 
 from time import monotonic
 
-from scrapli.exceptions import ScrapliAuthenticationFailed, ScrapliTimeout
+from scrapli.exceptions import OperationException
 
 from functional.constants import (
     AUTH_FAILURE_HOST,
@@ -47,8 +47,10 @@ def test_authentication_and_timeout_fail_only_the_affected_hosts(functional_norn
 
     assert set(result) == set(functional_nornir.inventory.hosts)
     assert set(result.failed_hosts) == {AUTH_FAILURE_HOST, TIMEOUT_FAILURE_HOST}
-    assert type(result[AUTH_FAILURE_HOST].exception) is ScrapliAuthenticationFailed
-    assert type(result[TIMEOUT_FAILURE_HOST].exception) is ScrapliTimeout
+    assert type(result[AUTH_FAILURE_HOST].exception) is OperationException
+    assert "permission denied" in str(result[AUTH_FAILURE_HOST].exception)
+    assert type(result[TIMEOUT_FAILURE_HOST].exception) is OperationException
+    assert "TimeoutExceeded" in str(result[TIMEOUT_FAILURE_HOST].exception)
     for host_name in healthy_host_names:
         assert not result[host_name].failed
         assert result[host_name][0].result == expected_version_output(host_name)

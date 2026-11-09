@@ -28,27 +28,42 @@ nornir_scrapli -- scrapli's plugin for nornir
   feel the need for speed, check out the `ssh2` transport plugin to take it to the next level!
 - __Great Developer Experience__: scrapli has great editor support thanks to being fully typed; that plus thorough 
   docs make developing with scrapli a breeze.
-- __Well Tested__: Perhaps out of paranoia, but regardless of the reason, scrapli has lots of tests! Unit tests 
-  cover the basics, regularly ran functional tests connect to virtual routers to ensure that everything works IRL! 
-- __Pluggable__: scrapli provides a pluggable transport system -- don't like the currently available transports, 
-  simply extend the base classes and add your own! Need additional device support? Create a simple "platform" in 
-  [scrapli_community](https://github.com/scrapli/scrapli_community) to easily add new device support!
+- __Tested task contracts__: Unit tests cover native v2 option conversion, task arguments,
+  result formatting, interactive sequencing and dry runs without requiring lab devices.
+- __Custom device support__: Supply a scrapli v2 YAML definition with `extras.definition`.
 - __But wait, there's more!__: Have NETCONF devices in your environment, but love the speed and simplicity of 
-  scrapli? You're in luck! Check out [scrapli_netconf](https://github.com/scrapli/scrapli_netconf)!
+  scrapli? Native v2 NETCONF operations are exposed through the `scrapli_netconf` connection plugin.
 
 
 ## Requirements
 
-MacOS or \*nix<sup>1</sup>, Python 3.10–3.14 (development defaults to Python 3.13)
+Python 3.10–3.14 and `scrapli>=2026.10.8` (development defaults to Python 3.13).
+Native wheels support Linux x86_64/aarch64 (glibc/musl) and macOS Apple silicon.
+Windows and Intel macOS are unsupported.
 
-<sup>1</sup> Although many parts of scrapli *do* run on Windows, Windows is not officially supported
+Upgrading from v1? Follow the [migration guide](docs/user_guide/migrating_to_v2.md).
+Inventory extras and task arguments change; `cfg_*` tasks are removed. Stay on the `1.x`
+line (`nornir-scrapli>=1,<2`) if you need scrapli v1 or scrapli_cfg integration.
 
 
 ## Installation
 
+nornir_scrapli uses [semantic versions](https://semver.org/). The major version matches the scrapli major version.
+Install the release line that matches your scrapli version:
+
 ```
-pip install nornir-scrapli
+# scrapli v1
+pip install "nornir-scrapli>=1,<2"
+
+# scrapli v2
+pip install "nornir-scrapli>=2,<3"
 ```
+
+Each `1.x` release is also published with a calendar version, such as `2026.10.30`. Without a version constraint,
+`pip install nornir-scrapli` installs the latest calendar version, which uses scrapli v1. Calendar versions will later
+follow `2.x` instead. The changelog heading of each release names both versions. See the
+[versioning docs](https://scrapli.github.io/nornir_scrapli/user_guide/versioning) and
+[issue #178](https://github.com/scrapli/nornir_scrapli/issues/178) for details.
 
 See the [docs](https://scrapli.github.io/nornir_scrapli/user_guide/installation) for other installation methods/details.
 

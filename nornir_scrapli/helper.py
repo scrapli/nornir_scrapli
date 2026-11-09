@@ -1,6 +1,9 @@
 """nornir_scrapli.helper"""
 
 import difflib
+from typing import Union
+
+from scrapli.netconf import DatastoreType
 
 ANSI_GREEN = "\033[92m"
 ANSI_RED = "\033[91m"
@@ -40,3 +43,29 @@ def diff_xml_text(document_one: str, document_two: str) -> str:
             diff_lines.append(line)
 
     return "\n".join(diff_lines)
+
+
+def to_datastore(value: Union[DatastoreType, str]) -> DatastoreType:
+    """
+    Convert a datastore name to the scrapli datastore enum
+
+    nornir_scrapli 1.x accepted datastore names as strings, such as "candidate". Accepting them
+    here keeps those calls working with scrapli v2, which requires the enum.
+
+    Args:
+        value: datastore enum member or name, such as "running" or "candidate"
+
+    Returns:
+        DatastoreType: matching datastore enum member
+
+    Raises:
+        ValueError: if the value does not name a datastore
+
+    """
+    if isinstance(value, DatastoreType):
+        return value
+    try:
+        return DatastoreType(value.lower())
+    except (AttributeError, ValueError) as exc:
+        names = ", ".join(member.value for member in DatastoreType)
+        raise ValueError(f"Unknown NETCONF datastore {value!r}; expected one of: {names}") from exc

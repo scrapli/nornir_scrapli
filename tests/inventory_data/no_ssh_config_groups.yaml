@@ -17,4 +17,5 @@ iosxe:
       platform: cisco_iosxe
       port: 22
       extras:
-        auth_strict_key: False
+        transport:
+          enable_strict_key: false

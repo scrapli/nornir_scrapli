@@ -12,7 +12,7 @@ jobs:
           version: "0.12.1"
           python-version: "3.13"
           enable-cache: auto
-      - run: uv run --locked --only-group nox nox -s ruff mypy docs build
+      - run: uv run --locked --only-group nox nox -s ruff mypy docs build unit_tests_min_scrapli
 
   unit_tests:
     runs-on: ${{ matrix.os }}
@@ -29,6 +29,8 @@ jobs:
           python-version: "3.13"
           enable-cache: auto
       - run: uv python install ${{ matrix.python }}
+      - if: runner.os == 'macOS'
+        run: python3 -c "import platform; assert platform.machine() == 'arm64', platform.machine()"
       - run: uv run --locked --only-group nox nox -s unit_tests-${{ matrix.python }}
         env:
           TERM: xterm

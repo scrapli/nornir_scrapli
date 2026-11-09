@@ -1,9 +1,7 @@
 # Available Tasks
 
-All tasks presented here are methods that live in `scrapli` or `scrapli_netconf` -- these tasks are simply "wrapped
-" in such a way that they may be used within the constructs of `nornir`! The links below link back to the `scrapli
-` or `scrapli_netconf` docs for the given method -- in all (or very nearly all?) cases, the same arguments that the
- underlying library supports will be exposed to `nornir`!
+Tasks wrap scrapli v2 `Cli` and `Netconf` operations for Nornir. Import them from
+`nornir_scrapli.tasks`; see each reference page for native argument names and defaults.
 
 
 ## Scrapli "core" Tasks
@@ -16,6 +14,7 @@ All tasks presented here are methods that live in `scrapli` or `scrapli_netconf`
 - [send_configs](https://scrapli.github.io/nornir_scrapli/reference/tasks/core/send_configs) - Send a list of configurations to the device
 - [send_configs_from_file](https://scrapli.github.io/nornir_scrapli/reference/tasks/core/send_configs_from_file) - Send a list of configurations from a file to the device
 - [send_interactive](https://scrapli.github.io/nornir_scrapli/reference/tasks/core/send_interactive) -"Interact" with the device (handle prompts and inputs and things like that)
+- [send_prompted_input](https://scrapli.github.io/nornir_scrapli/reference/tasks/core/send_prompted_input) - Answer a single confirmation or authentication prompt
 
 
 ## Scrapli Netconf Tasks
@@ -35,11 +34,12 @@ Note that not all devices will support all operations!
 - [netconf_validate](https://scrapli.github.io/nornir_scrapli/reference/tasks/netconf/validate) - Execute the`validate` rpc against a given datastore
 
 
-## Scrapli Cfg Tasks
+- [netconf_copy_config](https://scrapli.github.io/nornir_scrapli/reference/tasks/netconf/copy_config) - Copy a datastore configuration
+- [netconf_get_schema](https://scrapli.github.io/nornir_scrapli/reference/tasks/netconf/get_schema) - Read a schema
+- [netconf_get_data](https://scrapli.github.io/nornir_scrapli/reference/tasks/netconf/get_data) - Read NMDA datastore data
+- [netconf_edit_data](https://scrapli.github.io/nornir_scrapli/reference/tasks/netconf/edit_data) - Edit NMDA datastore data
+- [netconf_cancel_commit](https://scrapli.github.io/nornir_scrapli/reference/tasks/netconf/cancel_commit) - Cancel a confirmed commit
+- [netconf_kill_session](https://scrapli.github.io/nornir_scrapli/reference/tasks/netconf/kill_session) - Terminate a NETCONF session
+- [netconf_action](https://scrapli.github.io/nornir_scrapli/reference/tasks/netconf/action) - Execute a YANG action
 
-- [cfg_abort_config](https://scrapli.github.io/nornir_scrapli/reference/tasks/cfg/abort_config) - Abort a loaded candidate config
-- [cfg_commit_config](https://scrapli.github.io/nornir_scrapli/reference/tasks/cfg/commit_config) - Commit a loaded candidate config
-- [cfg_diff_config](https://scrapli.github.io/nornir_scrapli/reference/tasks/cfg/diff_config) - Diff a loaded candidate config
-- [cfg_get_config](https://scrapli.github.io/nornir_scrapli/reference/tasks/cfg/get_config) - Get a target config
-- [cfg_get_version](https://scrapli.github.io/nornir_scrapli/reference/tasks/cfg/get_version) - Get the device version string
-- [cfg_load_config](https://scrapli.github.io/nornir_scrapli/reference/tasks/cfg/load_config) - Load a candidate config
+The `cfg_*` tasks are removed in the v2 line. See [Migrating to v2](migrating_to_v2.md).

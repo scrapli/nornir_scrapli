@@ -4,7 +4,8 @@ import logging
 import threading
 
 from nornir_utils.plugins.functions.print_result import _print_result
-from scrapli.response import Response
+from scrapli.cli_result import Result as CliResult
+from scrapli.exceptions import ParsingException
 
 from nornir.core.task import AggregatedResult, MultiResult, Result
 
@@ -37,14 +38,11 @@ def print_structured_result(
     for hostname, multi_result in result.items():
         updated_multi_result = MultiResult(result.name)
         for individual_result in multi_result:
-            scrapli_responses = getattr(individual_result, "scrapli_response", None)
-            if isinstance(scrapli_responses, Response):
-                scrapli_responses = [scrapli_responses]
-            if not scrapli_responses:
+            scrapli_response = getattr(individual_result, "scrapli_response", None)
+            if not isinstance(scrapli_response, CliResult) or not scrapli_response.results:
                 updated_multi_result.append(individual_result)
                 continue
-            for scrapli_response in scrapli_responses:
-                parser_method = getattr(scrapli_response, f"{parser}_parse_output")
+            for index in range(len(scrapli_response.results)):
                 updated_result = Result(
                     host=individual_result.host,
                     changed=individual_result.changed,
@@ -57,13 +55,18 @@ def print_structured_result(
                     stdout=individual_result.stdout,
                 )
 
-                if parser == "textfsm":
-                    structured_result = parser_method(to_dict=to_dict)
-                else:
-                    structured_result = parser_method()
+                try:
+                    if parser == "textfsm":
+                        structured_result = scrapli_response.textfsm_parse(
+                            index=index, to_dict=to_dict
+                        )
+                    else:
+                        structured_result = scrapli_response.genie_parse(index=index)
+                except ParsingException:
+                    structured_result = []
 
                 if not structured_result and fail_to_string:
-                    updated_result.result = scrapli_response.result
+                    updated_result.result = scrapli_response.results[index]
                 else:
                     updated_result.result = structured_result
                 updated_multi_result.append(updated_result)

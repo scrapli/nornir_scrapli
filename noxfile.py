@@ -67,6 +67,28 @@ def genie(session):
 
 
 @nox.session(python="3.13")
+def unit_tests_min_scrapli(session):
+    """Verify the minimum supported scrapli version in an isolated environment."""
+    sync(session, "test")
+    session.run(
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        session.virtualenv.location,
+        "scrapli==2026.10.8",
+        external=True,
+    )
+    session.run(
+        "python",
+        "-I",
+        "-c",
+        "from importlib.metadata import version; assert version('scrapli') == '2026.10.8'",
+    )
+    session.run("pytest", "tests/unit", *session.posargs)
+
+
+@nox.session(python="3.13")
 def ruff(session):
     """Check formatting, imports, and lint rules."""
     sync(session, "lint")
@@ -92,3 +114,20 @@ def docs(session):
 def build(session):
     """Build distributions in an isolated build environment."""
     session.run("uv", "build", "--python", "3.13", external=True)
+
+
+@nox.session(venv_backend="none")
+def release_check(session):
+    """Check the release versions; pass `-- --tag <version> --pypi`."""
+    session.run(
+        "uv",
+        "run",
+        "--no-project",
+        "--python",
+        "3.13",
+        "python",
+        "scripts/release.py",
+        "check",
+        *session.posargs,
+        external=True,
+    )

@@ -6,5 +6,6 @@ iosxe:
       platform: cisco_iosxe
       port: 22
       extras:
-        ssh_config_file: True
-        auth_strict_key: False
+        transport:
+          kind: bin
+          ssh_config_path: ~/.ssh/config
