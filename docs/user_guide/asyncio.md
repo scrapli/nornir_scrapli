@@ -11,7 +11,8 @@ This implementation targets Nornir's `develop` branch at commit
 capability-aware connection plugins from
 [PR #1111](https://github.com/nornir-automation/nornir/pull/1111). The checkout pins that Git
 dependency because released Nornir 3.6.1 does not expose the capability registry
-or async runner, although the `develop` branch reports the same version.
+or async runner, although the `develop` branch reports the same version. The pin will
+be replaced by a requirement on Nornir 3.7.0a1 when that release is published.
 
 ```bash
 pip install ".[asyncio]"

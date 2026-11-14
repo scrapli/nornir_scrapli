@@ -44,7 +44,8 @@ MacOS or \*nix<sup>1</sup>, Python 3.10–3.14 (development defaults to Python 3
 This branch requires the asyncio runner and capability-aware connection plugins from
 Nornir's `develop` branch
 ([Nornir PR #1111](https://github.com/nornir-automation/nornir/pull/1111)), and pins its Git
-dependency to commit `6229e53`. Released Nornir 3.6.1 does not contain these APIs.
+dependency to commit `6229e53` until Nornir 3.7.0a1 is published. Released Nornir 3.6.1 does not
+contain these APIs.
 Both synchronous and asynchronous CLI/configuration plugins use the capability
 registry in this branch.
 
@@ -64,10 +65,10 @@ pip install "nornir-scrapli>=1,<2"
 pip install "nornir-scrapli>=2,<3"
 ```
 
-Each `1.x` release is also published with a calendar version, such as `2026.10.30`. Without a version constraint,
-`pip install nornir-scrapli` installs the latest calendar version, which uses scrapli v1. Calendar versions will later
-follow `2.x` instead. The changelog heading of each release names both versions. See the
-[versioning docs](https://scrapli.github.io/nornir_scrapli/user_guide/versioning) and
+Each `1.x` release, except pre-releases such as `1.6.0a1`, is also published with a calendar version, such as
+`2026.10.30`. Without a version constraint, `pip install nornir-scrapli` installs the latest calendar version, which
+uses scrapli v1. Calendar versions will later follow `2.x` instead. The changelog heading of each release names both
+versions. See the [versioning docs](https://scrapli.github.io/nornir_scrapli/user_guide/versioning) and
 [issue #178](https://github.com/scrapli/nornir_scrapli/issues/178) for details.
 
 See the [docs](https://scrapli.github.io/nornir_scrapli/user_guide/installation) for other installation methods/details.

@@ -2,7 +2,29 @@
 
 This file lists the changes in each nornir_scrapli release, starting with release 2026.10.13. For earlier releases, view the [GitHub releases page](https://github.com/scrapli/nornir_scrapli/releases).
 
-From 1.5.0, the heading of a release that is also published with a calendar version names that version, for example `## 1.5.1 (also published as 2026.10.30) - 2026-10-30`.
+From 1.5.0, the heading of a release that is also published with a calendar version names that version, for example `## 1.5.1 (also published as 2026.10.30) - 2026-10-30`. Pre-releases, such as `1.6.0a1`, have no calendar version.
+
+## 1.6.0a1 - 2026-11-14
+
+[Full list of commits since 1.5.0](https://github.com/scrapli/nornir_scrapli/compare/1.5.0...1.6.0a1)
+
+This pre-release is published with its semantic version only, not with a calendar version. Install it with `pip install "nornir-scrapli==1.6.0a1"`.
+
+### Breaking changes
+
+- nornir_scrapli requires Nornir 3.7.0a1, the first Nornir release with the asyncio runner and the capability-aware connection plugins. Until Nornir 3.7.0a1 is published, the dependency points to Nornir `develop` commit [`6229e53`](https://github.com/nornir-automation/nornir/commit/6229e535e951aebe036cfc62fbfc511f5b2fac9e). ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
+- The `scrapli` and `scrapli_cfg` connection plugins are registered in the `nornir.plugins.capability_connections` entry point group instead of `nornir.plugins.connections`. `scrapli_netconf` stays in `nornir.plugins.connections`. When you build a `Nornir` object without `InitNornir`, register `ScrapliCore` and `ScrapliConfig` with `CapabilityConnectionPluginRegister`. ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
+
+### Added
+
+- Coroutine tasks in `nornir_scrapli.async_tasks` for Nornir's `AsyncioRunner`: `get_prompt`, `send_command`, `send_commands`, `send_commands_from_file`, `send_interactive`, `send_config`, `send_configs`, `send_configs_from_file`, and the `cfg_*` tasks. They take the same arguments and return the same results as the synchronous tasks in `nornir_scrapli.tasks`. NETCONF tasks stay synchronous. ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
+- The `asyncio` extra installs the `asyncssh` transport: `pip install "nornir-scrapli[asyncio]"`. When `transport` is not set, a connection opened from a coroutine task uses `asyncssh`, and a connection opened from a synchronous task uses `system`. ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
+- The `scrapli` and `scrapli_cfg` connections can be opened from synchronous tasks and from coroutine tasks. A connection stays bound to the mode that opened it until it is closed; using it from the other mode raises Nornir's `ConnectionModeMismatchError`. For details, view the [asyncio docs](https://scrapli.github.io/nornir_scrapli/user_guide/asyncio). ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
+
+### Development
+
+- `scripts/release.py check` requires an empty `calver` for a pre-release, such as `1.6.0a1`, and the `Publish` workflow then publishes the semantic version only. ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
+- The test dependencies require pytest `>=8.2.0` and add pytest-asyncio in strict mode. ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
 
 ## 1.5.0 (also published as 2026.11.07) - 2026-11-07
 
