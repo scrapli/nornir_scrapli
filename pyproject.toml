@@ -9,7 +9,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
-    "nornir>=3.0.0",
+    "nornir @ git+https://github.com/nornir-automation/nornir@6229e535e951aebe036cfc62fbfc511f5b2fac9e",
     "nornir_utils>=0.1.0",
     "ntc_templates>=1.1.0",
     # scrapli 2.0 (2026.10.3 and later, including the 2026.2.22rc1+ pre-releases) is not supported yet
@@ -55,17 +55,23 @@ Homepage = "https://github.com/scrapli/nornir_scrapli"
 Docs = "https://scrapli.github.io/nornir_scrapli/"
 
 [project.entry-points."nornir.plugins.connections"]
-scrapli = "nornir_scrapli.connection:ScrapliCore"
-scrapli_cfg= "nornir_scrapli.connection:ScrapliConfig"
 scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 
+[project.entry-points."nornir.plugins.capability_connections"]
+scrapli = "nornir_scrapli.connection:ScrapliCore"
+scrapli_cfg= "nornir_scrapli.connection:ScrapliConfig"
+
 [project.optional-dependencies]
+asyncio = [
+    "scrapli[asyncssh]>=2022.01.30",
+]
 dev = [
     "nornir_scrapli[genie]",
     "mypy>1.0.0,<2.0.0",
     "nox>=2025.2.9",
     "pytest-cov>=3.0.0,<5.0.0",
-    "pytest>=7.0.0,<8.0.0",
+    "pytest>=8.2.0,<9.0.0",
+    "pytest-asyncio>=1.2.0,<2.0.0",
     "ruff>=0.16.7,<0.17.0",
 ]
 docs = [
@@ -93,11 +99,14 @@ nox = [
     "nox>=2025.2.9",
 ]
 test = [
-    "pytest>=7.0.0,<8.0.0",
+    "nornir_scrapli[asyncio]",
+    "pytest>=8.2.0,<9.0.0",
     "pytest-cov>=3.0.0,<5.0.0",
+    "pytest-asyncio>=1.2.0,<2.0.0",
 ]
 functional = [
     {include-group = "test"},
+    "nornir_scrapli[asyncio]",
     "fakenos>=1.2.1; python_version >= '3.11'",
 ]
 lint = [
@@ -114,8 +123,12 @@ path = "nornir_scrapli/__init__.py"
 # Releases of this major version are also published on PyPI with a calendar version.
 calver-line = 1
 # Calendar version of the next release on this branch, such as "2026.10.30".
-# Empty on a branch whose major version is not calver-line.
-calver = "2026.11.07"
+# Empty for a pre-release, such as "1.6.0a1", and on a branch whose major version is not calver-line.
+calver = ""
+
+[tool.hatch.metadata]
+# Required while nornir is pinned to an unreleased Git commit.
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["nornir_scrapli"]
@@ -127,6 +140,11 @@ include = ["/nornir_scrapli"]
 source = [
     "nornir_scrapli"
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+asyncio_default_test_loop_scope = "function"
 
 [tool.coverage.report]
 sort = "cover"
