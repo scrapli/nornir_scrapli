@@ -12,6 +12,7 @@ spec.loader.exec_module(release)
 
 CHANGELOG_WITH_CALVER = "# Changelog\n\n## 1.5.1 (also published as 2026.10.30) - 2026-10-30\n"
 CHANGELOG_WITHOUT_CALVER = "# Changelog\n\n## 2.0.0 - 2026-11-02\n"
+CHANGELOG_PRERELEASE = "# Changelog\n\n## 1.6.0a1 - 2026-11-14\n"
 PUBLISHED = ["2025.1.30", "2026.10.13", "2023.1.30.post1", "1.5.0"]
 
 
@@ -59,6 +60,27 @@ def test_check_release_without_calver():
 
 
 @pytest.mark.parametrize(
+    ("version", "expected"),
+    [
+        ("1.6.0a1", True),
+        ("1.6.0b2", True),
+        ("2.0.0rc1", True),
+        ("1.6.0", False),
+        ("2026.11.7", False),
+        ("2023.1.30.post1", False),
+    ],
+)
+def test_is_prerelease(version, expected):
+    assert release.is_prerelease(version) is expected
+
+
+@pytest.mark.parametrize("version", ["1.6.0a1", "2.0.0a1"])
+def test_check_release_prerelease_without_calver(version):
+    changelog = f"# Changelog\n\n## {version} - 2026-11-14\n"
+    assert release.check_release(version, version, 1, "", changelog, PUBLISHED) == []
+
+
+@pytest.mark.parametrize(
     ("args", "message"),
     [
         (("1.5.2", "1.5.1", 1, "2026.10.30", CHANGELOG_WITH_CALVER), "does not match"),
@@ -69,6 +91,7 @@ def test_check_release_without_calver():
         (("1.5.1", "1.5.1", 1, "2026.10.31", CHANGELOG_WITH_CALVER), "also published as"),
         (("1.5.2", "1.5.2", 1, "2026.10.30", "## 1.5.2 - 2026-10-30\n"), "also published"),
         (("1.5.1", "1.5.1", 1, "2026.10.30", "# Changelog\n"), "no '## 1.5.1 ' heading"),
+        (("1.6.0a1", "1.6.0a1", 1, "2026.11.14", CHANGELOG_PRERELEASE), "is a pre-release"),
     ],
 )
 def test_check_release_errors(args, message):
