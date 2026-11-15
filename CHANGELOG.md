@@ -4,7 +4,7 @@ This file lists the changes in each nornir_scrapli release, starting with releas
 
 From 1.5.0, the heading of a release that is also published with a calendar version names that version, for example `## 1.5.1 (also published as 2026.10.30) - 2026-10-30`. Pre-releases, such as `1.6.0a1`, have no calendar version.
 
-## 1.6.0a1 - 2026-11-14
+## 1.6.0a1 - 2026-11-15
 
 [Full list of commits since 1.5.0](https://github.com/scrapli/nornir_scrapli/compare/1.5.0...1.6.0a1)
 
@@ -12,7 +12,7 @@ This pre-release is published with its semantic version only, not with a calenda
 
 ### Breaking changes
 
-- nornir_scrapli requires Nornir 3.7.0a1, the first Nornir release with the asyncio runner and the capability-aware connection plugins. Until Nornir 3.7.0a1 is published, the dependency points to Nornir `develop` commit [`6229e53`](https://github.com/nornir-automation/nornir/commit/6229e535e951aebe036cfc62fbfc511f5b2fac9e). ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
+- nornir_scrapli requires Nornir 3.7.0a1, the first Nornir release with the asyncio runner and the capability-aware connection plugins. ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
 - The `scrapli` and `scrapli_cfg` connection plugins are registered in the `nornir.plugins.capability_connections` entry point group instead of `nornir.plugins.connections`. `scrapli_netconf` stays in `nornir.plugins.connections`. When you build a `Nornir` object without `InitNornir`, register `ScrapliCore` and `ScrapliConfig` with `CapabilityConnectionPluginRegister`. ([#179](https://github.com/scrapli/nornir_scrapli/pull/179))
 
 ### Added

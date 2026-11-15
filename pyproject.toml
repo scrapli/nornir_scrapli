@@ -9,7 +9,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
-    "nornir @ git+https://github.com/nornir-automation/nornir@6229e535e951aebe036cfc62fbfc511f5b2fac9e",
+    "nornir>=3.7.0a1",
     "nornir_utils>=0.1.0",
     "ntc_templates>=1.1.0",
     # scrapli 2.0 (2026.10.3 and later, including the 2026.2.22rc1+ pre-releases) is not supported yet
@@ -125,10 +125,6 @@ calver-line = 1
 # Calendar version of the next release on this branch, such as "2026.10.30".
 # Empty for a pre-release, such as "1.6.0a1", and on a branch whose major version is not calver-line.
 calver = ""
-
-[tool.hatch.metadata]
-# Required while nornir is pinned to an unreleased Git commit.
-allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["nornir_scrapli"]

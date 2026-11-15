@@ -41,13 +41,10 @@ nornir_scrapli -- scrapli's plugin for nornir
 
 MacOS or \*nix<sup>1</sup>, Python 3.10–3.14 (development defaults to Python 3.13)
 
-This branch requires the asyncio runner and capability-aware connection plugins from
-Nornir's `develop` branch
-([Nornir PR #1111](https://github.com/nornir-automation/nornir/pull/1111)), and pins its Git
-dependency to commit `6229e53` until Nornir 3.7.0a1 is published. Released Nornir 3.6.1 does not
-contain these APIs.
-Both synchronous and asynchronous CLI/configuration plugins use the capability
-registry in this branch.
+From 1.6.0a1, nornir_scrapli requires Nornir 3.7.0a1 or later, the first Nornir release with the asyncio
+runner and capability-aware connection plugins
+([Nornir PR #1111](https://github.com/nornir-automation/nornir/pull/1111)). Both synchronous and asynchronous
+CLI/configuration plugins use the capability registry.
 
 <sup>1</sup> Although many parts of scrapli *do* run on Windows, Windows is not officially supported
 
@@ -91,10 +88,10 @@ print(command_results["iosxe-1"].result)
 
 ## Asyncio tasks
 
-Install this checkout with the optional async SSH transport:
+Install the pre-release with the optional async SSH transport:
 
 ```bash
-pip install ".[asyncio]"
+pip install "nornir-scrapli[asyncio]==1.6.0a1"
 ```
 
 Use the same `scrapli` and `scrapli_cfg` inventory connection names. Leave

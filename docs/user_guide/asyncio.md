@@ -6,17 +6,16 @@ async imports are in `nornir_scrapli.async_tasks`.
 
 ## Install
 
-This implementation targets Nornir's `develop` branch at commit
-`6229e535e951aebe036cfc62fbfc511f5b2fac9e`, which includes the asyncio runner and
-capability-aware connection plugins from
-[PR #1111](https://github.com/nornir-automation/nornir/pull/1111). The checkout pins that Git
-dependency because released Nornir 3.6.1 does not expose the capability registry
-or async runner, although the `develop` branch reports the same version. The pin will
-be replaced by a requirement on Nornir 3.7.0a1 when that release is published.
+Async support requires Nornir 3.7.0a1 or later, the first Nornir release with the
+asyncio runner and capability-aware connection plugins
+([PR #1111](https://github.com/nornir-automation/nornir/pull/1111)). Install the
+pre-release with the `asyncio` extra, which adds the `asyncssh` transport:
 
 ```bash
-pip install ".[asyncio]"
+pip install "nornir-scrapli[asyncio]==1.6.0a1"
 ```
+
+To install from a checkout, run `pip install ".[asyncio]"`.
 
 For development, `uv sync --locked --group test` includes the async transport.
 
