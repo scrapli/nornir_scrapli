@@ -52,6 +52,10 @@ versions at a time. Today this is `1.x`. As a result:
 - `pip install --upgrade nornir_scrapli` without a constraint moves a `2.x` installation to the latest calendar
   version, which uses scrapli v1.
 
+Pre-releases, such as `1.6.0a1`, are published with their semantic version only. A calendar version is not a
+pre-release under PEP 440, so publishing a pre-release with a calendar version would make `pip install nornir_scrapli`
+install it.
+
 The calendar version of a release is its publication date in the format `YYYY.MM.DD`. A second release on the same
 day has the format `YYYY.MM.DD.N`, such as `2026.10.30.1`. When nornir_scrapli is installed from a calendar
 version, `nornir_scrapli.__version__` returns the calendar version.
@@ -89,19 +93,20 @@ version:
 
 - `calver-line` is the major version whose releases are also published with a calendar version. It is `1` today.
 - `calver` is the calendar version of the next release on the branch. It must be set for a release of the
-  `calver-line` major version, and empty for any other release.
+  `calver-line` major version, and empty for a pre-release, such as `1.6.0a1`, and for any other release.
 
 To publish a release:
 
 1. In a pull request against the release branch:
     - Set `__version__` in `nornir_scrapli/__init__.py` to the semantic version, such as `1.5.1`.
     - Set `calver` in `pyproject.toml` to the planned publication date, such as `2026.10.30`. Leave it empty for a
-      release of another major version.
+      pre-release and for a release of another major version.
     - Write the changelog heading with both versions, such as
       `## 1.5.1 (also published as 2026.10.30) - 2026-10-30`, or with the semantic version only when `calver` is empty.
 2. Run `nox -s release_check -- --tag 1.5.1 --pypi`. It checks that:
     - The tag matches `__version__`.
     - `calver` is set or empty as required, and is higher than every calendar version already on PyPI.
+      `calver` must be empty for a pre-release.
     - The changelog heading names the calendar version.
 3. Merge the pull request and create the GitHub release with the tag `1.5.1`.
 

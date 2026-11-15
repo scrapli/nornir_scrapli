@@ -24,6 +24,7 @@ nav:
       - Versioning: user_guide/versioning.md
       - Installation: user_guide/installation.md
       - Basic Usage: user_guide/basic_usage.md
+      - Asyncio Usage: user_guide/asyncio.md
       - Available Tasks: user_guide/available_tasks.md
       - Available Functions: user_guide/available_functions.md
   - API Reference: reference/

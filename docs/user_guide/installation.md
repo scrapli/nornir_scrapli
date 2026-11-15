@@ -13,9 +13,9 @@ pip install "nornir-scrapli>=1,<2"
 pip install "nornir-scrapli>=2,<3"
 ```
 
-Each `1.x` release is also published with a calendar version, such as `2026.10.30`. Without a version constraint,
-`pip install nornir-scrapli` installs the latest calendar version, which uses scrapli v1. Calendar versions will later
-follow `2.x` instead. See [Versioning](versioning.md) for details.
+Each `1.x` release, except pre-releases such as `1.6.0a1`, is also published with a calendar version, such as
+`2026.10.30`. Without a version constraint, `pip install nornir-scrapli` installs the latest calendar version, which
+uses scrapli v1. Calendar versions will later follow `2.x` instead. See [Versioning](versioning.md) for details.
 
 
 ## Installing from a branch

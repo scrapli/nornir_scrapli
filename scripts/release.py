@@ -1,7 +1,8 @@
 """Check the versions of a release and set the calendar version for its second build.
 
 A release of the major version set in `[tool.nornir_scrapli.release] calver-line` is published
-twice on PyPI: once with its semantic version and once with its calendar version.
+twice on PyPI: once with its semantic version and once with its calendar version. A pre-release,
+such as `1.6.0a1`, is published with its semantic version only.
 
 Usage:
     python scripts/release.py check --tag 1.5.1 [--pypi]
@@ -26,6 +27,7 @@ PYPI_URL = "https://pypi.org/pypi/nornir-scrapli/json"
 
 VERSION_PATTERN = re.compile(r'^__version__ = "(?P<version>[^"]*)"$', re.MULTILINE)
 CALVER_PATTERN = re.compile(r"^(\d{4})\.(\d{1,2})\.(\d{1,2})(?:\.(\d+))?$")
+PRERELEASE_PATTERN = re.compile(r"\d(?:a|b|rc)\d+$")
 
 
 def read_version(init_text: str) -> str:
@@ -69,11 +71,42 @@ def parse_calver(value: str) -> tuple[int, int, int, int] | None:
     return int(year), int(month), int(day), int(serial or 0)
 
 
+def is_prerelease(version: str) -> bool:
+    """Return whether `version` is an alpha, beta or release candidate, such as `1.6.0a1`."""
+    return PRERELEASE_PATTERN.search(version) is not None
+
+
 def changelog_heading(changelog_text: str, version: str) -> str | None:
     """Return the changelog heading of `version`, or None if the changelog has none."""
     for line in changelog_text.splitlines():
         if line.startswith(f"## {version} "):
             return line
+    return None
+
+
+def check_calver_required(version: str, calver_line: int, calver: str) -> str | None:
+    """Return the problem with whether `calver` is set for `version`, or None if there is none.
+
+    `calver` must be set for a release of the `calver_line` major version, and empty for a
+    pre-release and for a release of any other major version.
+    """
+    major = int(version.split(".", maxsplit=1)[0])
+    if is_prerelease(version):
+        if calver:
+            return (
+                f"{version} is a pre-release, so [tool.nornir_scrapli.release] calver must be empty"
+            )
+        return None
+    if major == calver_line and not calver:
+        return (
+            f"{version} is a {calver_line}.x release, so [tool.nornir_scrapli.release] calver "
+            "must be set"
+        )
+    if major != calver_line and calver:
+        return (
+            f"{version} is not a {calver_line}.x release, so [tool.nornir_scrapli.release] "
+            "calver must be empty"
+        )
     return None
 
 
@@ -90,17 +123,9 @@ def check_release(
     if tag != version:
         errors.append(f"the release tag {tag} does not match __version__ {version}")
 
-    major = int(version.split(".", maxsplit=1)[0])
-    if major == calver_line and not calver:
-        errors.append(
-            f"{version} is a {calver_line}.x release, so [tool.nornir_scrapli.release] calver "
-            "must be set"
-        )
-    if major != calver_line and calver:
-        errors.append(
-            f"{version} is not a {calver_line}.x release, so [tool.nornir_scrapli.release] "
-            "calver must be empty"
-        )
+    calver_error = check_calver_required(version, calver_line, calver)
+    if calver_error is not None:
+        errors.append(calver_error)
 
     calver_key = parse_calver(calver) if calver else None
     if calver and calver_key is None:
