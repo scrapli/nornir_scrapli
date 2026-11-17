@@ -70,3 +70,19 @@ def make_netconf_result():
         )
 
     return make
+
+
+@pytest.fixture
+def async_nornir(nornir):
+    from nornir.plugins.runners import AsyncioRunner
+
+    return nornir.with_runner(AsyncioRunner(num_workers=2))
+
+
+def asyncify(function):
+    """Wrap a sync fake so it can replace a scrapli ``*_async`` method."""
+
+    async def wrapper(*args, **kwargs):
+        return function(*args, **kwargs)
+
+    return wrapper

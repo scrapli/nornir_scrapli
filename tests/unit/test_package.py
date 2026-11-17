@@ -6,8 +6,24 @@ def test_public_surface_v2():
 
     assert not hasattr(connection, "ScrapliConfig")
     assert not any(name.startswith("cfg_") for name in tasks.__all__)
-    entries = {e.name for e in distribution("nornir_scrapli").entry_points}
-    assert entries == {"scrapli", "scrapli_netconf"}
+    entries = {(e.group, e.name) for e in distribution("nornir_scrapli").entry_points}
+    assert entries == {
+        ("nornir.plugins.capability_connections", "scrapli"),
+        ("nornir.plugins.capability_connections", "scrapli_netconf"),
+    }
+
+
+def test_async_tasks_mirror_sync_tasks():
+    import inspect
+
+    from nornir_scrapli import async_tasks, tasks
+
+    assert async_tasks.__all__ == tasks.__all__
+    for name in tasks.__all__:
+        sync_task, async_task = getattr(tasks, name), getattr(async_tasks, name)
+        assert inspect.iscoroutinefunction(async_task)
+        assert not inspect.iscoroutinefunction(sync_task)
+        assert inspect.signature(async_task) == inspect.signature(sync_task)
 
 
 def test_v2_dependencies():

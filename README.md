@@ -31,6 +31,8 @@ nornir_scrapli -- scrapli's plugin for nornir
 - __Tested task contracts__: Unit tests cover native v2 option conversion, task arguments,
   result formatting, interactive sequencing and dry runs without requiring lab devices.
 - __Custom device support__: Supply a scrapli v2 YAML definition with `extras.definition`.
+- __Asyncio__: Every task also exists as a coroutine in `nornir_scrapli.async_tasks`
+  for Nornir's asyncio runner.
 - __But wait, there's more!__: Have NETCONF devices in your environment, but love the speed and simplicity of 
   scrapli? Native v2 NETCONF operations are exposed through the `scrapli_netconf` connection plugin.
 
@@ -40,6 +42,12 @@ nornir_scrapli -- scrapli's plugin for nornir
 Python 3.10–3.14 and `scrapli>=2026.10.8` (development defaults to Python 3.13).
 Native wheels support Linux x86_64/aarch64 (glibc/musl) and macOS Apple silicon.
 Windows and Intel macOS are unsupported.
+
+nornir_scrapli requires Nornir 3.7.0a1 or later, the first Nornir release with the asyncio
+runner and capability-aware connection plugins
+([nornir-automation/nornir#1111](https://github.com/nornir-automation/nornir/pull/1111)).
+The connection plugins are registered in the `nornir.plugins.capability_connections`
+entry-point group, which earlier Nornir releases do not read.
 
 Upgrading from v1? Follow the [migration guide](docs/user_guide/migrating_to_v2.md).
 Inventory extras and task arguments change; `cfg_*` tasks are removed. Stay on the `1.x`
@@ -82,3 +90,28 @@ command_results = nr.run(task=send_command, command="show version")
 print("send_command result:")
 print(command_results["iosxe-1"].result)
 ```
+
+
+## Asyncio Example
+
+```python
+import asyncio
+
+from nornir import AInitNornir
+from nornir_scrapli.async_tasks import send_command
+
+
+async def main():
+    nr = await AInitNornir(
+        config_file="nornir_data/config.yaml",
+        runner={"plugin": "asyncio", "options": {"num_workers": 20}},
+    )
+    async with nr:
+        command_results = await nr.arun(task=send_command, command="show version")
+    print(command_results["iosxe-1"].result)
+
+
+asyncio.run(main())
+```
+
+See the [asyncio guide](docs/user_guide/asyncio.md) for connection modes, time limits and other details.

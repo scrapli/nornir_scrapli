@@ -1,0 +1,11 @@
+---
+iosxe:
+  platform: ios
+  connection_options:
+    scrapli:
+      platform: cisco_iosxe
+      port: 22
+      extras:
+        transport:
+          kind: bin
+          ssh_config_path: ~/.ssh/config
