@@ -9,7 +9,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
-    "nornir>=3.0.0",
+    "nornir>=3.7.0a1",
     "nornir_utils>=0.1.0",
     "ntc_templates>=1.1.0",
     "scrapli>=2026.10.8",
@@ -52,7 +52,7 @@ keywords = [
 Homepage = "https://github.com/scrapli/nornir_scrapli"
 Docs = "https://scrapli.github.io/nornir_scrapli/"
 
-[project.entry-points."nornir.plugins.connections"]
+[project.entry-points."nornir.plugins.capability_connections"]
 scrapli = "nornir_scrapli.connection:ScrapliCore"
 scrapli_netconf= "nornir_scrapli.connection:ScrapliNetconf"
 
@@ -62,8 +62,9 @@ dev = [
     "mypy>1.0.0,<2.0.0",
     "types-PyYAML>=6.0",
     "nox>=2025.2.9",
+    "pytest-asyncio>=1.2.0,<2.0.0",
     "pytest-cov>=3.0.0,<5.0.0",
-    "pytest>=7.0.0,<8.0.0",
+    "pytest>=8.2.0,<9.0.0",
     "ruff>=0.16.7,<0.17.0",
 ]
 docs = [
@@ -91,7 +92,8 @@ nox = [
     "nox>=2025.2.9",
 ]
 test = [
-    "pytest>=7.0.0,<8.0.0",
+    "pytest>=8.2.0,<9.0.0",
+    "pytest-asyncio>=1.2.0,<2.0.0",
     "pytest-cov>=3.0.0,<5.0.0",
 ]
 functional = [
@@ -121,6 +123,10 @@ packages = ["nornir_scrapli"]
 
 [tool.hatch.build.targets.sdist]
 include = ["/nornir_scrapli"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
 
 [tool.coverage.run]
 source = [
