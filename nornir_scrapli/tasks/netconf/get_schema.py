@@ -5,7 +5,7 @@ from typing import Optional
 from scrapli.ffi_types import Cancel
 from scrapli.netconf import SchemaFormat
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult
 
 
@@ -17,7 +17,7 @@ def netconf_get_schema(
     format_: SchemaFormat = SchemaFormat.YANG,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Read a schema by identifier and version.
 
     Args:

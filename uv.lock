@@ -2202,14 +2202,14 @@ wheels = [
 
 [[package]]
 name = "nornir"
-version = "3.7.0a1"
+version = "3.7.0b1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ruamel-yaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f9/fa/c21bce221e979d28502c3a932c453d83967b604ba35b6cd117c0997ea8e2/nornir-3.7.0a1.tar.gz", hash = "sha256:4035895ff916dff3dcbbf9395cac8c23f165483760ce18a9641ddf1f28a05df1", size = 61997, upload-time = "2026-11-15T11:58:51.614Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/94/64/197a734acf9260ed8dfb21e2fd2ee68adda141883d920385b155dc528076/nornir-3.7.0b1.tar.gz", hash = "sha256:bdcafc59421413cee96a130edd06212847c978e379c42754122402760904e9ba", size = 75574, upload-time = "2026-11-26T07:15:52.805Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/e2/7a552c6b07cb9c5af71084f3e70fc71c9c30537b12afc9c8d8f3b3e83839/nornir-3.7.0a1-py3-none-any.whl", hash = "sha256:79ad228b2e74a16ee0a467ceacbb228a2305fe6aa813aecd6aad6cb927f86ce4", size = 66145, upload-time = "2026-11-15T11:58:50.611Z" },
+    { url = "https://files.pythonhosted.org/packages/6f/7c/6f8763d947c38c6d40d24c0774c07b95a560a1f504658f4dd794938b5552/nornir-3.7.0b1-py3-none-any.whl", hash = "sha256:c7d735d51ca297911e43b411e60de37867f18ec72bacbbf1585b0a9a4f2bfee1", size = 79807, upload-time = "2026-11-26T07:15:51.587Z" },
 ]
 
 [[package]]
@@ -2298,7 +2298,7 @@ requires-dist = [
     { name = "mkdocs-section-index", marker = "extra == 'docs'", specifier = ">=0.3.4,<1.0.0" },
     { name = "mkdocstrings", extras = ["python"], marker = "extra == 'docs'", specifier = ">=0.19.0,<2.0.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">1.0.0,<2.0.0" },
-    { name = "nornir", specifier = ">=3.7.0a1" },
+    { name = "nornir", specifier = ">=3.7.0b1" },
     { name = "nornir-utils", specifier = ">=0.1.0" },
     { name = "nox", marker = "extra == 'dev'", specifier = ">=2025.2.9" },
     { name = "ntc-templates", specifier = ">=1.1.0" },

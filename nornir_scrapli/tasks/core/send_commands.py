@@ -5,7 +5,7 @@ from typing import List, Optional
 from scrapli.cli import InputHandling
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
@@ -20,7 +20,7 @@ def send_commands(
     stop_on_indicated_failure: bool = True,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Send commands and join outputs with blank lines.
 
     Args:

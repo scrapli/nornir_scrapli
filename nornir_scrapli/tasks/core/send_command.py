@@ -5,7 +5,7 @@ from typing import Optional
 from scrapli.cli import InputHandling
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
@@ -19,7 +19,7 @@ def send_command(
     retain_trailing_prompt: bool = False,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Send one command and retain its native result.
 
     Args:

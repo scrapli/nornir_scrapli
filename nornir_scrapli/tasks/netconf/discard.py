@@ -4,13 +4,13 @@ from typing import Optional
 
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult
 
 
 def netconf_discard(
     task: Task, *, operation_timeout_ns: Optional[int] = None, cancel: Optional[Cancel] = None
-) -> Result:
+) -> ScrapliResult:
     """Discard uncommitted candidate changes.
 
     Args:

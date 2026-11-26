@@ -5,7 +5,7 @@ from typing import Optional
 from scrapli.cli import InputHandling
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult
 
 
@@ -23,7 +23,7 @@ def send_prompted_input(
     retain_trailing_prompt: bool = False,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Send an input and answer its single confirmation or authentication prompt.
 
     Args:

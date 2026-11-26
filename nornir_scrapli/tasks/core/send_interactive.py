@@ -8,7 +8,7 @@ from scrapli.cli_result import Result as CliResult
 from scrapli.exceptions import OperationException
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult
 from nornir_scrapli.tasks.core.mode import load_definition
 
@@ -120,7 +120,7 @@ class Interaction:
             callback_async=callback_async,
         )
 
-    def result(self, task: Task, definition: Dict[str, Any], native: CliResult) -> Result:
+    def result(self, task: Task, definition: Dict[str, Any], native: CliResult) -> ScrapliResult:
         """Check completion, hide secrets and build the Nornir result.
 
         Args:
@@ -171,7 +171,7 @@ def send_interactive(
     requested_mode: str = "",
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Send each event only after the preceding input's expected prompt arrives.
 
     Args:

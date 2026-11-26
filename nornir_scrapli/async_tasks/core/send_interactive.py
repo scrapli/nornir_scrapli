@@ -6,7 +6,8 @@ from scrapli import Cli
 from scrapli.exceptions import OperationException
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
+from nornir_scrapli.result import ScrapliResult
 from nornir_scrapli.tasks.core.mode import load_definition
 from nornir_scrapli.tasks.core.send_interactive import Event, Interaction
 
@@ -18,7 +19,7 @@ async def send_interactive(
     requested_mode: str = "",
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Send each event only after the preceding input's expected prompt arrives.
 
     Args:

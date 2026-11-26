@@ -4,7 +4,7 @@ from typing import List, Optional, Tuple
 
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult
 
 
@@ -16,7 +16,7 @@ def netconf_rpc(
     extra_namespaces: Optional[List[Tuple[str, str]]] = None,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Send raw XML through the native raw_rpc operation.
 
     Args:

@@ -5,7 +5,7 @@ from typing import Optional
 from scrapli.ffi_types import Cancel
 from scrapli.netconf import DefaultsType, FilterType
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult
 
 
@@ -19,7 +19,7 @@ async def netconf_get(
     defaults_type: DefaultsType = DefaultsType.UNSET,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Read data with native NETCONF filtering options.
 
     Args:

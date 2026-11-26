@@ -5,7 +5,7 @@ from typing import Optional, Union
 from scrapli.ffi_types import Cancel
 from scrapli.netconf import DatastoreType
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.helper import to_datastore
 from nornir_scrapli.result import ScrapliResult
 
@@ -16,7 +16,7 @@ async def netconf_validate(
     source: Union[DatastoreType, str] = DatastoreType.RUNNING,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Validate the source datastore.
 
     Args:

@@ -4,12 +4,12 @@ nornir_scrapli can run every task on Nornir's asyncio runner. Each host's device
 then runs as a coroutine on one event loop instead of in a thread per host.
 
 !!! warning
-    Asyncio support requires Nornir 3.7.0a1 or later, the first Nornir release with the
-    asyncio runner and capability-aware connection plugins
+    Asyncio support requires Nornir 3.7.0b1 or later. Nornir 3.7 adds the asyncio runner
+    and capability-aware connection plugins
     ([nornir-automation/nornir#1111](https://github.com/nornir-automation/nornir/pull/1111)).
-    Nornir 3.7.0a1 is a pre-release, and its new APIs can still change. `uv` selects a
+    Nornir 3.7.0b1 is a pre-release, and its new APIs can still change. `uv` selects a
     pre-release of a transitive dependency only when asked: add `--prerelease=allow`, or
-    add `nornir>=3.7.0a1` to the requirements of your own project.
+    add `nornir>=3.7.0b1` to the requirements of your own project.
 
 
 ## Configure the runner

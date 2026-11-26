@@ -7,8 +7,9 @@ from scrapli.exceptions import OperationException
 from scrapli.ffi_types import Cancel
 from scrapli.netconf import DatastoreType, DefaultOperation, ErrorOption, TestOption
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.helper import diff_xml_text, to_datastore
+from nornir_scrapli.result import ScrapliResult
 from nornir_scrapli.tasks.netconf.edit_config import _finish_edit
 
 
@@ -33,7 +34,7 @@ async def netconf_edit_config(
     error_option: ErrorOption = ErrorOption.UNSET,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Edit configuration and optionally diff/discard candidate changes.
 
     A dry run requires the candidate datastore as the target. It sends edit_config, then

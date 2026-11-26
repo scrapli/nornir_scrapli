@@ -5,7 +5,7 @@ from typing import Optional, Union
 from scrapli.ffi_types import Cancel
 from scrapli.netconf import DatastoreType, DefaultOperation
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.helper import to_datastore
 from nornir_scrapli.result import ScrapliResult
 
@@ -18,7 +18,7 @@ async def netconf_edit_data(
     default_operation: DefaultOperation = DefaultOperation.UNSET,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Edit NMDA data in the target datastore.
 
     Args:

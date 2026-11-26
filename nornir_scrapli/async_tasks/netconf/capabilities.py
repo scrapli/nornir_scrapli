@@ -1,11 +1,13 @@
 """Read NETCONF capabilities from an asyncio connection."""
 
+from typing import List
+
 from nornir.core.task import Result, Task
 
 
 async def netconf_capabilities(
     task: Task,
-) -> Result:
+) -> Result[List[str]]:
     """Return the capabilities the device advertised when the session opened.
 
     Scrapli v2 stores the capabilities during the open, so this task sends no RPC.

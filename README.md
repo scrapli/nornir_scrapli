@@ -43,8 +43,8 @@ Python 3.10–3.14 and `scrapli>=2026.10.8` (development defaults to Python 3.13
 Native wheels support Linux x86_64/aarch64 (glibc/musl) and macOS Apple silicon.
 Windows and Intel macOS are unsupported.
 
-nornir_scrapli requires Nornir 3.7.0a1 or later, the first Nornir release with the asyncio
-runner and capability-aware connection plugins
+nornir_scrapli requires Nornir 3.7.0b1 or later. Nornir 3.7 adds the asyncio runner and
+capability-aware connection plugins
 ([nornir-automation/nornir#1111](https://github.com/nornir-automation/nornir/pull/1111)).
 The connection plugins are registered in the `nornir.plugins.capability_connections`
 entry-point group, which earlier Nornir releases do not read.

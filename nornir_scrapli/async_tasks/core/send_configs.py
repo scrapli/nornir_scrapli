@@ -5,7 +5,7 @@ from typing import List, Optional
 from scrapli.cli import InputHandling
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.async_tasks.core.mode import check_config_mode
 from nornir_scrapli.result import ScrapliResult, process_config_result
 
@@ -21,7 +21,7 @@ async def send_configs(
     stop_on_indicated_failure: bool = True,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult[Optional[str]]:
     """Send configuration lines or test entering and leaving configuration mode.
 
     Args:
