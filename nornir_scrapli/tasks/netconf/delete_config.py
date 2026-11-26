@@ -1,13 +1,13 @@
 """nornir_scrapli.tasks.netconf_delete_config"""
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
 def netconf_delete_config(
     task: Task,
     target: str = "candidate",
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Send a "delete-config" rcp to the device with scrapli_netconf
 

@@ -3,7 +3,7 @@
 from nornir.core.task import Result, Task
 
 
-def get_prompt(task: Task) -> Result:
+def get_prompt(task: Task) -> Result[str]:
     """
     Get current prompt from device using scrapli
 

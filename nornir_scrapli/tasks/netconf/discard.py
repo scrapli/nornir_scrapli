@@ -1,12 +1,12 @@
 """nornir_scrapli.tasks.netconf_discard"""
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
 def netconf_discard(
     task: Task,
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Discard the device config with scrapli_netconf
 

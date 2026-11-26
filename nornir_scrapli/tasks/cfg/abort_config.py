@@ -1,11 +1,11 @@
 """nornir_scrapli.tasks.cfg_abort_config"""
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.connection import ScrapliConfig
 from nornir_scrapli.result import ScrapliResult
 
 
-def cfg_abort_config(task: Task) -> Result:
+def cfg_abort_config(task: Task) -> ScrapliResult[str]:
     """
     Abort a device candidate config with scrapli-cfg
 

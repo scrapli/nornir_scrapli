@@ -78,7 +78,7 @@ def ruff(session):
 def mypy(session):
     """Check types against the minimum supported Python version."""
     sync(session, "lint")
-    session.run("mypy", "--strict", "nornir_scrapli/")
+    session.run("mypy", "--strict", "nornir_scrapli/", "tests/typing/")
 
 
 @nox.session(python="3.13")

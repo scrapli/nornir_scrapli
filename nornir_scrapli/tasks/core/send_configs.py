@@ -2,7 +2,7 @@
 
 from typing import List, Optional, Union
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 from nornir_scrapli.result import ScrapliResult, process_config_result
 
@@ -17,7 +17,7 @@ def send_configs(
     privilege_level: str = "",
     eager: bool = False,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[Optional[str]]:
     """
     Send configs to device using scrapli
 
@@ -76,10 +76,9 @@ def send_configs(
         timeout_ops=timeout_ops,
     )
 
-    result = ScrapliResult(
+    return ScrapliResult(
         host=task.host,
         result=process_config_result(scrapli_response=scrapli_response),
         scrapli_response=scrapli_response,
         changed=True,
     )
-    return result

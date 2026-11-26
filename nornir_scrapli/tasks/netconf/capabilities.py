@@ -1,11 +1,13 @@
 """nornir_scrapli.tasks.netconf_capabilities"""
 
+from typing import List
+
 from nornir.core.task import Result, Task
 
 
 def netconf_capabilities(
     task: Task,
-) -> Result:
+) -> Result[List[str]]:
     """
     Retrieve the device config with scrapli_netconf
 

@@ -2,7 +2,7 @@
 
 from typing import List, Optional, Union
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
@@ -12,7 +12,7 @@ def send_command(
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Send a single command to device using scrapli
 

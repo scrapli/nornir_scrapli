@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.helper import diff_xml_text
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
@@ -13,7 +13,7 @@ def netconf_edit_config(
     dry_run: Optional[bool] = None,
     diff: bool = False,
     target: str = "running",
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Edit config from the device with scrapli_netconf
 

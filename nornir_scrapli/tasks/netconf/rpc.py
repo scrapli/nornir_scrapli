@@ -1,13 +1,13 @@
 """nornir_scrapli.tasks.netconf_rpc"""
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
 def netconf_rpc(
     task: Task,
     filter_: str,
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Send a "bare" rcp to the device with scrapli_netconf
 
