@@ -3,6 +3,10 @@
 Tasks wrap scrapli v2 `Cli` and `Netconf` operations for Nornir. Import them from
 `nornir_scrapli.tasks`; see each reference page for native argument names and defaults.
 
+Every task also exists as a coroutine with the same name, parameters and result in
+`nornir_scrapli.async_tasks`, for use with Nornir's asyncio runner. See
+[Asyncio Usage](asyncio.md).
+
 
 ## Scrapli "core" Tasks
 

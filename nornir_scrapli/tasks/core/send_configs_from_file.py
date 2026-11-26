@@ -5,7 +5,7 @@ from typing import Optional
 from scrapli.cli import InputHandling
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_config_result
 from nornir_scrapli.tasks.core.mode import check_config_mode
 
@@ -21,7 +21,7 @@ def send_configs_from_file(
     stop_on_indicated_failure: bool = True,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult[Optional[str]]:
     """Send a configuration file or test mode transitions without reading the file.
 
     Args:

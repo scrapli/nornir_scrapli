@@ -1,0 +1,43 @@
+"""Edit NMDA NETCONF datastore data."""
+
+from typing import Optional, Union
+
+from scrapli.ffi_types import Cancel
+from scrapli.netconf import DatastoreType, DefaultOperation
+
+from nornir.core.task import Task
+from nornir_scrapli.helper import to_datastore
+from nornir_scrapli.result import ScrapliResult
+
+
+async def netconf_edit_data(
+    task: Task,
+    content: str,
+    *,
+    target: Union[DatastoreType, str] = DatastoreType.RUNNING,
+    default_operation: DefaultOperation = DefaultOperation.UNSET,
+    operation_timeout_ns: Optional[int] = None,
+    cancel: Optional[Cancel] = None,
+) -> ScrapliResult:
+    """Edit NMDA data in the target datastore.
+
+    Args:
+        task: Nornir task.
+        content: Data content XML.
+        target: Target datastore.
+        default_operation: Default edit operation.
+        operation_timeout_ns: Operation timeout in nanoseconds.
+        cancel: Native cancellation context.
+
+    Returns:
+        Nornir result containing reply XML.
+    """
+    connection = await task.host.aget_connection("scrapli_netconf", task.nornir.config)
+    response = await connection.edit_data_async(
+        content=content,
+        target=to_datastore(target),
+        default_operation=default_operation,
+        operation_timeout_ns=operation_timeout_ns,
+        cancel=cancel,
+    )
+    return ScrapliResult(task.host, response.result, response, changed=True)

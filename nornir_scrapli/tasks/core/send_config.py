@@ -5,7 +5,8 @@ from typing import Optional
 from scrapli.cli import InputHandling
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
+from nornir_scrapli.result import ScrapliResult
 from nornir_scrapli.tasks.core.send_configs import send_configs
 
 
@@ -20,7 +21,7 @@ def send_config(
     stop_on_indicated_failure: bool = True,
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult[Optional[str]]:
     """Send each configuration line through the batch configuration task.
 
     Args:

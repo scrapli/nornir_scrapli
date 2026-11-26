@@ -1,0 +1,35 @@
+"""Unlock a NETCONF datastore."""
+
+from typing import Optional, Union
+
+from scrapli.ffi_types import Cancel
+from scrapli.netconf import DatastoreType
+
+from nornir.core.task import Task
+from nornir_scrapli.helper import to_datastore
+from nornir_scrapli.result import ScrapliResult
+
+
+async def netconf_unlock(
+    task: Task,
+    *,
+    target: Union[DatastoreType, str] = DatastoreType.RUNNING,
+    operation_timeout_ns: Optional[int] = None,
+    cancel: Optional[Cancel] = None,
+) -> ScrapliResult:
+    """Unlock the requested datastore.
+
+    Args:
+        task: Nornir task.
+        target: Target datastore.
+        operation_timeout_ns: Operation timeout in nanoseconds.
+        cancel: Native cancellation context.
+
+    Returns:
+        Nornir result containing reply XML.
+    """
+    connection = await task.host.aget_connection("scrapli_netconf", task.nornir.config)
+    response = await connection.unlock_async(
+        target=to_datastore(target), operation_timeout_ns=operation_timeout_ns, cancel=cancel
+    )
+    return ScrapliResult(task.host, response.result, response, changed=True)

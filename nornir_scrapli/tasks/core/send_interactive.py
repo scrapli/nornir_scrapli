@@ -1,13 +1,14 @@
 """Run ordered CLI interactions using a single native read callback."""
 
-from typing import List, Optional, Tuple, Union
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Tuple, Union
 
 import regex
 from scrapli import Cli, ReadCallback
+from scrapli.cli_result import Result as CliResult
 from scrapli.exceptions import OperationException
 from scrapli.ffi_types import Cancel
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult
 from nornir_scrapli.tasks.core.mode import load_definition
 
@@ -44,6 +45,125 @@ def _prompt_end(prompt: str, output: str) -> Optional[int]:
     return match.end() if match and match.end() > match.start() else None
 
 
+class Interaction:
+    """Track which interaction event the device has acknowledged.
+
+    The tracker holds no I/O, so the sync and asyncio tasks share it and differ only in
+    how they write the next input.
+    """
+
+    def __init__(self, events: List[Event]) -> None:
+        """Validate the events and start at the first one.
+
+        Args:
+            events: Input/expected-prompt tuples with optional hidden-input flag.
+        """
+        _validate_events(events)
+        self.events = events
+        self.index = 0
+        self.consumed = 0
+
+    @property
+    def first_input(self) -> str:
+        """Input written before reading starts."""
+        return self.events[0][0]
+
+    @property
+    def complete(self) -> bool:
+        """Whether the final expected prompt has arrived."""
+        return self.index == len(self.events)
+
+    def advance(self, accumulated: str) -> Optional[str]:
+        """Consume output and return the next input once its preceding prompt arrives.
+
+        Args:
+            accumulated: All output read so far.
+
+        Returns:
+            The next input to write, or None when nothing is to be written.
+        """
+        if self.complete:
+            return None
+        end = _prompt_end(self.events[self.index][1], accumulated[self.consumed :])
+        if end is None:
+            return None
+        # Output already buffered before the next write cannot acknowledge that input.
+        self.consumed = len(accumulated)
+        self.index += 1
+        if self.complete:
+            return None
+        return self.events[self.index][0]
+
+    def read_callback(
+        self,
+        callback: Optional[Callable[[Cli, str, str], None]] = None,
+        callback_async: Optional[Callable[[Cli, str, str], Awaitable[None]]] = None,
+    ) -> ReadCallback:
+        """Build the read callback that runs on every chunk of output.
+
+        Native callback matching advances its own cursor on each match. The tracker keeps
+        a separate acknowledgement cursor so fragments and repeated prompt text remain
+        ordered.
+
+        Args:
+            callback: Sync callback function.
+            callback_async: Asyncio callback function.
+
+        Returns:
+            Native read callback.
+        """
+        return ReadCallback(
+            name="nornir-interactive",
+            contains_pattern=r"[\s\S]+",
+            search_depth=1,
+            callback=callback,
+            callback_async=callback_async,
+        )
+
+    def result(self, task: Task, definition: Dict[str, Any], native: CliResult) -> ScrapliResult:
+        """Check completion, hide secrets and build the Nornir result.
+
+        Args:
+            task: Nornir task.
+            definition: Loaded CLI definition.
+            native: Native read_with_callbacks result.
+
+        Returns:
+            Nornir result containing output and the native callback result.
+
+        Raises:
+            OperationException: If reading ended before the final expected prompt.
+        """
+        if not self.complete:
+            raise OperationException("Interactive operation ended before the final expected prompt")
+        events = self.events
+        indicator = next(
+            (text for text in definition.get("failure_indicators", []) if text in native.result),
+            "",
+        )
+        native.results_failed_indicator = native.results_failed_indicator or indicator
+        hidden = [
+            event[0]
+            for event in events
+            if len(event) == HIDDEN_EVENT_LENGTH and event[-1] and event[0]
+        ]
+        output = native.result
+        for secret in hidden:
+            output = output.replace(secret, "[redacted]")
+        # Raw journals may split a secret with control sequences. For hidden exchanges,
+        # expose only sanitized, normalized text bytes rather than wire-exact output.
+        raw = output.encode() if hidden else native.result_raw
+        native.inputs = [
+            "\n".join(
+                "[redacted]" if len(e) == HIDDEN_EVENT_LENGTH and e[-1] else e[0] for e in events
+            )
+        ]
+        native.results = [output]
+        native._result_raw_journals = [b""]
+        native._results_raw = [raw]
+        return ScrapliResult(task.host, output, native, changed=True)
+
+
 def send_interactive(
     task: Task,
     interact_events: List[Event],
@@ -51,7 +171,7 @@ def send_interactive(
     requested_mode: str = "",
     operation_timeout_ns: Optional[int] = None,
     cancel: Optional[Cancel] = None,
-) -> Result:
+) -> ScrapliResult:
     """Send each event only after the preceding input's expected prompt arrives.
 
     Args:
@@ -67,7 +187,7 @@ def send_interactive(
     Raises:
         OperationException: If entering the requested mode fails.
     """
-    _validate_events(interact_events)
+    interaction = Interaction(interact_events)
     connection = task.host.get_connection("scrapli", task.nornir.config)
     if requested_mode:
         entered = connection.enter_mode(
@@ -78,62 +198,20 @@ def send_interactive(
         if entered.failed:
             raise OperationException("Failed to enter interactive starting mode")
     definition = load_definition(connection)
-    index = 0
-    consumed = 0
 
     def advance(cli: Cli, recent: str, accumulated: str) -> None:
-        nonlocal index, consumed
         _ = recent
-        if index < len(interact_events):
-            end = _prompt_end(interact_events[index][1], accumulated[consumed:])
-            if end is None:
-                return
-            # Output already buffered before the next write cannot acknowledge that input.
-            consumed = len(accumulated)
-            index += 1
-            if index == len(interact_events):
-                callback.completes = True
-                return
-            cli.write_and_return(input_=interact_events[index][0])
+        next_input = interaction.advance(accumulated)
+        if interaction.complete:
+            callback.completes = True
+        elif next_input is not None:
+            cli.write_and_return(input_=next_input)
 
-    # Native callback matching advances its own cursor on each match. Keep our separate
-    # acknowledgement cursor so fragments and repeated prompt text remain ordered.
-    callback = ReadCallback(
-        name="nornir-interactive",
-        contains_pattern=r"[\s\S]+",
-        search_depth=1,
-        callback=advance,
-    )
-    connection.write_and_return(input_=interact_events[0][0])
+    callback = interaction.read_callback(callback=advance)
+    connection.write_and_return(input_=interaction.first_input)
     native = connection.read_with_callbacks(
         callbacks=[callback],
         operation_timeout_ns=operation_timeout_ns,
         cancel=cancel,
     )
-    if index != len(interact_events):
-        raise OperationException("Interactive operation ended before the final expected prompt")
-    indicator = next(
-        (text for text in definition.get("failure_indicators", []) if text in native.result), ""
-    )
-    native.results_failed_indicator = native.results_failed_indicator or indicator
-    hidden = [
-        event[0]
-        for event in interact_events
-        if len(event) == HIDDEN_EVENT_LENGTH and event[-1] and event[0]
-    ]
-    output = native.result
-    for secret in hidden:
-        output = output.replace(secret, "[redacted]")
-    # Raw journals may split a secret with control sequences. For hidden exchanges,
-    # expose only sanitized, normalized text bytes rather than wire-exact output.
-    raw = output.encode() if hidden else native.result_raw
-    native.inputs = [
-        "\n".join(
-            "[redacted]" if len(e) == HIDDEN_EVENT_LENGTH and e[-1] else e[0]
-            for e in interact_events
-        )
-    ]
-    native.results = [output]
-    native._result_raw_journals = [b""]
-    native._results_raw = [raw]
-    return ScrapliResult(task.host, output, native, changed=True)
+    return interaction.result(task, definition, native)

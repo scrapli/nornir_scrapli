@@ -1,0 +1,51 @@
+"""Send multiple CLI commands with scrapli v2."""
+
+from typing import List, Optional
+
+from scrapli.cli import InputHandling
+from scrapli.ffi_types import Cancel
+
+from nornir.core.task import Task
+from nornir_scrapli.result import ScrapliResult, process_command_result
+
+
+async def send_commands(
+    task: Task,
+    commands: List[str],
+    *,
+    requested_mode: str = "",
+    input_handling: InputHandling = InputHandling.FUZZY,
+    retain_input: bool = False,
+    retain_trailing_prompt: bool = False,
+    stop_on_indicated_failure: bool = True,
+    operation_timeout_ns: Optional[int] = None,
+    cancel: Optional[Cancel] = None,
+) -> ScrapliResult:
+    """Send commands and join outputs with blank lines.
+
+    Args:
+        task: Nornir task.
+        commands: Commands to send.
+        requested_mode: Mode in which to send commands.
+        input_handling: Native input matching strategy.
+        retain_input: Retain echoed input in output.
+        retain_trailing_prompt: Retain the trailing prompt.
+        stop_on_indicated_failure: Stop at a definition failure indicator.
+        operation_timeout_ns: Per-operation timeout in nanoseconds.
+        cancel: Native cancellation context.
+
+    Returns:
+        Nornir result containing joined command outputs.
+    """
+    connection = await task.host.aget_connection("scrapli", task.nornir.config)
+    response = await connection.send_inputs_async(
+        inputs=commands,
+        requested_mode=requested_mode,
+        input_handling=input_handling,
+        retain_input=retain_input,
+        retain_trailing_prompt=retain_trailing_prompt,
+        stop_on_indicated_failure=stop_on_indicated_failure,
+        operation_timeout_ns=operation_timeout_ns,
+        cancel=cancel,
+    )
+    return ScrapliResult(task.host, process_command_result(response), response)

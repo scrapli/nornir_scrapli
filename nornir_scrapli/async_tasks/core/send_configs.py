@@ -1,0 +1,55 @@
+"""Send CLI configuration lines with scrapli v2."""
+
+from typing import List, Optional
+
+from scrapli.cli import InputHandling
+from scrapli.ffi_types import Cancel
+
+from nornir.core.task import Task
+from nornir_scrapli.async_tasks.core.mode import check_config_mode
+from nornir_scrapli.result import ScrapliResult, process_config_result
+
+
+async def send_configs(
+    task: Task,
+    configs: List[str],
+    dry_run: Optional[bool] = None,
+    *,
+    requested_mode: str = "configuration",
+    input_handling: InputHandling = InputHandling.FUZZY,
+    retain_trailing_prompt: bool = False,
+    stop_on_indicated_failure: bool = True,
+    operation_timeout_ns: Optional[int] = None,
+    cancel: Optional[Cancel] = None,
+) -> ScrapliResult[Optional[str]]:
+    """Send configuration lines or test entering and leaving configuration mode.
+
+    Args:
+        task: Nornir task.
+        configs: Configuration lines to send.
+        dry_run: Override the global dry-run setting.
+        requested_mode: Configuration mode to use.
+        input_handling: Native input matching strategy.
+        retain_trailing_prompt: Retain trailing prompts in output.
+        stop_on_indicated_failure: Stop at a definition failure indicator.
+        operation_timeout_ns: Per-operation timeout in nanoseconds.
+        cancel: Native cancellation context.
+
+    Returns:
+        Formatted configuration result, or an unchanged dry-run result.
+    """
+    connection = await task.host.aget_connection("scrapli", task.nornir.config)
+    if task.global_dry_run if dry_run is None else dry_run:
+        await check_config_mode(connection, requested_mode, operation_timeout_ns, cancel)
+        return ScrapliResult(task.host, None)
+    response = await connection.send_inputs_async(
+        inputs=configs,
+        requested_mode=requested_mode,
+        input_handling=input_handling,
+        retain_input=False,
+        retain_trailing_prompt=retain_trailing_prompt,
+        stop_on_indicated_failure=stop_on_indicated_failure,
+        operation_timeout_ns=operation_timeout_ns,
+        cancel=cancel,
+    )
+    return ScrapliResult(task.host, process_config_result(response), response, changed=True)

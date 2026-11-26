@@ -1,12 +1,23 @@
 """Adapt native scrapli v2 results to Nornir."""
 
-from typing import Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Generic, Optional, Union
 
 from scrapli.cli_result import Result as CliResult
 from scrapli.netconf_result import Result as NetconfResult
 
 from nornir.core.inventory import Host
 from nornir.core.task import Result
+
+if TYPE_CHECKING:
+    # The default lets a bare ``ScrapliResult`` mean ``ScrapliResult[str]`` for the type
+    # checker. It is declared only here, so ``typing_extensions`` is not needed at runtime.
+    from typing_extensions import TypeVar
+
+    T = TypeVar("T", default=str)
+else:
+    from typing import TypeVar
+
+    T = TypeVar("T")
 
 
 def process_command_result(scrapli_response: Union[CliResult, NetconfResult]) -> str:
@@ -38,11 +49,18 @@ def process_config_result(scrapli_response: CliResult) -> str:
     )
 
 
-class ScrapliResult(Result):
+class ScrapliResult(Result[T], Generic[T]):
+    """Nornir result that retains the native scrapli result.
+
+    ``ScrapliResult[T]`` types ``result`` as ``T`` for the type checker; a bare
+    ``ScrapliResult`` means ``ScrapliResult[str]``. The type parameter has no effect at
+    runtime.
+    """
+
     def __init__(
         self,
         host: Host,
-        result: Optional[str],
+        result: T,
         scrapli_response: Optional[Union[CliResult, NetconfResult]] = None,
         changed: bool = False,
         **kwargs: Any,
