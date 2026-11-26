@@ -4,6 +4,36 @@ This file lists the changes in each nornir_scrapli release, starting with releas
 
 From 1.5.0, the heading of a release that is also published with a calendar version names that version, for example `## 1.5.1 (also published as 2026.10.30) - 2026-10-30`. Pre-releases, such as `1.6.0a1`, have no calendar version.
 
+## 1.6.0b1 - 2026-11-26
+
+[Full list of commits since 1.6.0a1](https://github.com/scrapli/nornir_scrapli/compare/1.6.0a1...1.6.0b1)
+
+1.6.0b1 is the second pre-release of 1.6.0. With it, your type checker and your editor know the type of `result` after you run a nornir_scrapli task. It requires Nornir 3.7.0b1, the first Nornir release with typed task results. Nothing changes when the code runs. Install it with `pip install "nornir-scrapli[asyncio]==1.6.0b1"`.
+
+### Breaking changes
+
+- nornir_scrapli requires `nornir>=3.7.0b1`. Nornir 3.7.0b1 is the first Nornir release in which `Result` accepts a type, such as `Result[str]` ([nornir-automation/nornir#1129](https://github.com/nornir-automation/nornir/pull/1129)).
+- A type checker can report errors in code that passed with 1.6.0a1, because the result of a task is no longer `Any`. Two cases need a change in your code. For details, view the [Nornir 3.7 pre-release guide](https://github.com/nornir-automation/nornir/blob/v3.7.0b1/docs/upgrading/testing_3_7_prereleases.rst):
+  - Code that reads a field that the result type does not have.
+  - A variable that holds the runs of tasks with different result types. Annotate it with `AggregatedResult`.
+
+### Added
+
+- Each task in `nornir_scrapli.tasks` and `nornir_scrapli.async_tasks` declares the type of its result. `nr.run()`, `nr.arun()` and `task.run()` then return results with a typed `result`. For an example, view the [typed results docs](https://github.com/scrapli/nornir_scrapli/blob/1.6.0b1/docs/user_guide/basic_usage.md#typed-results). The type of `result` for each task:
+  - `str` for `get_prompt`, `send_command`, `send_commands`, `send_commands_from_file`, the `cfg_*` tasks, and the `netconf_*` tasks except `netconf_capabilities`
+  - `Optional[str]` for `send_config`, `send_configs` and `send_configs_from_file`, because a dry run returns `None`
+  - `List[str]` for `netconf_capabilities`
+  - scrapli `Response` for `send_interactive`
+- `ScrapliResult` accepts a type, such as `ScrapliResult[str]`, which types its `result`. A `ScrapliResult` annotation without a type means `ScrapliResult[Any]`.
+
+### Changed
+
+- The `**kwargs` of `cfg_load_config` are annotated `object` instead of `Any`. With mypy 1.20.2, a task that has an `Any` parameter gets the result type `Any` from `nr.run()`. The task accepts the same arguments as before.
+
+### Development
+
+- The `mypy` nox session also checks `tests/typing/`, which holds the expected result type of each task.
+
 ## 1.6.0a1 - 2026-11-15
 
 [Full list of commits since 1.5.0](https://github.com/scrapli/nornir_scrapli/compare/1.5.0...1.6.0a1)

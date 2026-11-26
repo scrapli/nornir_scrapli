@@ -6,13 +6,13 @@ async imports are in `nornir_scrapli.async_tasks`.
 
 ## Install
 
-Async support requires Nornir 3.7.0a1 or later, the first Nornir release with the
-asyncio runner and capability-aware connection plugins
-([PR #1111](https://github.com/nornir-automation/nornir/pull/1111)). Install the
+Nornir 3.7.0a1 is the first Nornir release with the asyncio runner and capability-aware
+connection plugins ([PR #1111](https://github.com/nornir-automation/nornir/pull/1111)).
+From 1.6.0b1, nornir_scrapli requires Nornir 3.7.0b1 or later. Install the
 pre-release with the `asyncio` extra, which adds the `asyncssh` transport:
 
 ```bash
-pip install "nornir-scrapli[asyncio]==1.6.0a1"
+pip install "nornir-scrapli[asyncio]==1.6.0b1"
 ```
 
 To install from a checkout, run `pip install ".[asyncio]"`.
