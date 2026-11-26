@@ -1,11 +1,11 @@
 """nornir_scrapli.tasks.cfg_commit_config"""
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.connection import ScrapliConfig
 from nornir_scrapli.result import ScrapliResult
 
 
-def cfg_commit_config(task: Task, source: str = "running") -> Result:
+def cfg_commit_config(task: Task, source: str = "running") -> ScrapliResult[str]:
     """
     Commit a device candidate config with scrapli-cfg
 

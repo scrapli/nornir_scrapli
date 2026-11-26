@@ -2,7 +2,7 @@
 
 from typing import List, Optional, Union
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
@@ -14,7 +14,7 @@ def send_commands(
     stop_on_failed: bool = False,
     eager: bool = False,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Send a list of commands to device using scrapli
 

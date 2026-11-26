@@ -1,6 +1,6 @@
 """nornir_scrapli.tasks.netconf_get"""
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
@@ -8,7 +8,7 @@ def netconf_get(
     task: Task,
     filter_: str,
     filter_type: str = "subtree",
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Get from the device with scrapli_netconf
 

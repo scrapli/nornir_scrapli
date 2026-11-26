@@ -1,13 +1,13 @@
 """nornir_scrapli.tasks.netconf_unlock"""
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
 def netconf_unlock(
     task: Task,
     target: str,
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Unlock the device with scrapli_netconf
 

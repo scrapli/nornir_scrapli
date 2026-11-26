@@ -36,6 +36,40 @@ The last important difference with nornir_scrapli is that in addition to the "no
 [[some structured data back from the device!]]
 ``` 
 
+## Typed Results
+
+From 1.6.0b1, each task declares the type of its result, so your type checker and your editor know the type of
+`result` after `nr.run()`, `nr.arun()` and `task.run()`. This requires Nornir 3.7.0b1 or later.
+
+```python
+from nornir_scrapli.tasks import send_command
+
+results = nr.run(task=send_command, command="show version")
+for name, multi in results.items():
+    if not multi.failed:
+        print(name, multi.result.splitlines()[0])  # multi.result is a str
+```
+
+The type of `result` for each task:
+
+- `str`: `get_prompt`, `send_command`, `send_commands`, `send_commands_from_file`, the `cfg_*` tasks, and the
+  `netconf_*` tasks except `netconf_capabilities`
+- `Optional[str]`: `send_config`, `send_configs` and `send_configs_from_file`, because a dry run returns `None`
+- `List[str]`: `netconf_capabilities`
+- scrapli `Response`: `send_interactive`
+
+Three things to know:
+
+- The type is correct only for a host that succeeded. For a failed host, `result` holds the error text, so check
+  `multi.failed` first.
+- Nornir types `multi[0]` as a plain Nornir `Result`, so a type checker reports `multi[0].scrapli_response` as an
+  unknown attribute. `multi.scrapli_response` is accepted, with the type `Any`.
+- A task that calls a nornir_scrapli task directly, such as `send_command(task, command="show version")`, receives a
+  `ScrapliResult[str]`, with `result` and `scrapli_response` both typed.
+
+For the rules that Nornir applies, view the
+[Nornir 3.7 pre-release guide](https://github.com/nornir-automation/nornir/blob/v3.7.0b1/docs/upgrading/testing_3_7_prereleases.rst).
+
 If you would like to continue using `print_result` like "normal" in nornir, but would like to see structured data (if
  available) in the `print_result` output, you can use the nornir_scrapli `print_structured_result` function. This
   function can be imported from the scrapli functions module:

@@ -1,13 +1,15 @@
 """nornir_scrapli.tasks.cfg_load_config"""
 
-from typing import Any
-
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.connection import ScrapliConfig
 from nornir_scrapli.result import ScrapliResult
 
 
-def cfg_load_config(task: Task, config: str, replace: bool = False, **kwargs: Any) -> Result:
+# `**kwargs: object`, not `Any`: with mypy, an `Any` parameter makes `nr.run()` type the result of
+# this task as `Any`.
+def cfg_load_config(
+    task: Task, config: str, replace: bool = False, **kwargs: object
+) -> ScrapliResult[str]:
     """
     Load device config with scrapli-cfg
 

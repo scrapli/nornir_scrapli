@@ -1,13 +1,11 @@
 """Native asyncio Scrapli-Cfg task counterparts."""
 
-from typing import Any
-
 from nornir.core.task import Result, Task
 from nornir_scrapli.connection import ScrapliConfig
 from nornir_scrapli.result import ScrapliResult
 
 
-async def cfg_get_version(task: Task) -> Result:
+async def cfg_get_version(task: Task) -> Result[str]:
     """Get the device version through the shared async configuration wrapper.
 
     Args:
@@ -22,7 +20,7 @@ async def cfg_get_version(task: Task) -> Result:
     return Result(host=task.host, result=version.result, failed=False, changed=False)
 
 
-async def cfg_get_config(task: Task, source: str = "running") -> Result:
+async def cfg_get_config(task: Task, source: str = "running") -> ScrapliResult[str]:
     """Get a configuration source using Scrapli-Cfg.
 
     Args:
@@ -38,7 +36,11 @@ async def cfg_get_config(task: Task, source: str = "running") -> Result:
     return ScrapliResult(host=task.host, result=response.result, scrapli_response=response)
 
 
-async def cfg_load_config(task: Task, config: str, replace: bool = False, **kwargs: Any) -> Result:
+# `**kwargs: object`, not `Any`: with mypy, an `Any` parameter makes `nr.run()` type the result of
+# this task as `Any`.
+async def cfg_load_config(
+    task: Task, config: str, replace: bool = False, **kwargs: object
+) -> ScrapliResult[str]:
     """Load a candidate configuration without reporting it as committed.
 
     Args:
@@ -56,7 +58,7 @@ async def cfg_load_config(task: Task, config: str, replace: bool = False, **kwar
     return ScrapliResult(host=task.host, result=response.result, scrapli_response=response)
 
 
-async def cfg_diff_config(task: Task, source: str = "running") -> Result:
+async def cfg_diff_config(task: Task, source: str = "running") -> ScrapliResult[str]:
     """Diff the candidate against a configuration source.
 
     Args:
@@ -72,7 +74,7 @@ async def cfg_diff_config(task: Task, source: str = "running") -> Result:
     return ScrapliResult(host=task.host, result=response.device_diff, scrapli_response=response)
 
 
-async def cfg_commit_config(task: Task, source: str = "running") -> Result:
+async def cfg_commit_config(task: Task, source: str = "running") -> ScrapliResult[str]:
     """Commit the candidate configuration.
 
     Args:
@@ -90,7 +92,7 @@ async def cfg_commit_config(task: Task, source: str = "running") -> Result:
     )
 
 
-async def cfg_abort_config(task: Task) -> Result:
+async def cfg_abort_config(task: Task) -> ScrapliResult[str]:
     """Abort the candidate configuration.
 
     Args:

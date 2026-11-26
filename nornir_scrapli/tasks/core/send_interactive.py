@@ -2,6 +2,8 @@
 
 from typing import List, Optional, Tuple, Union
 
+from scrapli.response import Response
+
 from nornir.core.task import Result, Task
 
 
@@ -11,7 +13,7 @@ def send_interactive(
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     privilege_level: str = "",
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> Result[Response]:
     """
     Send inputs in an interactive fashion using scrapli; usually used to handle prompts
 

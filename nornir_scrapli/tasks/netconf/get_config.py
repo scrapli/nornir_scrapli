@@ -2,7 +2,7 @@
 
 from typing import List, Optional, Union
 
-from nornir.core.task import Result, Task
+from nornir.core.task import Task
 from nornir_scrapli.result import ScrapliResult, process_command_result
 
 
@@ -11,7 +11,7 @@ def netconf_get_config(
     source: str = "running",
     filter_: Optional[Union[str, List[str]]] = None,
     filter_type: str = "subtree",
-) -> Result:
+) -> ScrapliResult[str]:
     """
     Get config from the device with scrapli_netconf
 

@@ -3,12 +3,14 @@
 import asyncio
 from typing import Any, List, Optional, Tuple, Union
 
+from scrapli.response import Response
+
 from nornir.core.task import Result, Task
 from nornir_scrapli.exceptions import NornirScrapliNoConfigModeGenericDriver
 from nornir_scrapli.result import ScrapliResult, process_command_result, process_config_result
 
 
-async def get_prompt(task: Task) -> Result:
+async def get_prompt(task: Task) -> Result[str]:
     """Get the current device prompt.
 
     Args:
@@ -29,7 +31,7 @@ async def send_command(
     strip_prompt: bool = True,
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[str]:
     """Send a single command through an asynchronous connection.
 
     Args:
@@ -63,7 +65,7 @@ async def send_commands(
     stop_on_failed: bool = False,
     eager: bool = False,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[str]:
     """Send multiple commands through an asynchronous connection.
 
     Args:
@@ -101,7 +103,7 @@ async def send_commands_from_file(
     stop_on_failed: bool = False,
     eager: bool = False,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[str]:
     """Load a command file off the event loop, then send its commands natively.
 
     Args:
@@ -132,7 +134,7 @@ async def send_interactive(
     failed_when_contains: Optional[Union[str, List[str]]] = None,
     privilege_level: str = "",
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> Result[Response]:
     """Send an interactive sequence through an asynchronous connection.
 
     Args:
@@ -179,7 +181,7 @@ async def send_config(
     privilege_level: str = "",
     eager: bool = False,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[Optional[str]]:
     """Send a configuration string, or verify config-mode access during dry run.
 
     Args:
@@ -227,7 +229,7 @@ async def send_configs(
     privilege_level: str = "",
     eager: bool = False,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[Optional[str]]:
     """Send configuration lines, or verify config-mode access during dry run.
 
     Args:
@@ -275,7 +277,7 @@ async def send_configs_from_file(
     privilege_level: str = "",
     eager: bool = False,
     timeout_ops: Optional[float] = None,
-) -> Result:
+) -> ScrapliResult[Optional[str]]:
     """Load a configuration file off the loop, then send its lines natively.
 
     A dry run verifies config-mode access without reading the file or sending it.

@@ -4,7 +4,7 @@ from nornir.core.task import Result, Task
 from nornir_scrapli.connection import ScrapliConfig
 
 
-def cfg_get_version(task: Task) -> Result:
+def cfg_get_version(task: Task) -> Result[str]:
     """
     Get device version with scrapli-cfg
 
