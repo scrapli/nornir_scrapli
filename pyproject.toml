@@ -9,7 +9,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
-    "nornir>=3.7.0a1",
+    "nornir>=3.7.0b1",
     "nornir_utils>=0.1.0",
     "ntc_templates>=1.1.0",
     # scrapli 2.0 (2026.10.3 and later, including the 2026.2.22rc1+ pre-releases) is not supported yet
